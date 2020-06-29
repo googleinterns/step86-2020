@@ -4,8 +4,11 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
-  "license": "NONE"
+  "license": "NONE",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
 }

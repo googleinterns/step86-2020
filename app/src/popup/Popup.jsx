@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-class Popup extends React.Component {
+export class Popup extends React.Component {
   render() {
     return (
       <div>

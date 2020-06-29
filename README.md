@@ -24,3 +24,10 @@ To run the entire extension,
 2. Within chrome, go to Extensions > Load Unpacked Extension
 3. Select the `/app/dist` directory, this is the extension.
 
+#### Testing
+The **api** and **app** directories have separate tests, although both use [Jest](https://jestjs.io/), and are run using `npm run test`. Within **app**, [Enzyme](https://enzymejs.github.io/enzyme/) is used for UI testing, alongside conventional Jest tests.
+
+See app/__tests__/popup.js for a simple example of UI testing. For more UI testing, see the enzyme docs linked above, for general testing, see the Jest docs linked above.
+
+NOTE: Enzyme docs use chai rather than jest for testing. Keep an eye out for that, but everything contained within the enzyme API is consistent. Again, the the sample file above for the distinction.
+
