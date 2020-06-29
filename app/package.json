@@ -1,0 +1,28 @@
+{
+  "name": "debugger-extension-app",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
+    "clean": "rm -rf .cache dist",
+    "build": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
+    "clean-build": "npm run clean && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/preset-react": "^7.10.1",
+    "babel-loader": "^8.1.0",
+    "jest": "^26.1.0",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-web-extension": "^1.6.1"
+  },
+  "dependencies": {
+    "debugger-extension-api": "file:../api",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

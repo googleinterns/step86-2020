@@ -1,0 +1,11 @@
+{
+    "manifest_version": 2,
+
+    "name": "Cloud Debugger Chrome Extension",
+    "description": "An extension to use cloud debugger from anywhere.",
+    "version": "0.1",
+
+    "browser_action": {
+        "default_popup": "src/popup/popup.html"
+    }
+}
