@@ -1,3 +1,3 @@
 export function getGreeting() {
-    return "Hello world!!";
+  return "Hello world!!";
 }
