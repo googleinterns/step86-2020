@@ -1,5 +1,6 @@
 /**
- * Background
+ * Background Requests are used to communicate from UI to API, and await responses as needed.
+ * Each type of request must extend BackgroundRequest (and associated BackgroundRequestData/Response).
  */
 
 /**
