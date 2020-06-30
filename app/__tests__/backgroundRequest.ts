@@ -2,6 +2,8 @@ import chromeApi from "sinon-chrome";
 
 import { BackgroundRequestType, BackgroundRequestData, BackgroundRequest } from "../src/common/requests/BackgroundRequest";
 
+// Mock
+// Something like this would be used to send data from UI to API background
 class SampleRequestData extends BackgroundRequestData {
     sampleProp: string;
 
@@ -11,10 +13,12 @@ class SampleRequestData extends BackgroundRequestData {
     }
 }
 
+//Mock response from API to UI
 interface SampleResponse {
     foo: string;
 }
 
+// Mock of request to background from UI. No implementation, just sets type generics.
 class SampleRequest extends BackgroundRequest<SampleRequestData, SampleResponse> {}
 
 describe("BackgroundRequestData", () => {
