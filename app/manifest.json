@@ -6,6 +6,6 @@
     "version": "0.1",
 
     "browser_action": {
-        "default_popup": "src/popup/popup.html"
+        "default_popup": "src/client/popup/popup.html"
     }
 }
