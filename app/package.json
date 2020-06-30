@@ -8,7 +8,7 @@
     "clean": "rm -rf .cache dist",
     "build": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
     "clean-build": "npm run clean && npm run build",
-    "test": "jest --collectCoverage"
+    "test": "jest --collectCoverage --verbose"
   },
   "author": "",
   "license": "ISC",
