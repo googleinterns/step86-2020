@@ -38,3 +38,5 @@ One functionality per branch.
 Functionality branch should be named  `feature/name-of-feature`.
 
 A branch to fix a bug should be named  `hotfix/name-of-bug`.
+
+For the commits messages, follow this conventions (https://www.conventionalcommits.org/en/v1.0.0/)
