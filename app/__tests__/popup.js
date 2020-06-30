@@ -4,7 +4,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 configure({ adapter: new Adapter() });
 
-import { Popup } from "../src/popup/Popup";
+import { Popup } from "../src/client/popup/Popup";
 
 test("Sample popup renders correctly.", () => {
   const wrapper = shallow(<Popup />);
