@@ -31,10 +31,10 @@ See app/__tests__/popup.js for a simple example of UI testing. For more UI testi
 
 NOTE: Enzyme docs use chai rather than jest for testing. Keep an eye out for that, but everything contained within the enzyme API is consistent. Again, the the sample file above for the distinction.
 
-### Git
+#### Git
 
 One functionality per branch.
 
 Functionality branch should be named  `feature/name-of-feature`.
 
-A branchh to fix a bug should be named  `hotfix/name-of-bug`.
+A branch to fix a bug should be named  `hotfix/name-of-bug`.
