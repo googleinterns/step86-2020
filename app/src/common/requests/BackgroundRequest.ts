@@ -1,14 +1,13 @@
-
 /**
  *  Each request must include a type field.
  *  This is used to coordinate requests between UI and API,
  *  and dispatch them to the correct handlers.
  */
 export enum BackgroundRequestType {
-    FETCH_PROJECTS,
-    FETCH_DEBUGGEES,
-    FETCH_BREAKPOINTS,
-    SET_BREAKPOINT
+  FETCH_PROJECTS,
+  FETCH_DEBUGGEES,
+  FETCH_BREAKPOINTS,
+  SET_BREAKPOINT,
 }
 
 /**
@@ -16,12 +15,12 @@ export enum BackgroundRequestType {
  * Each type of request must extend this with its required parameters.
  */
 export abstract class BackgroundRequestData {
-    /** Used for dispatching to correct handler. */
-    type: BackgroundRequestType;
+  /** Used for dispatching to correct handler. */
+  type: BackgroundRequestType;
 
-    constructor(type: BackgroundRequestType) {
-        this.type = type;
-    }
+  constructor(type: BackgroundRequestType) {
+    this.type = type;
+  }
 }
 
 /**
@@ -29,11 +28,11 @@ export abstract class BackgroundRequestData {
  * This isn't meant to be used directly, instead through derived classes for each request type.
  */
 export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
-    run(data: D): Promise<R> {
-        return new Promise((resolve) => {
-            chrome.runtime.sendMessage(data, (response: R) => {
-                resolve(response);
-            });
-        });
-    }
+  run(data: D): Promise<R> {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(data, (response: R) => {
+        resolve(response);
+      });
+    });
+  }
 }
