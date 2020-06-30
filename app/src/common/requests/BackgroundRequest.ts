@@ -28,9 +28,15 @@ export abstract class BackgroundRequestData {
  * This isn't meant to be used directly, instead through derived classes for each request type.
  */
 export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
+  chromeApi: typeof chrome;
+
+  constructor(chromeApi: typeof chrome = chrome) {
+    this.chromeApi = chromeApi;
+  }
+
   run(data: D): Promise<R> {
     return new Promise((resolve) => {
-      chrome.runtime.sendMessage(data, (response: R) => {
+      this.chromeApi.runtime.sendMessage(data, (response: R) => {
         resolve(response);
       });
     });
