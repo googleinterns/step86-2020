@@ -2,7 +2,7 @@
   "name": "debugger-extension-api",
   "version": "0.1.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/core-api.js",
   "scripts": {
     "test": "jest --collectCoverage"
   },
