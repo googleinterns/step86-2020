@@ -1,12 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import styled from 'styled-components';
+
+const Title = styled.h1`
+  font-size: 1.5em;
+  text-align: center;
+  color: palevioletred;
+`;
+
+const Wrapper = styled.section`
+  padding: 6em;
+`;
 
 export class Popup extends React.Component {
+  constructor(){
+    super();
+  }
+  
   render() {
     return (
-      <div>
-        <h1>Hello World!</h1>
-      </div>
+      <Wrapper>
+        <Title>Welcome to Cloud Debugger !</Title>
+      </Wrapper>
     );
   }
 }
