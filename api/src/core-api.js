@@ -1,7 +1,10 @@
 const axios = require('axios');
 
 
-var userAuth = "ya29.a0AfH6SMCCEwdJKvs-NN2c34UB5PEVD-61tTmphALVUoEKKZKLgRifzgluUXwBN1TJbzKBROpsyuR8Qq6usq6-AmGGPMmbbq5BXhboXK6kOQZJ3OSFmJ_pdN0bdoR2Fo2u6nc3yMiMe_t9rEf55PV5QWalYja2oIko8lY"; // Temp token
+var userAuth = "ya29.a0AfH6SMDdQ9RJ4Fzs2Fmb5kAutLKIJrkPB9ridsD3666-t6xRwwOQBYDw3FtX4w_6l_h1mH2fT-5dFUuUPgpWNwoVSiunNYU1mH4GIDstgUeDryGyJDGYLsHcUEQl_ajCwz6U951bS75D57y7uLAeu7Tp46DQ9hyUESA"; // Temp token
+var debuggeeId=null;
+var breakpointid=null;
+
 
 function setAuthToken(token){
   userAuth = token; 
@@ -33,8 +36,30 @@ async function fetchDebuggees(projectId) {
 
 
 
+function setBreakpoint(debuggeeId, file, line){
+  axios.post('https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set', {
+    location: {
+      path: file,
+      line: line
+    }
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${userAuth}`
+    },
+    params: {
+      debuggeeId: debuggeeId,
+    }
+  })
+  .then(function (response) {
+    breakpointid = response['data']['breakpoint']['id'];
+  })
+}
+
+
+
 async function  main()  {
-    console.dir(await fetchDebuggees("kdalal-step-2020"))
+    console.dir(setBreakpoint("gcp:814996444798:fd0ebdbc768c5ef6", "DataServlet.java", 97))
   }
   
 main();
