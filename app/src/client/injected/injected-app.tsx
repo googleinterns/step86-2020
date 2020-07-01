@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import {showAlert} from "../injected/temporary";
+showAlert();
 
 
 class InjectedApp extends React.Component {
@@ -22,12 +23,13 @@ class InjectedApp extends React.Component {
 }
 
 // Mounts popup once html is loaded
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    const appMount = document.querySelector("#injected-app");
-    console.log("hello world");
-    ReactDOM.render(<InjectedApp />, appMount);
-  },
-  false
-);
+//document.addEventListener(
+ // "DOMContentLoaded",
+  //() => {
+    // const appMount = document.querySelector("#injected-app");
+    const mount = document.createElement("div");
+    document.body.appendChild(mount);
+    ReactDOM.render(<InjectedApp />, mount);
+//  },
+  //false
+//);
