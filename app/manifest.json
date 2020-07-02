@@ -15,7 +15,7 @@
     
       "content_scripts": [
         {
-          "matches": ["http://github.com/", "https://github.com/"],
+          "matches": ["http://github.com/*", "https://github.com/*"],
           "js": ["src/client/injected/injected-app.tsx"]
         }
       ]
