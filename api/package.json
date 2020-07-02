@@ -9,7 +9,8 @@
   "author": "",
   "license": "NONE",
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "moxios": "^0.4.0"
   },
   "dependencies": {
     "axios": "^0.19.2"
