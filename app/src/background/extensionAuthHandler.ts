@@ -11,6 +11,10 @@ function getToken() {
     });
 }
 
+function setAuthToken(access_token){
+  api.setAuthToken(access_token);
+}
+
 
 window.onload = (event) => {
     getToken();
