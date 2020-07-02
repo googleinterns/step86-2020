@@ -43,6 +43,7 @@ const relaunch = async () => {
   await launch();
   currentUrl && (await (await browser.pages())[0].goto(currentUrl));
   console.log("Re-launched");
+  console.log("Type r to rebuild+reload, or q to quit. (then enter)")
 };
 
 /** Allows simple control of launcher from command line. */
