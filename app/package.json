@@ -8,7 +8,9 @@
     "clean": "rm -rf .cache dist",
     "build": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
     "clean-build": "npm run clean && npm run build",
-    "test": "jest --collectCoverage --verbose"
+    "test": "jest --collectCoverage --verbose",
+    "integration-test": "jest --collectCoverage --verbose --config __integration__/jest.config.js",
+    "launch-dev": "node dev-launcher.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +29,7 @@
     "jest-webextension-mock": "^3.6.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-web-extension": "^1.6.1",
+    "puppeteer": "^5.0.0",
     "sinon": "^9.0.2",
     "sinon-chrome": "^3.0.1",
     "typescript": "^3.9.5"
