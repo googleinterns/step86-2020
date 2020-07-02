@@ -1,5 +1,3 @@
-/** @jest-environment jsdom */
-
 import chromeApi from "sinon-chrome";
 
 import {
