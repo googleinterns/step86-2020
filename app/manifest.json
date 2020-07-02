@@ -21,5 +21,10 @@
       ],
       "background": {
         "scripts": ["./src/background/extensionAuthHandler.ts"]
+    },
+    
+    "oauth2": {
+        "client_id": "814996444798-qs7alptifoqe7pqhcao40epof3p6tjue.apps.googleusercontent.com",
+        "scopes":  ["https://www.googleapis.com/auth/cloud-platform", "https://www.googleapis.com/auth/userinfo.profile"]
     }
 }
