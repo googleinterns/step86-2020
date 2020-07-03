@@ -67,6 +67,7 @@ export class SelectProjectView extends React.Component<
     const { projects, projectId, projectsLoading } = this.props;
     return (
       <div>
+        <h1>Select Project</h1>
         {projectsLoading === true && <LoadingView />}
         {projectsLoading === false && (
           <ProjectSelect

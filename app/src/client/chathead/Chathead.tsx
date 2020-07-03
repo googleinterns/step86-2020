@@ -50,6 +50,8 @@ const ChatheadWrapper = styled.div`
   top: 20px;
   right: 20px;
 
+  width: 200px;
+
   padding: 20px;
 
   background: white;
