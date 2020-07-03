@@ -1,8 +1,4 @@
 
-export function showAlert() {
-    alert("This is an alert!");
-}
-
 // can be used for milstone 2
 export function addBreakpoint(){
 
