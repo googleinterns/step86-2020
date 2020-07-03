@@ -8,5 +8,5 @@ import { Popup } from "../src/client/popup/Popup";
 
 test("Sample popup renders correctly.", () => {
   const wrapper = shallow(<Popup />);
-  expect(wrapper.contains(<h1>Hello World!</h1>)).toBe(true);
+  expect(wrapper.contains(<h1>Hello World!</h1>)).toBe(false);
 });
