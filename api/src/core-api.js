@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 var userAuth =
-  "ya29.a0AfH6SMA17p8GUeKk9Q3EFquORHIghp0oozcSBeJasPR66lg9GuNeS1V6SQw61ye9la7LJGO1AIdKMdfTdlSaGgo4zHnn8iAn_xF0wCvHxOlnwLvIN65bsRH57Wle-_OD9xekH824Dgjo5G7w5zuP_mkN4qUaHMqDHF0"; // Temp token
+  "ya29.a0AfH6SMDMnBCWmOJAduBYz7aQiSQrjCoADIKQLUe25nIqq0lK0pJzPK_nZ8uoo4ylkrZomC3NozvggV2AjJoWgNDLMpvT3Sdfn5sAtrTwztWuPcZ-IG5lweL0A8RT4cWY86vPmGN50Tpbv96D__Vbo90DCpcA3FmbLwc"; // Temp token
 
 exports.setAuthToken = (token) => {
   userAuth = token;
@@ -41,28 +41,25 @@ exports.fetchDebuggees = async (projectId) => {
 };
 
 exports.setBreakpoint = async (debuggeeId, file, line) => {
-  axios
-    .post(
-      "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set",
-      {
-        location: {
-          path: file,
-          line: line,
-        },
+  const response = await axios.post(
+    "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set",
+    {
+      location: {
+        path: file,
+        line: line,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${userAuth}`,
-        },
-        params: {
-          debuggeeId: debuggeeId,
-        },
-      }
-    )
-    .then(function (response) {
-      let data = response["data"];
-      return data;
-    });
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userAuth}`,
+      },
+      params: {
+        debuggeeId: debuggeeId,
+      },
+    }
+  );
+  let data = response.data;
+  return data;
 };
 
 exports.listBreakpoints = async (debuggeeId) => {
@@ -98,3 +95,11 @@ exports.getBreakpoint = async (debuggeeId, breakpointId) => {
   let data = response.data;
   return data;
 };
+
+
+async function  main()  {
+  console.dir(await fetchDebuggees("kdalal-step-2020"))
+//   console.dir(setBreakpoint("gcp:814996444798:fd0ebdbc768c5ef6", "DataServlet.java", 80))
+//   console.dir(await api.listBreakpoints("gcp:814996444798:fd0ebdbc768c5ef6"))
+//   console.dir(await api.getBreakpoint("gcp:814996444798:fd0ebdbc768c5ef6","5a9652d056032-b517-b7cab"))
+}
