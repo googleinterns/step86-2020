@@ -25,6 +25,10 @@ export class SelectProjectContainer extends React.Component<
     };
   }
 
+  onChange(projectId) {
+    this.props.onChange(projectId);
+  }
+
   componentDidMount() {
     this.setState({ projectsLoading: true });
     this.props.loadProjects().then((projects) => {
@@ -38,7 +42,7 @@ export class SelectProjectContainer extends React.Component<
         projects={this.state.projects}
         projectsLoading={this.state.projectsLoading}
         projectId={this.props.projectId}
-        onChange={this.props.onChange}
+        onChange={(projectId) => this.onChange(projectId)}
       />
     );
   }
@@ -55,13 +59,23 @@ export class SelectProjectView extends React.Component<
   SelectProjectViewProps,
   {}
 > {
+  onChange(projectId) {
+    this.props.onChange(projectId);
+  }
+
   render() {
-    const { projects, projectId, projectsLoading, onChange } = this.props;
+    const { projects, projectId, projectsLoading } = this.props;
     return (
       <div>
         {projectsLoading === true && <LoadingView />}
         {projectsLoading === false && (
-          <ProjectSelect {...{ projectId, projects, onChange }} />
+          <ProjectSelect
+            {...{
+              projectId,
+              projects,
+              onChange: (projectId) => this.onChange(projectId),
+            }}
+          />
         )}
       </div>
     );

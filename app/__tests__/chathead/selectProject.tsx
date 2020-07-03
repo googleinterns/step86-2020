@@ -113,4 +113,22 @@ describe("SelectProjectContainer", () => {
       done();
     });
   });
+
+  it("bubbles up onChange from nested SelectProjectView", async (done) => {
+    const spy = jest.fn();
+    const wrapper = shallow(
+      <SelectProjectContainer
+        projectId={undefined}
+        loadProjects={async () => ["a", "b", "c"]}
+        onChange={spy}
+      />
+    );
+
+    // Delays the expect call until the component has a change to setState
+    setImmediate(() => {
+      wrapper.find(SelectProjectView).invoke("onChange")("a");
+      expect(spy).toHaveBeenCalledWith("a");
+      done();
+    });
+  });
 });
