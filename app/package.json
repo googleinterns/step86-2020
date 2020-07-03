@@ -8,9 +8,7 @@
     "clean": "rm -rf .cache dist",
     "build": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
     "clean-build": "npm run clean && npm run build",
-    
     "format": "prettier --write src/**/*.ts",
-
     "test": "jest --collectCoverage --verbose",
     "integration-test": "jest --collectCoverage --verbose --config __integration__/jest.config.js",
     "launch-dev": "node dev-launcher.js"
@@ -44,7 +42,8 @@
     "debugger-extension-api": "file:../api",
     "enzyme-adapter-react-16": "^1.15.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "styled-components": "^5.1.1"
   },
   "jest": {
     "setupFiles": [
