@@ -29,6 +29,7 @@
     "@storybook/addons": "^5.3.19",
     "@storybook/react": "^5.3.19",
     "@types/chrome": "0.0.117",
+    "@types/enzyme": "^3.10.5",
     "@types/sinon-chrome": "^2.2.9",
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^9.1.2",

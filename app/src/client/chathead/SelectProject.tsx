@@ -38,6 +38,7 @@ interface SelectProjectViewProps {
   projects: any[];
   projectsLoading: boolean;
   projectId?: string;
+  onChange: (projectId: string) => void;
 }
 
 export class SelectProjectView extends React.Component<SelectProjectViewProps, {}> {
@@ -45,12 +46,12 @@ export class SelectProjectView extends React.Component<SelectProjectViewProps, {
     return (
       <div>
         {this.props.projectsLoading === true && (
-          <span>Loading Projects...</span>
+          <span data-testid="projectsLoading">Loading Projects...</span>
         )}
         {this.props.projectsLoading === false && (
-          <select value={this.props.projectId}>
+          <select value={this.props.projectId} onChange={e => this.props.onChange(e.target.value)}>
             {this.props.projects.map((project) => (
-              <option value={project}>{project}</option>
+              <option key={project} value={project}>{project}</option>
             ))}
           </select>
         )}
