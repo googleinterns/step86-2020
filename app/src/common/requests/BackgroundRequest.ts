@@ -58,7 +58,7 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
   /**
    * @param chromeApi The module used auth, messages, etc. Exposed globally in chrome, else mocked.
    */
-  constructor(chromeApi: typeof chrome = chrome) {
+  constructor(chromeApi: typeof chrome = window.chrome) {
     this.chromeApi = chromeApi;
   }
 
