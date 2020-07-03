@@ -14,10 +14,6 @@ interface ChatheadProps {
 }
 
 interface ChatheadState {
-    /** All projects this user has access to, loaded using FetchProjectsRequest */
-    projects: any[]; // TODO: Create a Project type
-    projectsLoading: boolean;
-
     /** All debuggees for the current project, loaded using FetchDebuggeesRequest */
     debuggees: any[]; // TODO: Create a Debuggee type,
     debuggeesLoading: boolean;
@@ -27,9 +23,6 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
     constructor(props: ChatheadProps) {
         super(props);
         this.state = {
-            projects: [],
-            projectsLoading: false,
-
             debuggees: [],
             debuggeesLoading: false
         }
