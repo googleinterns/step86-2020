@@ -52,5 +52,6 @@ const ChatheadWrapper = styled.div`
 
   padding: 20px;
 
+  background: white;
   box-shadow: 0px 2px 8px 0px rgba(20, 20, 20, 0.4);
 `;

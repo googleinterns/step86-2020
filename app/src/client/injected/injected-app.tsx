@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
+import { Chathead } from "../chathead/Chathead";
 
 const Wrapper = styled.section`
   padding: 6em;
@@ -88,12 +89,18 @@ interface InjectedAppState{
 
   render() {
     return (
-      <Wrapper>
-        <p>Create a Break Point</p>
+      <>
+        <Chathead
+          projectId={this.state.projectId}
+          debuggeeId={this.state.debuggeeId}
+          breakpoints={this.state.breakpoints}
+          setProject={projectId => this.setState({projectId})}
+        />
+        {/* <p>Create a Break Point</p>
         <Input placeholder="File Name " />
         <Input placeholder="Line Number " />
-        <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button>
-      </Wrapper>
+        <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button> */}
+      </>
     );
   }
 
