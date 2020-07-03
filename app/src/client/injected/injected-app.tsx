@@ -41,7 +41,7 @@ const Button = styled.button`
 // declare attributs here
 interface InjectedAppState{
   projectId: string,
-  debuggeId: string,
+  debuggeeId: string,
   counter: number,
   breakpoints: Array<any>,
   lineNum: number;
@@ -54,7 +54,7 @@ interface InjectedAppState{
     super();
     this.state = {
       projectId: "",
-      debuggeId: "",
+      debuggeeId: "",
       counter: 20,
       breakpoints : {},
       lineNumber: 29,
@@ -62,7 +62,7 @@ interface InjectedAppState{
     }
   }
   
-  get getLineNumber(){
+  get lineNumber(){
     return this.state.lineNumber;
   }
 
@@ -70,12 +70,12 @@ interface InjectedAppState{
     return this.state.fileName;
   }
 
-  set setLineNumber(value: number){
-    this.state.lineNumber = value;
+  set lineNumber(value: number){
+    this.setState({lineNumber: value});
   }
 
-  set setFileName(value: string){
-    this.state.lineNumber = value;
+  set fileName(value: string){
+    this.setState({fileName: value});
   }
 
   showBreakPoint(){
@@ -83,7 +83,7 @@ interface InjectedAppState{
 
   createBreakPoint(line: number){
     // use request to ccreat a breakpoint   
-      return this.getLineNumber;
+      return this.lineNumber;
   }
 
   render() {
