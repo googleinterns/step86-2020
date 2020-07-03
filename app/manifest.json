@@ -1,21 +1,29 @@
 {
-    "manifest_version": 2,
+  "manifest_version": 2,
 
-    "name": "Cloud Debugger Chrome Extension",
-    "description": "An extension to use cloud debugger from anywhere.",
-    "version": "0.1",
+  "name": "Cloud Debugger Chrome Extension",
+  "description": "An extension to use cloud debugger from anywhere.",
+  "version": "0.1",
 
-    "browser_action": {
-        "default_popup": "src/client/popup/popup.html"
-    },
-    "permissions": [
-        "activeTab",
-        "tabs"
-      ],
-    "content_scripts": [
-        {
-          "matches": ["http://github.com/*", "https://github.com/*"],
-          "js": ["src/client/injected/injected-app.tsx"]
-        }
-      ]
+  "browser_action": {
+    "default_popup": "src/client/popup/popup.html"
+  },
+  "permissions": ["activeTab", "tabs", "identity"],
+  "content_scripts": [
+    {
+      "matches": ["http://github.com/*", "https://github.com/*"],
+      "js": ["src/client/injected/injected-app.tsx"]
+    }
+  ],
+  "background": {
+    "scripts": ["./src/background/extensionAuthHandler.ts"]
+  },
+
+  "oauth2": {
+    "client_id": "814996444798-qs7alptifoqe7pqhcao40epof3p6tjue.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  }
 }
