@@ -1,7 +1,6 @@
 const axios = require("axios");
 
-var userAuth =
-  "ya29.a0AfH6SMDMnBCWmOJAduBYz7aQiSQrjCoADIKQLUe25nIqq0lK0pJzPK_nZ8uoo4ylkrZomC3NozvggV2AjJoWgNDLMpvT3Sdfn5sAtrTwztWuPcZ-IG5lweL0A8RT4cWY86vPmGN50Tpbv96D__Vbo90DCpcA3FmbLwc"; // Temp token
+var userAuth = ""; // Create temp token using https://developers.google.com/oauthplayground/
 
 /**
  * Sets the auth token used to validate the user's GCP access,
@@ -32,7 +31,7 @@ exports.fetchProjects = async () => {
       },
     }
   );
-  let data = response.data;
+  const data = response.data;
   return data;
 };
 
@@ -53,7 +52,7 @@ exports.fetchDebuggees = async (projectId) => {
       },
     }
   );
-  let data = response.data;
+  const data = response.data;
   return data;
 };
 
@@ -83,7 +82,7 @@ exports.setBreakpoint = async (debuggeeId, file, line) => {
       },
     }
   );
-  let data = response.data;
+  const data = response.data;
   return data;
 };
 
@@ -104,7 +103,7 @@ exports.listBreakpoints = async (debuggeeId) => {
       },
     }
   );
-  let data = response.data;
+  const data = response.data;
   return data;
 };
 
@@ -127,6 +126,6 @@ exports.getBreakpoint = async (debuggeeId, breakpointId) => {
       },
     }
   );
-  let data = response.data;
+  const data = response.data;
   return data;
 };

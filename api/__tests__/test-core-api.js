@@ -47,11 +47,11 @@ describe("Testing API functions", () => {
     });
 
     // Call the API
-    const projects = await api.fetchDebuggees(mockProjectId);
-    expect(projects).toEqual(mockResponse.response);
+    const debuggees = await api.fetchDebuggees(mockProjectId);
+    expect(debuggees).toEqual(mockResponse.response);
   });
 
-  it("Can set breakpoints", async () => {
+  it("Can set breakpoint", async () => {
     const mockDebuggeeId = "foo";
     const mockFile = "bar";
     const mockLineNumber = 88;
@@ -75,23 +75,24 @@ describe("Testing API functions", () => {
     });
 
     // Call the API
-    const projects = await api.setBreakpoint(
+    const breakpoint = await api.setBreakpoint(
       mockDebuggeeId,
       mockFile,
       mockLineNumber
     );
-    expect(projects).toEqual(mockResponse.response);
+    expect(breakpoint).toEqual(mockResponse.response);
   });
 
   it("Can list breakpoints", async () => {
     const mockDebuggeeId = "foo";
+    const debuggeeId = "foo";
     const mockResponse = {
       status: 200,
       response: [{ breakpoint: 1 }],
     };
 
     // This depends on the number of "expect" checks we have below
-    expect.assertions(2);
+    expect.assertions(3);
 
     // Before calling the API, set up a function to intercept the API request.
     moxios.wait(() => {
@@ -101,15 +102,16 @@ describe("Testing API functions", () => {
       expect(request.config.url).toEqual(
         "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints"
       );
+      expect(debuggeeId).toEqual(mockDebuggeeId);
       request.respondWith(mockResponse);
     });
 
     // Call the API
-    const projects = await api.listBreakpoints(mockDebuggeeId);
-    expect(projects).toEqual(mockResponse.response);
+    const breakpoints = await api.listBreakpoints(mockDebuggeeId);
+    expect(breakpoints).toEqual(mockResponse.response);
   });
 
-  it("Can get breakpoints", async () => {
+  it("Can get breakpoint", async () => {
     const mockDebuggeeId = "foo";
     const mockBreakpointId = "bar";
 
@@ -132,7 +134,10 @@ describe("Testing API functions", () => {
     });
 
     // Call the API
-    const projects = await api.getBreakpoint(mockDebuggeeId, mockBreakpointId);
-    expect(projects).toEqual(mockResponse.response);
+    const breakpoint = await api.getBreakpoint(
+      mockDebuggeeId,
+      mockBreakpointId
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
   });
 });
