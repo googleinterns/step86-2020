@@ -1,33 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
-import {showAlert} from "../injected/temporary";
-showAlert();
-
-class InjectedApp extends React.Component {
-
-  constructor(){
-    super();
-  }
-
-  render() {
-    return (
-      <Wrapper>
-        <p>Create a Break Point</p>
-        <Input placeholder="File Name " />
-        <Input placeholder="Line Number " />
-        <Button primary onClick={showAlert}>CREATE</Button>
-      </Wrapper>
-    );
-  }
-
-}
-
-// Mounts injected App once html is loaded
-
-const mount = document.createElement("div");
-document.body.appendChild(mount);
-ReactDOM.render(<InjectedApp />, mount);
 
 const Wrapper = styled.section`
   padding: 6em;
@@ -64,3 +37,72 @@ const Button = styled.button`
   border: 2px solid #1E90FF;
   border-radius: 3px;
 `;
+
+// declare attributs here
+interface InjectedAppState{
+  projectId : string,
+  debuggeId : string,
+  counter: number,
+  breakpoints : Array<any>,
+  lineNumber : number;
+  fileName : string;
+}
+
+ class InjectedApp extends React.Component<any,InjectedAppState> {
+
+  constructor(){
+    super();
+    this.state = {
+      projectId: "",
+      debuggeId: "",
+      counter: 20,
+      breakpoints : {},
+      lineNumber: 29,
+      fileName: "index.js"
+
+    }
+  }
+  
+  get getLineNumber(){
+    return this.state.lineNumber;
+  }
+  get fileName(){
+    return this.state.fileName;
+
+  }
+
+  set setLineNumber(value: number){
+    this.state.lineNumber = value;
+  }
+
+  set setFileName(value: string){
+    this.state.lineNumber = value;
+  }
+
+  showBreakPoint(){
+  }
+
+  createBreakPoint(line: number){
+    // use request to ccreat a breakpoint   
+      return this.getLineNumber;
+  }
+
+  render() {
+    return (
+      <Wrapper>
+        <p>Create a Break Point</p>
+        <Input placeholder="File Name " />
+        <Input placeholder="Line Number " />
+    <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button>
+      </Wrapper>
+    );
+  }
+
+}
+
+// Mounts injected App once html is loaded
+const mount = document.createElement("div");
+document.body.appendChild(mount);
+ReactDOM.render(<InjectedApp />, mount);
+
+
