@@ -5,7 +5,6 @@ import styled from 'styled-components';
 export class Popup extends React.Component {
   constructor(){
     super();
-
   }
   
   render() {

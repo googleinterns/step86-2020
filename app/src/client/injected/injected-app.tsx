@@ -40,12 +40,12 @@ const Button = styled.button`
 
 // declare attributs here
 interface InjectedAppState{
-  projectId : string,
-  debuggeId : string,
+  projectId: string,
+  debuggeId: string,
   counter: number,
-  breakpoints : Array<any>,
-  lineNumber : number;
-  fileName : string;
+  breakpoints: Array<any>,
+  lineNum: number;
+  fileName: string;
 }
 
  class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -59,16 +59,15 @@ interface InjectedAppState{
       breakpoints : {},
       lineNumber: 29,
       fileName: "index.js"
-
     }
   }
   
   get getLineNumber(){
     return this.state.lineNumber;
   }
+
   get fileName(){
     return this.state.fileName;
-
   }
 
   set setLineNumber(value: number){
@@ -93,7 +92,7 @@ interface InjectedAppState{
         <p>Create a Break Point</p>
         <Input placeholder="File Name " />
         <Input placeholder="Line Number " />
-    <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button>
+        <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button>
       </Wrapper>
     );
   }
@@ -104,5 +103,3 @@ interface InjectedAppState{
 const mount = document.createElement("div");
 document.body.appendChild(mount);
 ReactDOM.render(<InjectedApp />, mount);
-
-
