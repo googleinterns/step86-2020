@@ -17,7 +17,6 @@ describe("Github", () => {
     expect.assertions(1);
 
     await page.waitForSelector("header");
-    console.log("here");
     const bgColor = await page.evaluate(() => {
       const header = document.querySelector("header");
       return window
