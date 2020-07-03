@@ -7,5 +7,16 @@
 
     "browser_action": {
         "default_popup": "src/client/popup/popup.html"
-    }
+    },
+    "permissions": [
+        "activeTab",
+        "tabs"
+      ],
+    
+      "content_scripts": [
+        {
+          "matches": ["http://github.com/", "https://github.com/"],
+          "js": ["src/client/injected/injected-app.html"]
+        }
+      ]
 }
