@@ -2,6 +2,8 @@ import React from "react";
 
 interface SelectProjectContainerProps {
   projectId?: string;
+  loadProjects: () => Promise<any[]>;
+  onChange: (projectId) => void;
 }
 
 interface SelectProjectContainerState {
@@ -23,12 +25,20 @@ export class SelectProjectContainer extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.setState({ projectsLoading: true });
+    this.props.loadProjects().then((projects) => {
+      this.setState({ projects, projectsLoading: false });
+    });
+  }
+
   render() {
     return (
       <SelectProjectView
         projects={this.state.projects}
         projectsLoading={this.state.projectsLoading}
         projectId={this.props.projectId}
+        onChange={this.props.onChange}
       />
     );
   }
@@ -41,21 +51,34 @@ interface SelectProjectViewProps {
   onChange: (projectId: string) => void;
 }
 
-export class SelectProjectView extends React.Component<SelectProjectViewProps, {}> {
+export class SelectProjectView extends React.Component<
+  SelectProjectViewProps,
+  {}
+> {
   render() {
+    const { projects, projectId, projectsLoading, onChange } = this.props;
     return (
       <div>
-        {this.props.projectsLoading === true && (
-          <span data-testid="projectsLoading">Loading Projects...</span>
-        )}
-        {this.props.projectsLoading === false && (
-          <select value={this.props.projectId} onChange={e => this.props.onChange(e.target.value)}>
-            {this.props.projects.map((project) => (
-              <option key={project} value={project}>{project}</option>
-            ))}
-          </select>
+        {projectsLoading === true && <LoadingView />}
+        {projectsLoading === false && (
+          <ProjectSelect {...{ projectId, projects, onChange }} />
         )}
       </div>
     );
   }
 }
+
+export const LoadingView = () => <div>Loading...</div>;
+export const ProjectSelect = ({ projects, projectId, onChange }) => {
+  return (
+    <select value={projectId} onChange={(e) => onChange(e.target.value)}>
+      {projects.map((project) => (
+        <ProjectOption key={project} project={project} />
+      ))}
+    </select>
+  );
+};
+
+export const ProjectOption = ({ project }) => (
+  <option value={project}>{project}</option>
+);
