@@ -8,6 +8,9 @@
     "clean": "rm -rf .cache dist",
     "build": "parcel build -d dist --no-content-hash --no-source-maps manifest.json",
     "clean-build": "npm run clean && npm run build",
+    
+    "format": "prettier --write src/**/*.ts",
+
     "test": "jest --collectCoverage --verbose",
     "integration-test": "jest --collectCoverage --verbose --config __integration__/jest.config.js",
     "launch-dev": "node dev-launcher.js"
@@ -30,6 +33,7 @@
     "jest-webextension-mock": "^3.6.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-web-extension": "^1.6.1",
+    "prettier": "^2.0.5",
     "puppeteer": "^5.0.0",
     "sinon": "^9.0.2",
     "sinon-chrome": "^3.0.1",
