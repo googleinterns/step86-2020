@@ -75,7 +75,6 @@ exports.listBreakpoints = async (debuggeeId) => {
     }
   );
   let data = response.data;
-  // console.dir(data, {depth: 10})
   return data;
 };
 
@@ -95,11 +94,3 @@ exports.getBreakpoint = async (debuggeeId, breakpointId) => {
   let data = response.data;
   return data;
 };
-
-
-async function  main()  {
-  console.dir(await fetchDebuggees("kdalal-step-2020"))
-//   console.dir(setBreakpoint("gcp:814996444798:fd0ebdbc768c5ef6", "DataServlet.java", 80))
-//   console.dir(await api.listBreakpoints("gcp:814996444798:fd0ebdbc768c5ef6"))
-//   console.dir(await api.getBreakpoint("gcp:814996444798:fd0ebdbc768c5ef6","5a9652d056032-b517-b7cab"))
-}
