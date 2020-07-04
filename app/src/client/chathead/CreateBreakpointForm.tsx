@@ -39,6 +39,7 @@ export class CreateBreakpointForm extends React.Component<
       <form>
         <label>File Name</label>
         <input
+          style={{width: "100%"}}
           data-testid="fileName"
           value={fileName}
           onChange={(e) => this.onFileName(e.target.value)}
@@ -46,6 +47,7 @@ export class CreateBreakpointForm extends React.Component<
 
         <label>Line Number</label>
         <input
+          style={{width: "100%"}}
           data-testid="lineNumber"
           value={lineNumber}
           onChange={(e) => this.onLineNumber(e.target.value)}
