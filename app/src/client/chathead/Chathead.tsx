@@ -13,7 +13,7 @@ interface ChatheadProps {
 
   setProject: (projectId: string) => void;
   setDebugee: (debugeeId: string) => void;
-  createBreakpoint: (lineNumber: number) => void;
+  createBreakpoint: (fileName: string, lineNumber: number) => void;
 }
 
 interface ChatheadState {
@@ -51,7 +51,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           />
         )}
         {projectId && debuggeeId && (
-          <CreateBreakpointForm createBreakpoint={() => {}}/>
+          <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
         )}
       </ChatheadWrapper>
     );

@@ -82,7 +82,8 @@ interface InjectedAppState{
   showBreakPoint(){
   }
 
-  createBreakPoint(line: number){
+  createBreakPoint(fileName: string, lineNumber: number){
+    alert(fileName);
     // use request to ccreat a breakpoint   
       return this.lineNumber;
   }
@@ -96,6 +97,7 @@ interface InjectedAppState{
           breakpoints={this.state.breakpoints}
           setProject={projectId => this.setState({projectId})}
           setDebugee={debuggeeId => this.setState({debuggeeId})}
+          createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
         />
         {/* <p>Create a Break Point</p>
         <Input placeholder="File Name " />
