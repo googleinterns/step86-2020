@@ -7,10 +7,11 @@ configure({ adapter: new Adapter() });
 import { Chathead } from "../../src/client/chathead/Chathead";
 import { SelectProjectContainer } from "../../src/client/chathead/SelectProject";
 import { SelectDebugeeContainer } from "../../src/client/chathead/SelectDebugee";
+import { CreateBreakpointForm } from "../../src/client/chathead/CreateBreakpointForm";
 
 describe("Chathead", () => {
   it("displays SelectProjectContainer when no project selected.", () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <Chathead
         projectId={undefined}
         debuggeeId={undefined}
@@ -37,7 +38,7 @@ describe("Chathead", () => {
   });
 
   it("displays SelectDebugeeContainer when no debugee selected.", () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <Chathead
         projectId={"a"}
         debuggeeId={undefined}
@@ -47,4 +48,16 @@ describe("Chathead", () => {
     );
     expect(wrapper.find(SelectDebugeeContainer)).toHaveLength(1);
   });
+
+  it("displays CreateBreakpointForm when project and debugee selected", () => {
+    const wrapper = mount(
+      <Chathead
+        projectId={"a"}
+        debuggeeId={"b"}
+        breakpoints={[]}
+        createBreakpoint={() => {}}
+      />
+    );
+    expect(wrapper.find(CreateBreakpointForm)).toHaveLength(1);
+  })
 });
