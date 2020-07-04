@@ -4,8 +4,6 @@ import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebugeeContainer } from "./SelectDebugee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
 
-export const Test = () => <div>Test</div>;
-
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
   projectId: string | undefined;
