@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebugeeContainer } from "./SelectDebugee";
+import { CreateBreakpointForm } from "./CreateBreakpointForm";
 
 export const Test = () => <div>Test</div>;
 
@@ -13,6 +14,7 @@ interface ChatheadProps {
   breakpoints: any[]; // TODO: Create a Breakpoint type
 
   setProject: (projectId: string) => void;
+  setDebugee: (debugeeId: string) => void;
   createBreakpoint: (lineNumber: number) => void;
 }
 
@@ -32,22 +34,26 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 
   render() {
+    const {projectId, debuggeeId} = this.props;
     return (
       <ChatheadWrapper>
-        {!this.props.projectId && (
+        {!projectId && (
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
             loadProjects={async () => ["a", "b", "c"]}
           />
         )}
-        {this.props.projectId && !this.props.debuggeeId && (
+        {projectId && !debuggeeId && (
           <SelectDebugeeContainer
             projectId={this.props.projectId}
             debugeeId={this.props.debuggeeId}
-            onChange={() => {}}
+            onChange={this.props.setDebugee}
             loadDebugees={async () => ["a", "b", "c"]}
           />
+        )}
+        {projectId && debuggeeId && (
+          <CreateBreakpointForm createBreakpoint={() => {}}/>
         )}
       </ChatheadWrapper>
     );
