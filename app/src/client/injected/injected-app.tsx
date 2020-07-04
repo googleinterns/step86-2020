@@ -83,7 +83,7 @@ interface InjectedAppState{
   }
 
   createBreakPoint(fileName: string, lineNumber: number){
-    alert(fileName);
+    alert(`${fileName}:${lineNumber}`);
     // use request to ccreat a breakpoint   
       return this.lineNumber;
   }
