@@ -1,4 +1,5 @@
 import React from "react";
+import { SelectView } from "./GeneralSelectView";
 
 interface SelectDebugeeContainerProps {
   projectId: string;
@@ -40,65 +41,15 @@ export class SelectDebugeeContainer extends React.Component<
   render() {
     return (
       <div>
-         <span>Project: {this.props.projectId}</span>
-         <SelectDebugeeView
-        debugees={this.state.debugees}
-        debugeesLoading={this.state.debugeesLoading}
-        debugeeId={this.props.debugeeId}
-        onChange={(debugeeId) => this.onChange(debugeeId)}
-      />
-      </div>
-
-    );
-  }
-}
-
-interface SelectDebugeeViewProps {
-  debugees: any[];
-  debugeesLoading: boolean;
-  debugeeId?: string;
-  onChange: (debugeeId: string) => void;
-}
-
-export class SelectDebugeeView extends React.Component<
-  SelectDebugeeViewProps,
-  {}
-> {
-  onChange(debugeeId) {
-    this.props.onChange(debugeeId);
-  }
-
-  render() {
-    const { debugees, debugeeId, debugeesLoading } = this.props;
-    return (
-      <div>
-        <h1>Select Debugee</h1>
-        {debugeesLoading === true && <LoadingView />}
-        {debugeesLoading === false && (
-          <DebugeeSelect
-            {...{
-              debugeeId,
-              debugees,
-              onChange: (debugeeId) => this.onChange(debugeeId),
-            }}
-          />
-        )}
+        <span>Project: {this.props.projectId}</span>
+        <h3>Select Debugee</h3>
+        <SelectView
+          options={this.state.debugees}
+          optionsLoading={this.state.debugeesLoading}
+          optionId={this.props.debugeeId}
+          onChange={(debugeeId) => this.onChange(debugeeId)}
+        />
       </div>
     );
   }
 }
-
-export const LoadingView = () => <div>Loading...</div>;
-export const DebugeeSelect = ({ debugees, debugeeId, onChange }) => {
-  return (
-    <select value={debugeeId} onChange={(e) => onChange(e.target.value)}>
-      {debugees.map((debugee) => (
-        <DebugeeOption key={debugee} debugee={debugee} />
-      ))}
-    </select>
-  );
-};
-
-export const DebugeeOption = ({ debugee }) => (
-  <option value={debugee}>{debugee}</option>
-);

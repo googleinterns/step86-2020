@@ -1,4 +1,5 @@
 import React from "react";
+import { SelectView } from "./GeneralSelectView";
 
 interface SelectProjectContainerProps {
   projectId?: string;
@@ -38,62 +39,15 @@ export class SelectProjectContainer extends React.Component<
 
   render() {
     return (
-      <SelectProjectView
-        projects={this.state.projects}
-        projectsLoading={this.state.projectsLoading}
-        projectId={this.props.projectId}
-        onChange={(projectId) => this.onChange(projectId)}
-      />
+      <>
+        <h3>Select Project</h3>
+        <SelectView
+          options={this.state.projects}
+          optionsLoading={this.state.projectsLoading}
+          optionId={this.props.projectId}
+          onChange={(projectId) => this.onChange(projectId)}
+        />
+      </>
     );
   }
 }
-
-interface SelectProjectViewProps {
-  projects: any[];
-  projectsLoading: boolean;
-  projectId?: string;
-  onChange: (projectId: string) => void;
-}
-
-export class SelectProjectView extends React.Component<
-  SelectProjectViewProps,
-  {}
-> {
-  onChange(projectId) {
-    this.props.onChange(projectId);
-  }
-
-  render() {
-    const { projects, projectId, projectsLoading } = this.props;
-    return (
-      <div>
-        <h1>Select Project</h1>
-        {projectsLoading === true && <LoadingView />}
-        {projectsLoading === false && (
-          <ProjectSelect
-            {...{
-              projectId,
-              projects,
-              onChange: (projectId) => this.onChange(projectId),
-            }}
-          />
-        )}
-      </div>
-    );
-  }
-}
-
-export const LoadingView = () => <div>Loading...</div>;
-export const ProjectSelect = ({ projects, projectId, onChange }) => {
-  return (
-    <select value={projectId} onChange={(e) => onChange(e.target.value)}>
-      {projects.map((project) => (
-        <ProjectOption key={project} project={project} />
-      ))}
-    </select>
-  );
-};
-
-export const ProjectOption = ({ project }) => (
-  <option value={project}>{project}</option>
-);
