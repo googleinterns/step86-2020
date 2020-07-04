@@ -6,6 +6,7 @@ configure({ adapter: new Adapter() });
 
 import { Chathead } from "../../src/client/chathead/Chathead";
 import { SelectProjectContainer } from "../../src/client/chathead/SelectProject";
+import { SelectDebugeeContainer } from "../../src/client/chathead/SelectDebugee";
 
 describe("Chathead", () => {
   it("displays SelectProjectContainer when no project selected.", () => {
@@ -33,5 +34,17 @@ describe("Chathead", () => {
     );
     wrapper.find(SelectProjectContainer).invoke("onChange")("a");
     expect(spy).toHaveBeenCalledWith("a");
+  });
+
+  it("displays SelectDebugeeContainer when no debugee selected.", () => {
+    const wrapper = shallow(
+      <Chathead
+        projectId={"a"}
+        debuggeeId={undefined}
+        breakpoints={[]}
+        createBreakpoint={() => {}}
+      />
+    );
+    expect(wrapper.find(SelectDebugeeContainer)).toHaveLength(1);
   });
 });

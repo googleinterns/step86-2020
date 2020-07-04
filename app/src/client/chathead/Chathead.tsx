@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
+import { SelectDebugeeContainer } from "./SelectDebugee";
 
 export const Test = () => <div>Test</div>;
 
@@ -38,6 +39,14 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             onChange={this.props.setProject}
             loadProjects={async () => ["a", "b", "c"]}
+          />
+        )}
+        {this.props.projectId && !this.props.debuggeeId && (
+          <SelectDebugeeContainer
+            projectId={this.props.projectId}
+            debugeeId={this.props.debuggeeId}
+            onChange={() => {}}
+            loadDebugees={async () => ["a", "b", "c"]}
           />
         )}
       </ChatheadWrapper>
