@@ -4,46 +4,46 @@ import Adapter from "enzyme-adapter-react-16";
 
 configure({ adapter: new Adapter() });
 
-import { SelectDebugeeContainer } from "../../src/client/chathead/SelectDebugee";
+import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebuggee";
 import { SelectView } from "../../src/client/chathead/GeneralSelectView";
 
-describe("SelectDebugeeContainer", () => {
-  it("loads debugees when mounted", () => {
-    const loadDebugeesSpy = jest.fn(() => new Promise((resolve) => {}));
+describe("SelectDebuggeeContainer", () => {
+  it("loads debuggees when mounted", () => {
+    const loadDebuggeesSpy = jest.fn(() => new Promise((resolve) => {}));
     const wrapper = shallow(
-      <SelectDebugeeContainer
-        debugeeId={undefined}
-        loadDebugees={loadDebugeesSpy}
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={loadDebuggeesSpy}
       />
     );
-    expect(loadDebugeesSpy).toHaveBeenCalledTimes(1);
+    expect(loadDebuggeesSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("goes into loading state when loading debugees", () => {
+  it("goes into loading state when loading debuggees", () => {
     const loadProjectsSpy = jest.fn(() => new Promise((resolve) => {}));
     const wrapper = shallow(
-      <SelectDebugeeContainer
-        debugeeId={undefined}
-        loadDebugees={loadProjectsSpy}
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={loadProjectsSpy}
       />
     );
-    expect(wrapper.state().debugeesLoading).toEqual(true);
+    expect(wrapper.state().debuggeesLoading).toEqual(true);
   });
 
-  it("moves debugees to state once loaded", async (done) => {
-    const mockDebugees = ["a", "b", "c"];
+  it("moves debuggees to state once loaded", async (done) => {
+    const mockDebuggees = ["a", "b", "c"];
     const wrapper = shallow(
-      <SelectDebugeeContainer
-        debugeeId={undefined}
-        loadDebugees={async () => mockDebugees}
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => mockDebuggees}
       />
     );
 
     // Delays the expect call until the component has a change to setState
     setImmediate(() => {
       expect(wrapper.state()).toEqual({
-        debugees: mockDebugees,
-        debugeesLoading: false,
+        debuggees: mockDebuggees,
+        debuggeesLoading: false,
       });
       done();
     });
@@ -52,9 +52,9 @@ describe("SelectDebugeeContainer", () => {
   it("bubbles up onChange from nested SelectView", async (done) => {
     const spy = jest.fn();
     const wrapper = shallow(
-      <SelectDebugeeContainer
-        debugeeId={undefined}
-        loadDebugees={async () => ["a", "b", "c"]}
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => ["a", "b", "c"]}
         onChange={spy}
       />
     );

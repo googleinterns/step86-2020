@@ -96,7 +96,7 @@ interface InjectedAppState{
           debuggeeId={this.state.debuggeeId}
           breakpoints={this.state.breakpoints}
           setProject={projectId => this.setState({projectId})}
-          setDebugee={debuggeeId => this.setState({debuggeeId})}
+          setDebuggee={debuggeeId => this.setState({debuggeeId})}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
         />
         {/* <p>Create a Break Point</p>

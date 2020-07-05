@@ -6,7 +6,7 @@ configure({ adapter: new Adapter() });
 
 import { Chathead } from "../../src/client/chathead/Chathead";
 import { SelectProjectContainer } from "../../src/client/chathead/SelectProject";
-import { SelectDebugeeContainer } from "../../src/client/chathead/SelectDebugee";
+import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebuggee";
 import { CreateBreakpointForm } from "../../src/client/chathead/CreateBreakpointForm";
 
 describe("Chathead", () => {
@@ -37,7 +37,7 @@ describe("Chathead", () => {
     expect(spy).toHaveBeenCalledWith("a");
   });
 
-  it("displays SelectDebugeeContainer when no debugee selected.", () => {
+  it("displays SelectDebuggeeContainer when no debuggee selected.", () => {
     const wrapper = mount(
       <Chathead
         projectId={"a"}
@@ -46,10 +46,10 @@ describe("Chathead", () => {
         createBreakpoint={() => {}}
       />
     );
-    expect(wrapper.find(SelectDebugeeContainer)).toHaveLength(1);
+    expect(wrapper.find(SelectDebuggeeContainer)).toHaveLength(1);
   });
 
-  it("displays CreateBreakpointForm when project and debugee selected", () => {
+  it("displays CreateBreakpointForm when project and debuggee selected", () => {
     const wrapper = mount(
       <Chathead
         projectId={"a"}

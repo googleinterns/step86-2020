@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
-import { SelectDebugeeContainer } from "./SelectDebugee";
+import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
 
 interface ChatheadProps {
@@ -12,23 +12,15 @@ interface ChatheadProps {
   breakpoints: any[]; // TODO: Create a Breakpoint type
 
   setProject: (projectId: string) => void;
-  setDebugee: (debugeeId: string) => void;
+  setDebuggee: (debuggeeId: string) => void;
   createBreakpoint: (fileName: string, lineNumber: number) => void;
 }
 
-interface ChatheadState {
-  /** All debuggees for the current project, loaded using FetchDebuggeesRequest */
-  debuggees: any[]; // TODO: Create a Debuggee type,
-  debuggeesLoading: boolean;
-}
+interface ChatheadState {}
 
 export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   constructor(props: ChatheadProps) {
     super(props);
-    this.state = {
-      debuggees: [],
-      debuggeesLoading: false,
-    };
   }
 
   render() {
@@ -43,11 +35,11 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           />
         )}
         {projectId && !debuggeeId && (
-          <SelectDebugeeContainer
+          <SelectDebuggeeContainer
             projectId={this.props.projectId}
-            debugeeId={this.props.debuggeeId}
-            onChange={this.props.setDebugee}
-            loadDebugees={async () => ["a", "b", "c"]}
+            debuggeeId={this.props.debuggeeId}
+            onChange={this.props.setDebuggee}
+            loadDebuggees={async () => ["a", "b", "c"]}
           />
         )}
         {projectId && debuggeeId && (
