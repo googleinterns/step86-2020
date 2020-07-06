@@ -118,7 +118,7 @@ class FetchDebuggeesRequestData extends BackgroundRequestData {
   projectId: string;
 
   constructor(projectId: string) {
-    super(BackgroundRequestType.FETCH_BREAKPOINTS);
+    super(BackgroundRequestType.FETCH_DEBUGGEES);
     this.projectId = projectId; 
   }
 }
