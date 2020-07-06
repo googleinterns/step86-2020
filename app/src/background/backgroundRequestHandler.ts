@@ -8,6 +8,16 @@ class BackgroundRequestHandler {
         BackgroundRequestHandler.handlers[type] = callback;
     }
 
+    static listen() {
+        chrome.runtime.onMessage.addListener(async (data: BackgroundRequestData, sender, sendResponse) => {
+            const handler = BackgroundRequestHandler.handlers[data.type];
+            if (handler === undefined) {
+                throw new Error("Handler not registered for type: " + data.type);
+            }
+            const response = await handler(data);
+            sendResponse(response);
+        });
+    }
 }
 
 BackgroundRequestHandler.on(BackgroundRequestType.FETCH_PROJECT, async data => {
