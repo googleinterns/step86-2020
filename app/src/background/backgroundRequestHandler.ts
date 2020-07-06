@@ -1,46 +1,76 @@
 import api from "debugger-extension-api";
-import { BackgroundRequestType, BackgroundRequestData } from "../common/requests/BackgroundRequest";
+import {
+  BackgroundRequestType,
+  BackgroundRequestData,
+} from "../common/requests/BackgroundRequest";
 
 class BackgroundRequestHandler {
-    static handlers = {};
+  static handlers = {};
 
-    static on<D extends BackgroundRequestData>(type: BackgroundRequestType, callback: (data: D) => Promise<any>){
-        BackgroundRequestHandler.handlers[type] = callback;
-    }
+  static on<D extends BackgroundRequestData>(
+    type: BackgroundRequestType,
+    callback: (data: D) => Promise<any>
+  ) {
+    BackgroundRequestHandler.handlers[type] = callback;
+  }
 
-    static listen() {
-        chrome.runtime.onMessage.addListener(async (data: BackgroundRequestData, sender, sendResponse) => {
-            const handler = BackgroundRequestHandler.handlers[data.type];
-            if (handler === undefined) {
-                throw new Error("Handler not registered for type: " + data.type);
-            }
-            const response = await handler(data);
-            sendResponse(response);
-        });
-    }
+  static listen() {
+    chrome.runtime.onMessage.addListener(
+      async (data: BackgroundRequestData, sender, sendResponse) => {
+        const handler = BackgroundRequestHandler.handlers[data.type];
+        if (handler === undefined) {
+          throw new Error("Handler not registered for type: " + data.type);
+        }
+        const response = await handler(data);
+        sendResponse(response);
+      }
+    );
+  }
 }
 
-BackgroundRequestHandler.on(BackgroundRequestType.FETCH_PROJECT, async data => {
-    const response = await api.fetchProjects(); 
+BackgroundRequestHandler.on(
+  BackgroundRequestType.FETCH_PROJECT,
+  async (data) => {
+    const response = await api.fetchProjects();
     return response;
-})
+  }
+);
 
-BackgroundRequestHandler.on(BackgroundRequestType.FETCH_DEBUGGEES, async data => {
-    const response = await api.fetchDebuggees(data.projectId); 
+BackgroundRequestHandler.on(
+  BackgroundRequestType.FETCH_DEBUGGEES,
+  async (data) => {
+    const response = await api.fetchDebuggees(data.projectId);
     return response;
-})
+  }
+);
 
-BackgroundRequestHandler.on(BackgroundRequestType.SET_BREAKPOINT, async data => {
-    const response = await api.setBreakpoint(data.debuggeeId, data.fileName, data.lineNumber); 
+BackgroundRequestHandler.on(
+  BackgroundRequestType.SET_BREAKPOINT,
+  async (data) => {
+    const response = await api.setBreakpoint(
+      data.debuggeeId,
+      data.fileName,
+      data.lineNumber
+    );
     return response;
-})
+  }
+);
 
-BackgroundRequestHandler.on(BackgroundRequestType.FETCH_BREAKPOINT, async data => {
-    const response = await api.getBreakpoint(data.debuggeeId, data.breakpointId); 
+BackgroundRequestHandler.on(
+  BackgroundRequestType.FETCH_BREAKPOINT,
+  async (data) => {
+    const response = await api.getBreakpoint(
+      data.debuggeeId,
+      data.breakpointId
+    );
     return response;
-})
+  }
+);
 
-BackgroundRequestHandler.on(BackgroundRequestType.LIST_BREAKPOINTS, async data => {
-    const response = await api.fetchDebuggees(data.debuggeeId); 
+BackgroundRequestHandler.on(
+  BackgroundRequestType.LIST_BREAKPOINTS,
+  async (data) => {
+    const response = await api.fetchDebuggees(data.debuggeeId);
     return response;
-})
+  }
+);
