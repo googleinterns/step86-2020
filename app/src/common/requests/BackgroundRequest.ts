@@ -11,8 +11,9 @@
 export enum BackgroundRequestType {
   FETCH_PROJECTS,
   FETCH_DEBUGGEES,
-  FETCH_BREAKPOINTS,
+  FETCH_BREAKPOINT,
   SET_BREAKPOINT,
+  LIST_BREAKPOINTS
 }
 
 /**
@@ -77,6 +78,9 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
 }
 
 
+/**
+ *  This class lets UI request a list of user's projects
+ */
 
 class FetchProjectsRequestData extends BackgroundRequestData {
 
@@ -93,13 +97,16 @@ export class FetchProjectsRequest<T,K> extends BackgroundRequest<FetchProjectsRe
 
 }
 
+/**
+ *  This class lets UI request a list of a debuggee breakpoints
+ */
 
 class ListBreakpointsData extends BackgroundRequestData {
   debuggeeId: string;
   waitToken?: string;
 
   constructor(debuggeeId: string, waitToken: string) {
-    super(BackgroundRequestType.FETCH_BREAKPOINTS);
+    super(BackgroundRequestType.LIST_BREAKPOINTS);
     this.debuggeeId = debuggeeId;
     this.waitToken = waitToken;
   }
@@ -115,7 +122,7 @@ export class ListBreakPointsRequest<T,K> extends BackgroundRequest<ListBreakpoin
 }
 
 /**
- *  This class lets UI set a new breakpoint
+ *  This class lets UI request a list of project's debuggees
  */
 
 class FetchDebuggeesRequestData extends BackgroundRequestData {
@@ -169,7 +176,7 @@ class FetchBreakpointRequestData extends BackgroundRequestData {
   breakpointId: string;
 
   constructor(debuggeeId: string, breakpointId: string) {
-    super(BackgroundRequestType.FETCH_BREAKPOINTS);
+    super(BackgroundRequestType.FETCH_BREAKPOINT);
     this.debuggeeId = debuggeeId;
     this.breakpointId = breakpointId;
   }
