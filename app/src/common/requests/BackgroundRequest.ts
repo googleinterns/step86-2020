@@ -114,3 +114,19 @@ export class ListBreakPointsRequest<T,K> extends BackgroundRequest<ListBreakpoin
 
 }
 
+class FetchDebuggeesRequestData extends BackgroundRequestData {
+  projectId: string;
+
+  constructor(projectId: string) {
+    super(BackgroundRequestType.FETCH_BREAKPOINTS);
+    this.projectId = projectId; 
+  }
+}
+
+interface FetchDebuggeesRequestResponse {
+  debuggees: Array<any>;
+}
+
+export class FetchDebuggeesRequest<T,K> extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
+
+}
