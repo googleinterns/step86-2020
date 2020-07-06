@@ -11,8 +11,9 @@
 export enum BackgroundRequestType {
   FETCH_PROJECTS,
   FETCH_DEBUGGEES,
-  FETCH_BREAKPOINTS,
+  FETCH_BREAKPOINT,
   SET_BREAKPOINT,
+  LIST_BREAKPOINTS
 }
 
 /**
@@ -74,4 +75,117 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
       });
     });
   }
+}
+
+
+/**
+ *  This class lets UI request a list of user's projects
+ */
+
+class FetchProjectsRequestData extends BackgroundRequestData {
+
+  constructor() {
+    super(BackgroundRequestType.FETCH_PROJECTS);
+  }
+}
+
+interface FetchProjectsRequestResponse {
+  projects: Array<any>;
+}
+
+export class FetchProjectsRequest extends BackgroundRequest<FetchProjectsRequestData,FetchProjectsRequestResponse> {
+
+}
+
+/**
+ *  This class lets UI request a list of a debuggee breakpoints
+ */
+
+class ListBreakpointsData extends BackgroundRequestData {
+  debuggeeId: string;
+  waitToken?: string;
+
+  constructor(debuggeeId: string, waitToken: string) {
+    super(BackgroundRequestType.LIST_BREAKPOINTS);
+    this.debuggeeId = debuggeeId;
+    this.waitToken = waitToken;
+  }
+}
+
+interface ListBreakpointsResponse {
+  breakpoints: Array<any>;
+  nextWaitToken: string;
+}
+
+export class ListBreakPointsRequest extends BackgroundRequest<ListBreakpointsData,ListBreakpointsResponse> {
+
+}
+
+/**
+ *  This class lets UI request a list of project's debuggees
+ */
+
+class FetchDebuggeesRequestData extends BackgroundRequestData {
+  projectId: string;
+
+  constructor(projectId: string) {
+    super(BackgroundRequestType.FETCH_DEBUGGEES);
+    this.projectId = projectId; 
+  }
+}
+
+interface FetchDebuggeesRequestResponse {
+  debuggees: Array<any>;
+}
+
+export class FetchDebuggeesRequest extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
+
+}
+
+/**
+ *  This class lets UI set a new breakpoint
+ */
+
+class SetBreakpointRequestData extends BackgroundRequestData {
+  debuggeeId: string;
+  fileName: string;
+  lineNumber: number;
+
+  constructor(debuggeeId: string, fileName: string, lineNumber: number) {
+    super(BackgroundRequestType.SET_BREAKPOINT);
+    this.debuggeeId = debuggeeId;
+    this.fileName = fileName;
+    this.lineNumber = lineNumber; 
+  }
+}
+
+interface SetBreakpointRequestResponse {
+  breakpoint: Array<any>;
+}
+
+export class SetBreakpointRequest extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
+
+}
+
+/**
+ *  This class lets UI request full data for a specific breakpoint
+ */
+
+class FetchBreakpointRequestData extends BackgroundRequestData {
+  debuggeeId: string;
+  breakpointId: string;
+
+  constructor(debuggeeId: string, breakpointId: string) {
+    super(BackgroundRequestType.FETCH_BREAKPOINT);
+    this.debuggeeId = debuggeeId;
+    this.breakpointId = breakpointId;
+  }
+}
+
+interface FetchBreakpointRequestResponse {
+  breakpoint: Array<any>;
+}
+
+export class FetchBreakpointRequest extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
+
 }
