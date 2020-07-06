@@ -130,3 +130,25 @@ interface FetchDebuggeesRequestResponse {
 export class FetchDebuggeesRequest<T,K> extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
 
 }
+
+
+class SetBreakpointRequestData extends BackgroundRequestData {
+  debuggeeId: string;
+  fileName: string;
+  lineNumber: number;
+
+  constructor(debuggeeId: string, fileName: string, lineNumber: number) {
+    super(BackgroundRequestType.SET_BREAKPOINT);
+    this.debuggeeId = debuggeeId;
+    this.fileName = fileName;
+    this.lineNumber = lineNumber; 
+  }
+}
+
+interface SetBreakpointRequestResponse {
+  breakpoint: Array<any>;
+}
+
+export class SetBreakpointRequest<T,K> extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
+
+}
