@@ -28,7 +28,7 @@ class BackgroundRequestHandler {
   }
 }
 
-BackgroundRequestHandler.on(
+BackgroundRequestHandler.on<FetchProjectsRequestData>(
   BackgroundRequestType.FETCH_PROJECT,
   async (data) => {
     const response = await api.fetchProjects();
@@ -36,7 +36,7 @@ BackgroundRequestHandler.on(
   }
 );
 
-BackgroundRequestHandler.on(
+BackgroundRequestHandler.on<FetchDebuggeesRequestData>(
   BackgroundRequestType.FETCH_DEBUGGEES,
   async (data) => {
     const response = await api.fetchDebuggees(data.projectId);
@@ -44,7 +44,7 @@ BackgroundRequestHandler.on(
   }
 );
 
-BackgroundRequestHandler.on(
+BackgroundRequestHandler.on<SetBreakpointRequestData>(
   BackgroundRequestType.SET_BREAKPOINT,
   async (data) => {
     const response = await api.setBreakpoint(
@@ -56,7 +56,7 @@ BackgroundRequestHandler.on(
   }
 );
 
-BackgroundRequestHandler.on(
+BackgroundRequestHandler.on<FetchBreakpointRequestData>(
   BackgroundRequestType.FETCH_BREAKPOINT,
   async (data) => {
     const response = await api.getBreakpoint(
@@ -67,7 +67,7 @@ BackgroundRequestHandler.on(
   }
 );
 
-BackgroundRequestHandler.on(
+BackgroundRequestHandler.on<ListBreakpointsData>(
   BackgroundRequestType.LIST_BREAKPOINTS,
   async (data) => {
     const response = await api.fetchDebuggees(data.debuggeeId);
