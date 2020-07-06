@@ -82,7 +82,7 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
  *  This class lets UI request a list of user's projects
  */
 
-class FetchProjectsRequestData extends BackgroundRequestData {
+export class FetchProjectsRequestData extends BackgroundRequestData {
 
   constructor() {
     super(BackgroundRequestType.FETCH_PROJECTS);
@@ -101,7 +101,7 @@ export class FetchProjectsRequest extends BackgroundRequest<FetchProjectsRequest
  *  This class lets UI request a list of a debuggee breakpoints
  */
 
-class ListBreakpointsData extends BackgroundRequestData {
+export class ListBreakpointsData extends BackgroundRequestData {
   debuggeeId: string;
   waitToken?: string;
 
@@ -125,7 +125,7 @@ export class ListBreakPointsRequest extends BackgroundRequest<ListBreakpointsDat
  *  This class lets UI request a list of project's debuggees
  */
 
-class FetchDebuggeesRequestData extends BackgroundRequestData {
+export class FetchDebuggeesRequestData extends BackgroundRequestData {
   projectId: string;
 
   constructor(projectId: string) {
@@ -146,7 +146,7 @@ export class FetchDebuggeesRequest extends BackgroundRequest<FetchDebuggeesReque
  *  This class lets UI set a new breakpoint
  */
 
-class SetBreakpointRequestData extends BackgroundRequestData {
+ export class SetBreakpointRequestData extends BackgroundRequestData {
   debuggeeId: string;
   fileName: string;
   lineNumber: number;
@@ -160,7 +160,7 @@ class SetBreakpointRequestData extends BackgroundRequestData {
 }
 
 interface SetBreakpointRequestResponse {
-  breakpoint: Array<any>;
+  breakpoint: any;
 }
 
 export class SetBreakpointRequest extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
@@ -171,7 +171,7 @@ export class SetBreakpointRequest extends BackgroundRequest<SetBreakpointRequest
  *  This class lets UI request full data for a specific breakpoint
  */
 
-class FetchBreakpointRequestData extends BackgroundRequestData {
+export class FetchBreakpointRequestData extends BackgroundRequestData {
   debuggeeId: string;
   breakpointId: string;
 
@@ -181,9 +181,8 @@ class FetchBreakpointRequestData extends BackgroundRequestData {
     this.breakpointId = breakpointId;
   }
 }
-
 interface FetchBreakpointRequestResponse {
-  breakpoint: Array<any>;
+  breakpoint: any;
 }
 
 export class FetchBreakpointRequest extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
