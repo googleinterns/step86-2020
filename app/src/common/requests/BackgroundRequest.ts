@@ -75,3 +75,42 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
     });
   }
 }
+
+
+
+class FetchProjectsRequestData extends BackgroundRequestData {
+
+  constructor() {
+    super(BackgroundRequestType.FETCH_PROJECTS);
+  }
+}
+
+interface FetchProjectsRequestResponse {
+  projects: Array<any>;
+}
+
+export class FetchProjectsRequest<T,K> extends BackgroundRequest<FetchProjectsRequestData,FetchProjectsRequestResponse> {
+
+}
+
+
+class ListBreakpointsData extends BackgroundRequestData {
+  debuggeeId: string;
+  waitToken?: string;
+
+  constructor(debuggeeId: string, waitToken: string) {
+    super(BackgroundRequestType.FETCH_BREAKPOINTS);
+    this.debuggeeId = debuggeeId;
+    this.waitToken = waitToken;
+  }
+}
+
+interface ListBreakpointsResponse {
+  breakpoints: Array<any>;
+  nextWaitToken: string;
+}
+
+export class ListBreakPointsRequest<T,K> extends BackgroundRequest<ListBreakpointsData,ListBreakpointsResponse> {
+
+}
+
