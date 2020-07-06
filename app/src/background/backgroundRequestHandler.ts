@@ -1,7 +1,14 @@
 import api from "debugger-extension-api";
+import { BackgroundRequestType, BackgroundRequestData } from "../common/requests/BackgroundRequest";
 
+class BackgroundRequestHandler {
+    static handlers = {};
 
+    static on<D extends BackgroundRequestData>(type: BackgroundRequestType, callback: (data: D) => Promise<any>){
+        BackgroundRequestHandler.handlers[type] = callback;
+    }
 
+}
 
 BackgroundRequestHandler.on(BackgroundRequestType.FETCH_PROJECT, async data => {
     const response = await api.fetchProjects(); 
@@ -26,4 +33,4 @@ BackgroundRequestHandler.on(BackgroundRequestType.FETCH_BREAKPOINT, async data =
 BackgroundRequestHandler.on(BackgroundRequestType.LIST_BREAKPOINTS, async data => {
     const response = await api.fetchDebuggees(data.debuggeeId); 
     return response;
-}
+})
