@@ -114,6 +114,10 @@ export class ListBreakPointsRequest<T,K> extends BackgroundRequest<ListBreakpoin
 
 }
 
+/**
+ *  This class lets UI set a new breakpoint
+ */
+
 class FetchDebuggeesRequestData extends BackgroundRequestData {
   projectId: string;
 
@@ -131,6 +135,9 @@ export class FetchDebuggeesRequest<T,K> extends BackgroundRequest<FetchDebuggees
 
 }
 
+/**
+ *  This class lets UI set a new breakpoint
+ */
 
 class SetBreakpointRequestData extends BackgroundRequestData {
   debuggeeId: string;
@@ -153,6 +160,9 @@ export class SetBreakpointRequest<T,K> extends BackgroundRequest<SetBreakpointRe
 
 }
 
+/**
+ *  This class lets UI request full data for a specific breakpoint
+ */
 
 class FetchBreakpointRequestData extends BackgroundRequestData {
   debuggeeId: string;
