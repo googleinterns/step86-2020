@@ -93,7 +93,7 @@ interface FetchProjectsRequestResponse {
   projects: Array<any>;
 }
 
-export class FetchProjectsRequest<T,K> extends BackgroundRequest<FetchProjectsRequestData,FetchProjectsRequestResponse> {
+export class FetchProjectsRequest extends BackgroundRequest<FetchProjectsRequestData,FetchProjectsRequestResponse> {
 
 }
 
@@ -117,7 +117,7 @@ interface ListBreakpointsResponse {
   nextWaitToken: string;
 }
 
-export class ListBreakPointsRequest<T,K> extends BackgroundRequest<ListBreakpointsData,ListBreakpointsResponse> {
+export class ListBreakPointsRequest extends BackgroundRequest<ListBreakpointsData,ListBreakpointsResponse> {
 
 }
 
@@ -138,7 +138,7 @@ interface FetchDebuggeesRequestResponse {
   debuggees: Array<any>;
 }
 
-export class FetchDebuggeesRequest<T,K> extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
+export class FetchDebuggeesRequest extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
 
 }
 
@@ -163,7 +163,7 @@ interface SetBreakpointRequestResponse {
   breakpoint: Array<any>;
 }
 
-export class SetBreakpointRequest<T,K> extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
+export class SetBreakpointRequest extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
 
 }
 
@@ -186,6 +186,6 @@ interface FetchBreakpointRequestResponse {
   breakpoint: Array<any>;
 }
 
-export class FetchBreakpointRequest<T,K> extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
+export class FetchBreakpointRequest extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
 
 }
