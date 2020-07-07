@@ -3,7 +3,7 @@ import * as backgroundRequest from "../common/requests/BackgroundRequest";
 
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
- * dispatches them to the handlers based on their type (BackgroundRequestType) field. 
+ * dispatches them to the handlers based on their type (BackgroundRequestType) field.
  * These handlers will perform  logic usually by calling (and awaiting) debugger-extension API methods.
  */
 class BackgroundRequestHandler {
@@ -18,12 +18,16 @@ class BackgroundRequestHandler {
   }
 
   /**
- * Static functionto match the handler based on their BackgroundRequest type and send the response
- * back to the request using chrome.runtime.onMessage.addListener(function callback)
- */
+   * Static functionto match the handler based on their BackgroundRequest type and send the response
+   * back to the request using chrome.runtime.onMessage.addListener(function callback)
+   */
   static listen() {
     chrome.runtime.onMessage.addListener(
-      async (data: backgroundRequest.BackgroundRequestData, sender, sendResponse) => {
+      async (
+        data: backgroundRequest.BackgroundRequestData,
+        sender,
+        sendResponse
+      ) => {
         const handler = BackgroundRequestHandler.handlers[data.type];
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
