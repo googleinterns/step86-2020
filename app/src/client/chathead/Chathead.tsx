@@ -6,8 +6,6 @@ import { CreateBreakpointForm } from "./CreateBreakpointForm";
 import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData } from "../../common/requests/BackgroundRequest";
 import { FetchDebuggeesRequest } from "../../common/requests/BackgroundRequest";
 
-
-
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
   projectId: string | undefined;
