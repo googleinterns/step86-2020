@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
+import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
 
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
@@ -31,7 +32,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
-            loadProjects={async () => ["a", "b", "c"]}
+            loadProjects={() => new FetchProjectsRequest().run(new FetchProjectsRequestData())}
           />
         )}
         {projectId && !debuggeeId && (
@@ -39,7 +40,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
             onChange={this.props.setDebuggee}
-            loadDebuggees={async () => ["a", "b", "c"]}
+            loadDebuggees={() => new FetchDebuggeesRequest().run(new FetchDebuggeesRequestData(this.props.projectId))}
           />
         )}
         {projectId && debuggeeId && (
