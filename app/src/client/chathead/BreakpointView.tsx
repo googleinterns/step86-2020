@@ -15,7 +15,8 @@ export const PendingBreakpointView = ({ breakpointMeta }) => (
 export const CompletedBreakpointView = ({ breakpoint }) => (
   <div>
     <BreakpointHeader id={breakpoint.id} location={breakpoint.location} />
-    <pre>{JSON.stringify(breakpoint)}</pre>
+    {/* Adding the "null, 2" params enables pretty-printing*/}
+    <pre>{JSON.stringify(breakpoint, null, 2)}</pre>
   </div>
 );
 
