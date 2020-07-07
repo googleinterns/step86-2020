@@ -6,7 +6,7 @@ import * as backgroundRequest from "../common/requests/BackgroundRequest";
  * dispatches them to the handlers based on their type (BackgroundRequestType) field.
  * These handlers will perform  logic usually by calling (and awaiting) debugger-extension API methods.
  */
-class BackgroundRequestHandler {
+export class BackgroundRequestHandler {
   // Dictionary to keep the handlers and their callback
   static handlers = {};
 
