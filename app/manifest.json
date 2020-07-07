@@ -16,7 +16,7 @@
     }
   ],
   "background": {
-    "scripts": ["./src/background/extensionAuthHandler.ts"]
+    "scripts": ["./src/background/background.ts"]
   },
 
   "oauth2": {
