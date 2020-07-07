@@ -33,7 +33,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
-            loadProjects={ () => new FetchProjectsRequest().run(new FetchProjectsRequestData())}
+            loadProjects={() => new FetchProjectsRequest().run(new FetchProjectsRequestData())}
           />
         )}
         {projectId && !debuggeeId && (
