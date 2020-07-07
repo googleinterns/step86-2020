@@ -18,7 +18,7 @@ class BackgroundRequestHandler {
   }
 
   /**
-   * Static functionto match the handler based on their BackgroundRequest type and send the response
+   * Static function to match the handler based on their BackgroundRequest type and send the response
    * back to the request using chrome.runtime.onMessage.addListener(function callback)
    */
   static listen() {
