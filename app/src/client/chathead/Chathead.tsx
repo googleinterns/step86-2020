@@ -35,7 +35,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
-            loadProjects={this.props.FetchProjectsRequest}
+            loadProjects={ () => new FetchProjectsRequest().run()}
           />
         )}
         {projectId && !debuggeeId && (
@@ -43,7 +43,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
             onChange={this.props.setDebuggee}
-            loadDebuggees={this.props.FetchDebuggeesRequest}
+            loadDebuggees={() => new FetchDebuggeesRequest().run(this.props.projectId)}
           />
         )}
         {projectId && debuggeeId && (
