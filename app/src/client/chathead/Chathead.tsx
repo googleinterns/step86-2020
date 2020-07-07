@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
-import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData } from "../../common/requests/BackgroundRequest";
-import { FetchDebuggeesRequest } from "../../common/requests/BackgroundRequest";
+import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
 
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
