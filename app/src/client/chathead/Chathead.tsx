@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
-import { FetchProjectsRequest } from "../../common/requests/BackgroundRequest";
+import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData } from "../../common/requests/BackgroundRequest";
 import { FetchDebuggeesRequest } from "../../common/requests/BackgroundRequest";
 
 
@@ -35,7 +35,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
-            loadProjects={ () => new FetchProjectsRequest().run()}
+            loadProjects={ () => new FetchProjectsRequest().run(new FetchProjectsRequestData())}
           />
         )}
         {projectId && !debuggeeId && (
@@ -43,7 +43,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
             onChange={this.props.setDebuggee}
-            loadDebuggees={() => new FetchDebuggeesRequest().run(this.props.projectId)}
+            loadDebuggees={() => new FetchDebuggeesRequest().run(new FetchDebuggeesRequestData(this.props.projectId))}
           />
         )}
         {projectId && debuggeeId && (
