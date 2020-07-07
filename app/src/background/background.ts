@@ -1,8 +1,7 @@
-import * as extensionAuthHandler from "./extensionAuthHandler"; 
-import * as backgroundRequestHandler from "./backgroundRequestHandler"; 
-
+import * as extensionAuthHandler from "./extensionAuthHandler";
+import * as backgroundRequestHandler from "./backgroundRequestHandler";
 
 window.onload = (event) => {
-    extensionAuthHandler.getToken();
-    backgroundRequestHandler.BackgroundRequestHandler.listen();
-  };
+  extensionAuthHandler.getToken();
+  backgroundRequestHandler.BackgroundRequestHandler.listen();
+};
