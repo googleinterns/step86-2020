@@ -1,16 +1,17 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
+import { Debuggee } from "../../common/types/debugger";
 
 interface SelectDebuggeeContainerProps {
   projectId: string;
   debuggeeId?: string;
-  loadDebuggees: () => Promise<any[]>;
+  loadDebuggees: () => Promise<Debuggee[]>;
   onChange: (debuggeeId) => void;
 }
 
 interface SelectDebuggeeContainerState {
   /** All projects this user has access to, loaded using FetchProjectsRequest */
-  debuggees: any[]; // TODO: Create a Project type
+  debuggees: any[];
   debuggeesLoading: boolean;
 }
 
@@ -46,8 +47,9 @@ export class SelectDebuggeeContainer extends React.Component<
         <SelectView
           options={this.state.debuggees}
           optionsLoading={this.state.debuggeesLoading}
-          optionId={this.props.debuggeeId}
+          selectedOptionId={this.props.debuggeeId}
           onChange={(debuggeeId) => this.onChange(debuggeeId)}
+          optionToId={(debuggee: Debuggee) => debuggee.id}
         />
       </div>
     );

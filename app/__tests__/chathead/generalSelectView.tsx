@@ -14,7 +14,13 @@ import {
 describe("SelectView", () => {
   it("displays loading state", () => {
     const wrapper = shallow(
-      <SelectView optionsLoading={true} options={[]} onChange={() => {}} />
+      <SelectView
+        optionsLoading={true}
+        options={[]}
+        optionToId={opt => opt}
+        selectedOptionId={"b"}
+        onChange={() => {}}
+      />
     );
     expect(wrapper.find(LoadingView)).toHaveLength(1);
   });
@@ -24,6 +30,8 @@ describe("SelectView", () => {
       <SelectView
         optionsLoading={false}
         options={["a", "b", "c"]}
+        optionToId={opt => opt}
+        selectedOptionId={"b"}
         onChange={() => {}}
       />
     );
@@ -38,14 +46,15 @@ describe("SelectView", () => {
       <SelectView
         optionsLoading={false}
         options={["a", "b", "c"]}
-        optionId={"b"}
+        optionToId={opt => opt}
+        selectedOptionId={"b"}
         onChange={() => {}}
       />
     );
 
     // Find selected option
     expect(
-      wrapper.find(OptionSelect).first().getElement().props.optionId
+      wrapper.find(OptionSelect).first().getElement().props.selectedOptionId
     ).toEqual("b");
   });
 
@@ -55,7 +64,8 @@ describe("SelectView", () => {
       <SelectView
         optionsLoading={false}
         options={["a", "b", "c"]}
-        optionId={"b"}
+        optionToId={opt => opt}
+        selectedOptionId={"b"}
         onChange={spy}
       />
     );

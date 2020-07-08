@@ -54,8 +54,8 @@ interface InjectedAppState{
   constructor(){
     super();
     this.state = {
-      projectId: "",
-      debuggeeId: "",
+      projectId: undefined,
+      debuggeeId: undefined,
       counter: 20,
       breakpoints : {},
       lineNumber: 29,
