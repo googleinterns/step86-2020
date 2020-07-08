@@ -49,7 +49,7 @@ interface InjectedAppState{
   breakpoints: Array<any>,
   lineNum: number;
   fileName: string;
-  activeBreakpoints: Array<any>;
+  activeBreakpoints: Object;
   listBreakpoints: Array<any>;
   getBreakpoints: Array<any>;
 
@@ -91,8 +91,8 @@ interface InjectedAppState{
 
   async createBreakPoint(fileName: string, lineNumber: number){
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
-    var newStateActive = this.state.activeBreakpoints.slice();
-    newStateActive.push(response.breakpoint);
+    var newStateActive = {...this.state.activeBreakpoints};
+    newStateActive[response.breakpoint.id] = response.breakpoint;
     this.setState({activeBreakpoints: newStateActive});
   }
 
