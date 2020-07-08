@@ -107,7 +107,7 @@ interface InjectedAppState{
       }
       this.setState({listBreakpoints: newStateList});
 
-      let difference = {}
+      let difference: Array<any>
       for (let breakpoint of this.state.listBreakpoints) {
         if (breakpoint in this.state.activeBreakpoints) {
           difference.push(breakpoint);
