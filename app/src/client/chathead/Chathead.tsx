@@ -32,7 +32,10 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <SelectProjectContainer
             projectId={this.props.projectId}
             onChange={this.props.setProject}
-            loadProjects={() => new FetchProjectsRequest().run(new FetchProjectsRequestData())}
+            loadProjects={async () => {
+              const response = await new FetchProjectsRequest().run(new FetchProjectsRequestData());
+              return response.projects;
+            }}
           />
         )}
         {projectId && !debuggeeId && (
@@ -40,7 +43,11 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
             onChange={this.props.setDebuggee}
-            loadDebuggees={() => new FetchDebuggeesRequest().run(new FetchDebuggeesRequestData(this.props.projectId))}
+            loadDebuggees={async () => {
+              const response = await new FetchDebuggeesRequest().run(new FetchDebuggeesRequestData(this.props.projectId));
+              // Response.debuggees will be undefined if there are no active debuggees.
+              return response.debuggees || [];
+            }}
           />
         )}
         {projectId && debuggeeId && (

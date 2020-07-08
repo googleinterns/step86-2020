@@ -23,7 +23,7 @@ export class BackgroundRequestHandler {
    */
   static listen() {
     chrome.runtime.onMessage.addListener(
-      async (
+      (
         data: backgroundRequest.BackgroundRequestData,
         sender,
         sendResponse
@@ -32,8 +32,9 @@ export class BackgroundRequestHandler {
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
         }
-        const response = await handler(data);
-        sendResponse(response);
+        handler(data).then(sendResponse);
+        // Need to return true to tell chrome to wait for a response.
+        return true;
       }
     );
   }

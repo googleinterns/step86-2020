@@ -3,7 +3,9 @@ import React from "react";
 interface SelectViewProps {
   options: any[];
   optionsLoading: boolean;
-  optionId?: string;
+  selectedOptionId?: string;
+  // Gets an ID to internally represent an option (will be stored and sent to API)
+  optionToId: (option: any) => string;
   onChange: (optionId: string) => void;
 }
 
@@ -13,17 +15,16 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
   }
 
   render() {
-    const { options, optionId, optionsLoading } = this.props;
+    const { options, selectedOptionId, optionsLoading, optionToId } = this.props;
     return (
       <div>
         {optionsLoading === true && <LoadingView />}
         {optionsLoading === false && (
           <OptionSelect
-            {...{
-              optionId,
-              options,
-              onChange: (optionId) => this.onChange(optionId),
-            }}
+            selectedOptionId={selectedOptionId}
+            options={options}
+            onChange={(optionId) => this.onChange(optionId)}
+            optionToId={optionToId}
           />
         )}
       </div>
@@ -32,11 +33,14 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
 }
 
 export const LoadingView = () => <div>Loading...</div>;
-export const OptionSelect = ({ options, optionId, onChange }) => {
+
+export const OptionSelect = ({ options, selectedOptionId, onChange, optionToId }) => {
+  // We use a default value of -1 to force allow selection of the 0th element.
   return (
-    <select value={optionId} onChange={(e) => onChange(e.target.value)}>
+    <select value={selectedOptionId || -1} onChange={(e) => onChange(e.target.value)}>
+      <option value={-1} disabled>None Selected</option>
       {options.map((option) => (
-        <Option key={option} option={option} />
+        <Option key={optionToId(option)} option={optionToId(option)} />
       ))}
     </select>
   );

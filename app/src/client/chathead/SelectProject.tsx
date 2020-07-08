@@ -1,15 +1,16 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
+import { Project } from "../../common/types/debugger";
 
 interface SelectProjectContainerProps {
   projectId?: string;
-  loadProjects: () => Promise<any[]>;
+  loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
 }
 
 interface SelectProjectContainerState {
   /** All projects this user has access to, loaded using FetchProjectsRequest */
-  projects: any[]; // TODO: Create a Project type
+  projects: Array<Project>;
   projectsLoading: boolean;
 }
 
@@ -44,8 +45,9 @@ export class SelectProjectContainer extends React.Component<
         <SelectView
           options={this.state.projects}
           optionsLoading={this.state.projectsLoading}
-          optionId={this.props.projectId}
+          selectedOptionId={this.props.projectId}
           onChange={(projectId) => this.onChange(projectId)}
+          optionToId={(project: Project) => project.projectId}
         />
       </>
     );
