@@ -88,41 +88,70 @@ interface InjectedAppState{
     this.setState({fileName: value});
   }
 
-
+    /**
+   * Makes request to the BackgroundRequest to set the breakpoint 
+   * using debuggee id, file name and line number
+   * @param {String} filename Name of the file to set the breakpoint in that file.
+   * @param {number} lineNumber line number to set the breakpoint on that line.
+   */
   async createBreakPoint(fileName: string, lineNumber: number){
+    // Make the Set breakpoint request in the BackgroundRequest 
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
+  /**
+   * Side note: you cannot mutate the state variable in React. So, to append values to an array, you have to 
+   * make a copy of state array and push elements to it. And then reassign the state variable
+   */
+    // Add the response to the state object variable
     var newStateActive = {...this.state.activeBreakpoints};
     newStateActive[response.breakpoint.id] = response.breakpoint;
     this.setState({activeBreakpoints: newStateActive});
   }
 
+    /**
+   * This function is invoked immediately after a component is mounted. This allows to 
+   * keep calling listbreakpoints request on an interval of 5 seconds to check 
+   * the difference between active breakpoints and non-active breakpoints.
+   */
   componentDidMount(){
+    // Set waitToken to null as default for first call
     var waitToken = null;
     setInterval(async function(){
+      // Make the list breakpoint request
       let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
       waitToken = listBreakpointResponse.nextWaitToken
       var newStateList = this.state.listBreakpoints.slice();
+      // Add the active breakpoints to the listBreakpoint state array.
       for (let i of listBreakpointResponse.breakpoints) {
         newStateList.push(i['id']);
       }
       this.setState({listBreakpoints: newStateList});
 
+      // Get the difference between active and non-active array
       let difference: Array<any>
       for (let breakpoint of this.state.listBreakpoints) {
         if (breakpoint in this.state.activeBreakpoints) {
           difference.push(breakpoint);
         }
       }
+      // Call function to get the breakpoint data sending non-active breakpoints.
       this.getBreakpoint(difference)
     }, 5000); 
   }
-
+    
+  /**
+   * This function gets the data of non-active breakpoints (breakpoint that are hit) 
+   * and saves it to the getBreakpoint state array. Moreover removes it from active breakpoint array.
+   * @param {Array<any>} differenceBreakpoint list of non-active breakpoints.
+   */
   async getBreakpoint(differenceBreakpoint: Array<any>){
+    // Make request to get the breakpoint data using breakpoint ids
     var newStateGetBP = this.state.getBreakpoints.slice();
     var removeBP = {...this.state.activeBreakpoints};
     for (let breakpointId of differenceBreakpoint) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(new BackgroundRequest.FetchBreakpointRequestData(this.state.debuggeeId,breakpointId));
-      newStateGetBP.push(getBreakpointresponse.breakpoint); 
+      // Add it to the state array for getBreakpoint data
+      newStateGetBP.push(getBreakpointresponse.breakpoint);
+      // Remove the breakpoint from the active breakpoint list 
       delete removeBP[breakpointId];
     }
     this.setState({getBreakpoints: newStateGetBP});
