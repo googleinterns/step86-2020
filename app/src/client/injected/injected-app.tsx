@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import { Chathead } from "../chathead/Chathead";
+import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
+
 
 const Wrapper = styled.section`
   padding: 6em;
@@ -82,10 +84,12 @@ interface InjectedAppState{
   showBreakPoint(){
   }
 
-  createBreakPoint(fileName: string, lineNumber: number){
-    alert(`${fileName}:${lineNumber}`);
-    // use request to ccreat a breakpoint   
-      return this.lineNumber;
+  async createBreakPoint(fileName: string, lineNumber: number){
+    let activeBreakpoints: Array<any>
+    const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
+    activeBreakpoints.push(response.breakpoint.id)
+
+
   }
 
   render() {
