@@ -52,7 +52,10 @@ export class CreateBreakpointForm extends React.Component<
           value={lineNumber}
           onChange={(e) => this.onLineNumber(e.target.value)}
         />
-        <button onClick={() => this.onCreateBreakpoint()}>
+        <button onClick={(e) => {
+          e.preventDefault(); // Prevents a page reload from form submit.
+          this.onCreateBreakpoint();
+          }}>
           Create Breakpoint
         </button>
       </form>
