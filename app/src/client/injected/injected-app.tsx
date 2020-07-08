@@ -122,7 +122,7 @@ interface InjectedAppState{
 
           let listBreakpoint: Array<any> = [];
           // Add the active breakpoints to the listBreakpoint state array.
-          for (let breakpoint of listBreakpointResponse.breakpoints) {
+          for (let breakpoint of (listBreakpointResponse.breakpoints || [])) {
             listBreakpoint.push(breakpoint['id']);
           }
 
