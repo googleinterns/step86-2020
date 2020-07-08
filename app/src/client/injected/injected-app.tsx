@@ -49,7 +49,7 @@ interface InjectedAppState{
   breakpoints: Array<any>,
   lineNum: number;
   fileName: string;
-  activeBreakpoints: Object;
+  activeBreakpoints: {[key: string]: BreakpointMeta};
   listBreakpoints: Array<any>;
   getBreakpoints: Array<any>;
 
@@ -107,7 +107,12 @@ interface InjectedAppState{
       }
       this.setState({listBreakpoints: newStateList});
 
-      let difference = this.state.activeBreakpoints.filter(x => !this.state.listBreakpoints.includes(x));
+      let difference = {}
+      for (let breakpoint of this.state.listBreakpoints) {
+        if (breakpoint in this.state.activeBreakpoints) {
+          difference.push(breakpoint);
+        }
+      }
       this.getBreakpoint(difference)
     }, 5000); 
   }
