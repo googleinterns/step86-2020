@@ -97,7 +97,7 @@ BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
   backgroundRequest.BackgroundRequestType.LIST_BREAKPOINTS,
   async (data) => {
-    const response = await api.fetchDebuggees(data.debuggeeId);
+    const response = await api.listBreakpoints(data.debuggeeId);
     return response;
   }
 );
