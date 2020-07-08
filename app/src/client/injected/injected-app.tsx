@@ -66,7 +66,7 @@ interface InjectedAppState{
       lineNumber: 29,
       fileName: "index.js"
       activeBreakpoints : {},
-      completedBreakpointsList: {}
+      completedBreakpointsList: []
     }
   }
   
@@ -119,14 +119,21 @@ interface InjectedAppState{
           // Make the list breakpoint request
           let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
           waitToken = listBreakpointResponse.nextWaitToken
-          // Get the difference between active and non-active array
-          let difference: Array<any>
+
+          let listBreakpoint: Array<any> = [];
           // Add the active breakpoints to the listBreakpoint state array.
           for (let breakpoint of listBreakpointResponse.breakpoints) {
-            if (!(breakpoint['id'] in this.state.activeBreakpoints)) {
-              difference.push(breakpoint['id']);
+            listBreakpoint.push(breakpoint['id']);
+          }
+
+          // Get the difference between active and non-active array
+          let difference: Array<any> = [];
+          for (let breakpointId in this.state.activeBreakpoints) {
+            if (!(listBreakpoint.includes(breakpointId))) {
+              difference.push(breakpointId);
             }
           }
+
           // Call function to get the breakpoint data sending non-active breakpoints.
           this.loadBreakpoints(difference)
         }
