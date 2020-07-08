@@ -4,13 +4,16 @@ import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
 import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
+import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
 
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
   projectId: string | undefined;
   /** The current selected debuggee. Undefined if no debuggee selected. */
   debuggeeId: string | undefined;
-  breakpoints: any[]; // TODO: Create a Breakpoint type
+  activeBreakpoints: BreakpointMeta[]; // TODO: Create a Breakpoint type
+  completedBreakpoints: Breakpoint[];
 
   setProject: (projectId: string) => void;
   setDebuggee: (debuggeeId: string) => void;
@@ -53,6 +56,14 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
         {projectId && debuggeeId && (
           <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
         )}
+
+        {
+          this.props.activeBreakpoints.map(b => <PendingBreakpointView breakpointMeta={b}/>)
+        }
+
+        {
+          this.props.completedBreakpoints.map(b => <CompletedBreakpointView breakpoint={b}/>)
+        }
       </ChatheadWrapper>
     );
   }

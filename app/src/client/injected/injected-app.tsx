@@ -167,7 +167,8 @@ interface InjectedAppState{
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
-          breakpoints={this.state.breakpoints}
+          activeBreakpoints={Object.values(this.state.activeBreakpoints)}
+          completedBreakpoints={this.state.completedBreakpointsList}
           setProject={projectId => this.setState({projectId})}
           setDebuggee={debuggeeId => this.setState({debuggeeId})}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
