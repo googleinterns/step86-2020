@@ -90,16 +90,22 @@ interface InjectedAppState{
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
     var newStateActive = this.state.activeBreakpoints.slice();
     newStateActive.push(response.breakpoint.id);
-    this.setState(activeBreakpoints: newStateActive);
-    
-    let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,null))
-    var newStateList = this.state.listBreakpoints.slice();
-    for (let i of listBreakpointResponse.breakpoints) {
-      newStateList.push(i['id']);
-    }
-    this.setState(listBreakpoints: newStateList);
+    this.setState({activeBreakpoints: newStateActive});
   }
 
+  componentDidMount(){
+    var waitToken = null;
+    setInterval(async function(){
+      let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
+      waitToken = listBreakpointResponse.nextWaitToken
+      var newStateList = this.state.listBreakpoints.slice();
+      for (let i of listBreakpointResponse.breakpoints) {
+        newStateList.push(i['id']);
+      }
+      this.setState({listBreakpoints: newStateList});
+    }, 5000); 
+  }
+ 
 
   render() {
     return (
