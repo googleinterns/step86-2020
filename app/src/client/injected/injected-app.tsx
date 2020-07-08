@@ -115,7 +115,7 @@ interface InjectedAppState{
   componentDidMount(){
     // Set waitToken to null as default for first call
     var waitToken = null;
-    setInterval(async function(){
+    setInterval(async () => {
       // Make the list breakpoint request
       let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
       waitToken = listBreakpointResponse.nextWaitToken
