@@ -49,6 +49,8 @@ interface InjectedAppState{
   breakpoints: Array<any>,
   lineNum: number;
   fileName: string;
+  activeBreakpoints: Array<any>;
+  listBreakpoints: Array<any>;
 }
 
  class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -62,6 +64,8 @@ interface InjectedAppState{
       breakpoints : {},
       lineNumber: 29,
       fileName: "index.js"
+      activeBreakpoints : {},
+      listBreakpoints : {}
     }
   }
   
@@ -81,22 +85,21 @@ interface InjectedAppState{
     this.setState({fileName: value});
   }
 
-  showBreakPoint(){
-  }
 
   async createBreakPoint(fileName: string, lineNumber: number){
-    let activeBreakpoints: Array<any>
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
-    activeBreakpoints.push(response.breakpoint.id)
-
+    var newStateActive = this.state.activeBreakpoints.slice();
+    newStateActive.push(response.breakpoint.id);
+    this.setState(activeBreakpoints: newStateActive);
+    
     let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,null))
-    let listBreakpoint: Array<any>
-    for (let i in listBreakpointResponse.breakpoints) {
-      listBreakpoint.push(i['id']);
+    var newStateList = this.state.listBreakpoints.slice();
+    for (let i of listBreakpointResponse.breakpoints) {
+      newStateList.push(i['id']);
     }
-
-
+    this.setState(listBreakpoints: newStateList);
   }
+
 
   render() {
     return (
