@@ -89,6 +89,12 @@ interface InjectedAppState{
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
     activeBreakpoints.push(response.breakpoint.id)
 
+    let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,null))
+    let listBreakpoint: Array<any>
+    for (let i in listBreakpointResponse.breakpoints) {
+      listBreakpoint.push(i['id']);
+    }
+
 
   }
 
