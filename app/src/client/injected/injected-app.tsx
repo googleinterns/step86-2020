@@ -51,6 +51,8 @@ interface InjectedAppState{
   fileName: string;
   activeBreakpoints: Array<any>;
   listBreakpoints: Array<any>;
+  getBreakpoints: Array<any>;
+
 }
 
  class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -65,7 +67,8 @@ interface InjectedAppState{
       lineNumber: 29,
       fileName: "index.js"
       activeBreakpoints : {},
-      listBreakpoints : {}
+      listBreakpoints : {},
+      getBreakpoints: {}
     }
   }
   
@@ -89,7 +92,7 @@ interface InjectedAppState{
   async createBreakPoint(fileName: string, lineNumber: number){
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
     var newStateActive = this.state.activeBreakpoints.slice();
-    newStateActive.push(response.breakpoint.id);
+    newStateActive.push(response.breakpoint);
     this.setState({activeBreakpoints: newStateActive});
   }
 
@@ -103,7 +106,20 @@ interface InjectedAppState{
         newStateList.push(i['id']);
       }
       this.setState({listBreakpoints: newStateList});
+
+      let difference = this.state.activeBreakpoints.filter(x => !this.state.listBreakpoints.includes(x));
+      this.getBreakpoint(difference)
     }, 5000); 
+  }
+
+  async getBreakpoint(differenceBreakpoint: Array<any>){
+    var newStateGetBP = this.state.getBreakpoints.slice();
+    for (let breakpointId of differenceBreakpoint) {
+      const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(new BackgroundRequest.FetchBreakpointRequestData(this.state.debuggeeId,breakpointId));
+      newStateGetBP.push(getBreakpointresponse.breakpoint); 
+    }
+    this.setState({getBreakpoints: newStateGetBP});
+
   }
  
 
