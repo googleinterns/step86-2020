@@ -29,11 +29,13 @@ describe("CreateBreakpointForm", () => {
 
   it("calls createBreakpoint", () => {
     const spy = jest.fn();
+    const preventFormSubmitSpy = jest.fn();
     const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} />);
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    wrapper.find("button").simulate("click");
+    wrapper.find("button").simulate("click", {preventDefault: preventFormSubmitSpy});
 
     expect(spy).toHaveBeenCalledWith("a", 1);
+    expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
 });
