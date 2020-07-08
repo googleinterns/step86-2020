@@ -129,3 +129,26 @@ exports.getBreakpoint = async (debuggeeId, breakpointId) => {
   const data = response.data;
   return data;
 };
+
+/**
+ * Deletes the breakpoint using debuggeeId and breakpointId by calling the
+ * the Cloud Debugger service's api.
+ * @param {String} debuggeeId User's active debuggeeID used to debug an application.
+ * @param {String} breakpointId breakpoint id to get the stack trace of that breakpoint.
+ */
+exports.deleteBreakpoint = async (debuggeeId, breakpointId) => {
+  const response = await axios.delete(
+    "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/{breakpointId}",
+    {
+      headers: {
+        Authorization: `Bearer ${userAuth}`,
+      },
+      params: {
+        debuggeeId: debuggeeId,
+        breakpointId: breakpointId,
+      },
+    }
+  );
+  const data = response.data;
+  return data;
+};
