@@ -101,3 +101,17 @@ BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
     return response;
   }
 );
+
+/**
+ * Handler for delete the breakpoint from debugger-extension api and return the response.
+ */
+BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
+  backgroundRequest.BackgroundRequestType.DELETE_BREAKPOINT,
+  async (data) => {
+    const response = await api.deleteBreakpoint(
+      data.debuggeeId,
+      data.breakpointId
+    );
+    return response;
+  }
+);
