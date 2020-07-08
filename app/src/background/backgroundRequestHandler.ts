@@ -23,11 +23,7 @@ export class BackgroundRequestHandler {
    */
   static listen() {
     chrome.runtime.onMessage.addListener(
-      (
-        data: backgroundRequest.BackgroundRequestData,
-        sender,
-        sendResponse
-      ) => {
+      (data: backgroundRequest.BackgroundRequestData, sender, sendResponse) => {
         const handler = BackgroundRequestHandler.handlers[data.type];
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
