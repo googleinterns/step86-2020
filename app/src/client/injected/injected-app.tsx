@@ -114,23 +114,23 @@ interface InjectedAppState{
     // Set waitToken to null as default for first call
     var waitToken = null;
     // Checks if debuggeeId is not undefined
-    if (this.state.debuggeeId !== undefined){         // Might just use toggle variable
       setInterval(async () => {
-        // Make the list breakpoint request
-        let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
-        waitToken = listBreakpointResponse.nextWaitToken
-        // Get the difference between active and non-active array
-        let difference: Array<any>
-        // Add the active breakpoints to the listBreakpoint state array.
-        for (let breakpoint of listBreakpointResponse.breakpoints) {
-          if (!(breakpoint['id'] in this.state.activeBreakpoints)) {
-            difference.push(breakpoint['id']);
+        if (this.state.debuggeeId !== undefined) {         
+          // Make the list breakpoint request
+          let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
+          waitToken = listBreakpointResponse.nextWaitToken
+          // Get the difference between active and non-active array
+          let difference: Array<any>
+          // Add the active breakpoints to the listBreakpoint state array.
+          for (let breakpoint of listBreakpointResponse.breakpoints) {
+            if (!(breakpoint['id'] in this.state.activeBreakpoints)) {
+              difference.push(breakpoint['id']);
+            }
           }
+          // Call function to get the breakpoint data sending non-active breakpoints.
+          this.loadBreakpoints(difference)
         }
-        // Call function to get the breakpoint data sending non-active breakpoints.
-        this.loadBreakpoints(difference)
       }, 5000); 
-    }
   }
     
   /**
