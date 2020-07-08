@@ -114,12 +114,14 @@ interface InjectedAppState{
 
   async getBreakpoint(differenceBreakpoint: Array<any>){
     var newStateGetBP = this.state.getBreakpoints.slice();
+    var removeBP = {...this.state.activeBreakpoints};
     for (let breakpointId of differenceBreakpoint) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(new BackgroundRequest.FetchBreakpointRequestData(this.state.debuggeeId,breakpointId));
       newStateGetBP.push(getBreakpointresponse.breakpoint); 
+      delete removeBP[breakpointId];
     }
     this.setState({getBreakpoints: newStateGetBP});
-
+    this.setState({activeBreakpoints: removeBP});
   }
  
 
