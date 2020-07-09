@@ -12,7 +12,9 @@ interface ChatheadProps {
   projectId: string | undefined;
   /** The current selected debuggee. Undefined if no debuggee selected. */
   debuggeeId: string | undefined;
-  activeBreakpoints: BreakpointMeta[]; // TODO: Create a Breakpoint type
+  /** Breakpoints that have been set but not hit. */
+  activeBreakpoints: BreakpointMeta[];
+  /** Breakpoints that have been hit, with all data loaded. */
   completedBreakpoints: Breakpoint[];
 
   setProject: (projectId: string) => void;
