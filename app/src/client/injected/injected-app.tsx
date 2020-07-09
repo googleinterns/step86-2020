@@ -96,13 +96,13 @@ interface InjectedAppState{
     // Make the Set breakpoint request in the BackgroundRequest 
     const response = await new BackgroundRequest.SetBreakpointRequest().run(new BackgroundRequest.SetBreakpointRequestData(this.state.debuggeeId,fileName,lineNumber))
   /**
-   * Side note: you cannot mutate the state variable in React. So, to append values to an array, you have to 
-   * make a copy of state array and push elements to it. And then reassign the state variable
+   * Side note: you cannot mutate the state variable in React. So, to append (add) values to an array, you have to 
+   * make a temporary copy of state array and push elements to it. And then reassign the state variable
    */
     // Add the response to the state object variable
-    var newStateActive = {...this.state.activeBreakpoints};
-    newStateActive[response.breakpoint.id] = response.breakpoint;
-    this.setState({activeBreakpoints: newStateActive});
+    var tempActiveBreakpoint = {...this.state.activeBreakpoints};
+    tempActiveBreakpoint[response.breakpoint.id] = response.breakpoint;
+    this.setState({activeBreakpoints: tempActiveBreakpoint});
   }
 
     /**
@@ -117,25 +117,25 @@ interface InjectedAppState{
       setInterval(async () => {
         if (this.state.debuggeeId !== undefined) {         
           // Make the list breakpoint request
-          let listBreakpointResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
-          waitToken = listBreakpointResponse.nextWaitToken
+          let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
+          waitToken = breakpointListResponse.nextWaitToken
 
-          let listBreakpoint: Array<any> = [];
+          let breakpointList: Array<any> = [];
           // Add the active breakpoints to the listBreakpoint state array.
-          for (let breakpoint of (listBreakpointResponse.breakpoints || [])) {
-            listBreakpoint.push(breakpoint['id']);
+          for (let breakpoint of (breakpointListResponse.breakpoints || [])) {
+            breakpointList.push(breakpoint['id']);
           }
 
-          // Get the difference between active and non-active array
-          let difference: Array<any> = [];
+          // Get the inactive breakpoints (by getting difference from activeBreakpoint and breakpointList) array
+          let inactiveBreakpoints: Array<any> = [];
           for (let breakpointId in this.state.activeBreakpoints) {
-            if (!(listBreakpoint.includes(breakpointId))) {
-              difference.push(breakpointId);
+            if (!(breakpointList.includes(breakpointId))) {
+              inactiveBreakpoints.push(breakpointId);
             }
           }
 
           // Call function to get the breakpoint data sending non-active breakpoints.
-          this.loadBreakpoints(difference)
+          this.loadBreakpoints(inactiveBreakpoints)
         }
       }, 5000); 
   }
@@ -147,16 +147,16 @@ interface InjectedAppState{
    */
   async loadBreakpoints(breakpointIdsToLoad: Array<any>){
     // Make request to get the breakpoint data using breakpoint ids
-    var newStateGetBP = this.state.completedBreakpointsList.slice();
+    var tempGetBreakpoints = this.state.completedBreakpointsList.slice();
     var updatedActiveBPs = {...this.state.activeBreakpoints};
     for (let breakpointId of breakpointIdsToLoad) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(new BackgroundRequest.FetchBreakpointRequestData(this.state.debuggeeId,breakpointId));
       // Add it to the state array for getBreakpoint data
-      newStateGetBP.push(getBreakpointresponse.breakpoint);
+      tempGetBreakpoints.push(getBreakpointresponse.breakpoint);
       // Remove the breakpoint from the active breakpoint list 
       delete updatedActiveBPs[breakpointId];
     }
-    this.setState({completedBreakpointsList: newStateGetBP});
+    this.setState({completedBreakpointsList: tempGetBreakpoints});
     this.setState({activeBreakpoints: updatedActiveBPs});
   }
  
