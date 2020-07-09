@@ -42,7 +42,7 @@ describe("BackgroundRequest", () => {
     chromeApi.runtime.sendMessage.flush();
   });
 
-  it.only("can be instantiated with default chrome", () => {
+  it("can be instantiated with default chrome", () => {
     const req = new SampleRequest();
   });
 
@@ -99,11 +99,21 @@ interface SampleSetBreakpointResponse {
 // Mock of request to background from UI. No implementation, just sets type generics.
 class SampleSetBreakpointRequest extends BackgroundRequest<
 SampleSetBreakpointRequestData,
-  SampleResponse
+SampleSetBreakpointResponse
 > {}
 
 
-describe.only("SetBreakPointRequest", () => {
+describe("SetBreakPointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new SampleSetBreakpointRequestData("test","test1","test2");
+    expect(data.type).toBe(BackgroundRequestType.SET_BREAKPOINT);
+    expect(data.sampleDebuggeeId).toBe("test");
+    expect(data.sampleFileName).toBe("test1");
+    expect(data.sampleLineNumber).toBe("test2");
+  });
+});
+
+describe("BackgroundRequest", () => {
   beforeEach(() => {
     // Resets the stub for each test
     chromeApi.runtime.sendMessage.flush();
@@ -113,32 +123,6 @@ describe.only("SetBreakPointRequest", () => {
     const req = new SampleSetBreakpointRequest();
   });
 
-  it("can be instantiated with chrome mock", () => {
-    const req = new SampleSetBreakpointRequest((chromeApi as unknown) as typeof chrome);
-  });
-
-  it("can send a message", () => {
-    const data = new SampleRequestData("test");
-    const req = new SampleRequest((chromeApi as unknown) as typeof chrome);
-
-    req.run(data);
-    expect(chromeApi.runtime.sendMessage.calledOnceWith(data)).toBe(true);
-  });
-
-  it("can get a response", async () => {
-    const data = new SampleRequestData("test");
-    const req = new SampleRequest((chromeApi as unknown) as typeof chrome);
-
-    const stub = { foo: "bar" } as SampleResponse;
-
-    // Intercept the message and send a stubbed response.
-    // "1" represents the index of the sendMessage response function.
-    chromeApi.runtime.sendMessage.callsArgWith(1, stub);
-
-    // Need to explicitly declare number of assertions to expect if async.
-    expect.assertions(1);
-    const response = await req.run(data);
-    expect(response).toEqual(stub);
-  });
 });
+
 
