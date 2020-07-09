@@ -25,7 +25,7 @@ interface SampleResponse {
 // Mock of request to background from UI. No implementation, just sets type generics.
 class SampleRequest extends BackgroundRequest<
   SampleRequestData,
-  SampleSetBreakpointResponse
+  SampleResponse
 > {}
 
 describe("BackgroundRequestData", () => {
