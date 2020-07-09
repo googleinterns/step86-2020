@@ -15,7 +15,8 @@ describe("Chathead", () => {
       <Chathead
         projectId={undefined}
         debuggeeId={undefined}
-        breakpoints={[]}
+        activeBreakpoints={[]}
+        completedBreakpoints={[]}
         createBreakpoint={() => {}}
       />
     );
@@ -28,7 +29,8 @@ describe("Chathead", () => {
       <Chathead
         projectId={undefined}
         debuggeeId={undefined}
-        breakpoints={[]}
+        activeBreakpoints={[]}
+        completedBreakpoints={[]}
         createBreakpoint={() => {}}
         setProject={spy}
       />
@@ -42,7 +44,8 @@ describe("Chathead", () => {
       <Chathead
         projectId={"a"}
         debuggeeId={undefined}
-        breakpoints={[]}
+        activeBreakpoints={[]}
+        completedBreakpoints={[]}
         createBreakpoint={() => {}}
       />
     );
@@ -54,7 +57,8 @@ describe("Chathead", () => {
       <Chathead
         projectId={"a"}
         debuggeeId={"b"}
-        breakpoints={[]}
+        activeBreakpoints={[]}
+        completedBreakpoints={[]}
         createBreakpoint={() => {}}
       />
     );
