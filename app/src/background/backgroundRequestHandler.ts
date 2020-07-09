@@ -23,11 +23,7 @@ export class BackgroundRequestHandler {
    */
   static listen() {
     chrome.runtime.onMessage.addListener(
-      (
-        data: backgroundRequest.BackgroundRequestData,
-        sender,
-        sendResponse
-      ) => {
+      (data: backgroundRequest.BackgroundRequestData, sender, sendResponse) => {
         const handler = BackgroundRequestHandler.handlers[data.type];
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
@@ -98,6 +94,20 @@ BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
   backgroundRequest.BackgroundRequestType.LIST_BREAKPOINTS,
   async (data) => {
     const response = await api.listBreakpoints(data.debuggeeId);
+    return response;
+  }
+);
+
+/**
+ * Handler for delete the breakpoint from debugger-extension api and return the response.
+ */
+BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
+  backgroundRequest.BackgroundRequestType.DELETE_BREAKPOINT,
+  async (data) => {
+    const response = await api.deleteBreakpoint(
+      data.debuggeeId,
+      data.breakpointId
+    );
     return response;
   }
 );
