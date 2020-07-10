@@ -69,7 +69,50 @@ interface InjectedAppState{
       completedBreakpointsList: []
     }
   }
+
+
+
+
+
+
+
+
+
+
+// just a function that return a random project name
+  getProjectNameFromGithub(){
+    return "hanane-ikhelef2020";
+  }
+
+  storesProjectsInChrome() {
+    let projectId = this.getProjectNameFromGithub();
+    // Save it using the Chrome extension storage API.
+    chrome.storage.sync.set({'projects': projectId}, function() {
+      // Notify that we saved.
+      alert('Settings saved');
+    });
+
+        // Get a value saved in a form.
+    chrome.storage.sync.get(['projects'], function(result) {
+      console.log("results are", result);
+      console.log("results are here :", result.key);
+    });
+
+    return projectId;
+  }
   
+
+
+
+
+
+
+
+
+
+
+
+
   get lineNumber(){
     return this.state.lineNumber;
   }
@@ -165,7 +208,7 @@ interface InjectedAppState{
     return (
       <>
         <Chathead
-          projectId={this.state.projectId}
+          projectId={this.storesProjectsInChrome()}
           debuggeeId={this.state.debuggeeId}
           activeBreakpoints={Object.values(this.state.activeBreakpoints)}
           completedBreakpoints={this.state.completedBreakpointsList}
