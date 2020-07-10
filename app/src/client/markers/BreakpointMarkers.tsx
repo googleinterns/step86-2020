@@ -80,36 +80,51 @@ export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
       // DOM node where marker will be portaled to.
       const mountNode = this.getOrCreateBPMarkerMount(node, lineNumber);
 
-      if (activeBreakpoints.has(lineNumber)) {
-        return ReactDOM.createPortal(
-          <ActiveBreakpointMarker
-            breakpointMeta={activeBreakpoints.get(lineNumber)}
-          />,
-          mountNode
-        );
-      }
-
-      if (completedBreakpoints.has(lineNumber)) {
-        return ReactDOM.createPortal(
-          <CompletedBreakpointMarker
-            breakpoint={completedBreakpoints.get(lineNumber)}
-          />,
-          mountNode
-        );
-      }
-      /** Note that this means we can't create new breakpoints on a line with existing breakpoints.
-       * TODO: address this somehow. May want to add something similar to cloud console with dropdown.
-       * In the short term, could just add ability to delete then re-create.
-       */
       return ReactDOM.createPortal(
-        <NewBreakpointMarker
-          onClick={() =>
-            this.props.createBreakpoint(this.getFileName(), lineNumber)
-          }
-        />,
+        this.getMarker(
+          activeBreakpoints,
+          completedBreakpoints,
+          lineNumber,
+          this.props.createBreakpoint
+        ),
         mountNode
       );
     });
+  }
+
+  /** Get the appropriate breakpoint marker for a given line.
+   *  For now, we mark a line as active/completed if a breakpoint exists, else show a 'create' option.
+   */
+  getMarker(
+    activeBreakpoints,
+    completedBreakpoints,
+    lineNumber,
+    createBreakpoint
+  ) {
+    if (activeBreakpoints.has(lineNumber)) {
+      return (
+        <ActiveBreakpointMarker
+          breakpointMeta={activeBreakpoints.get(lineNumber)}
+        />
+      );
+    }
+
+    if (completedBreakpoints.has(lineNumber)) {
+      return (
+        <CompletedBreakpointMarker
+          breakpoint={completedBreakpoints.get(lineNumber)}
+        />
+      );
+    }
+    /** Note that this means we can't create new breakpoints on a line with existing breakpoints.
+     * TODO: address this somehow. May want to add something similar to cloud console with dropdown.
+     * In the short term, could just add ability to delete then re-create.
+     */
+    return (
+      <NewBreakpointMarker
+        onClick={() => createBreakpoint(this.getFileName(), lineNumber)}
+      />
+    );
   }
 
   /** We are mounting breakpoint markers at the beginning of each line of code.
