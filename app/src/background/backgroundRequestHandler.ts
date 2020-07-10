@@ -1,6 +1,7 @@
 import api from "debugger-extension-api";
 import * as backgroundRequest from "../common/requests/BackgroundRequest";
 import * as serviceUsageHandler from "./serviceUsageHandler";
+import * as extensionAuthHandler from "./extensionAuthHandler"
 
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
