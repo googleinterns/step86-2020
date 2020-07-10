@@ -4,6 +4,8 @@ import {
   BackgroundRequestType,
   BackgroundRequestData,
   BackgroundRequest,
+  SetBreakpointRequestData,
+  FetchBreakpointRequestData,
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -35,6 +37,26 @@ describe("BackgroundRequestData", () => {
     expect(data.sampleProp).toBe("test");
   });
 });
+
+describe("SetBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new SetBreakpointRequestData("test", "test2", 2);
+    expect(data.type).toBe(BackgroundRequestType.SET_BREAKPOINT);
+    expect(data.debuggeeId).toBe("test");
+    expect(data.fileName).toBe("test1");
+    expect(data.lineNumber).toBe(2);
+  });
+});
+
+describe("SetBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new FetchBreakpointRequestData("test1", "test2");
+    expect(data.type).toBe(BackgroundRequestType.SET_BREAKPOINT);
+    expect(data.debuggeeId).toBe("test1");
+    expect(data.breakpointId).toBe("test2");
+  });
+});
+
 
 describe("BackgroundRequest", () => {
   beforeEach(() => {
