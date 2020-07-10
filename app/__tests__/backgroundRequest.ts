@@ -41,6 +41,7 @@ describe("BackgroundRequestData", () => {
   });
 });
 
+// tests that setBreakPoint class is well instantiated with the right attributes
 describe("SetBreakpointRequestData", () => {
   it("can be instantiated", () => {
     const data = new SetBreakpointRequestData("test", "test2", 2);
@@ -51,6 +52,7 @@ describe("SetBreakpointRequestData", () => {
   });
 });
 
+// tests that FetchBreakPoint class is well instantiated with the right attributes
 describe("FetchBreakpointRequestData", () => {
   it("can be instantiated", () => {
     const data = new FetchBreakpointRequestData("test1", "test2");
@@ -60,6 +62,7 @@ describe("FetchBreakpointRequestData", () => {
   });
 });
 
+// tests that FetchDebuggees class is well instantiated with the right attributes
 describe("FetchDebuggeesRequestData", () => {
   it("can be instantiated", () => {
     const data = new FetchDebuggeesRequestData("test");
@@ -68,6 +71,7 @@ describe("FetchDebuggeesRequestData", () => {
   });
 });
 
+// tests that ListBreakpoint class is well instantiated with the right attributes
 describe("ListBreakpointRequestData", () => {
   it("can be instantiated", () => {
     const data = new ListBreakpointsData("test1","test2");
