@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
-import { NewBreakpointMarker, ActiveBreakpointMarker, CompletedBreakpointMarker } from "../markers/BreakpointMarker";
-import { BreakpointMeta } from "../../common/types/debugger";
+import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import { BreakpointMarkers } from "../markers/BreakpointMarkers";
 
 
 const Wrapper = styled.section`
@@ -164,13 +164,16 @@ interface InjectedAppState{
  
 
   render() {
+    const activeBreakpoints = Object.values(this.state.activeBreakpoints);
+    const completedBreakpoints = this.state.completedBreakpointsList;
+
     return (
       <>
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
-          activeBreakpoints={Object.values(this.state.activeBreakpoints)}
-          completedBreakpoints={this.state.completedBreakpointsList}
+          activeBreakpoints={activeBreakpoints}
+          completedBreakpoints={completedBreakpoints}
           setProject={projectId => this.setState({projectId})}
           setDebuggee={debuggeeId => this.setState({debuggeeId})}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
@@ -180,8 +183,8 @@ interface InjectedAppState{
         <Input placeholder="Line Number " />
         <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button> */}
         <BreakpointMarkers
-          activeBreakpoints={Object.values(this.state.activeBreakpoints)}
-          completedBreakpoints={this.state.completedBreakpointsList}
+          activeBreakpoints={activeBreakpoints}
+          completedBreakpoints={completedBreakpoints}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
         />
       </>
@@ -189,41 +192,6 @@ interface InjectedAppState{
   }
 }
 
-
-const BreakpointMarkers = ({activeBreakpoints, completedBreakpoints, createBreakpoint}) => {
-  const fileName = document.querySelector(".final-path").innerHTML;
-  const markers = [];
-  //@ts-ignore
-  const lineNumberNodes = [...document.querySelectorAll(".js-line-number")];
-
-  const activeBreakpointsByLine = activeBreakpoints.reduce((byLine: {[key: number]: BreakpointMeta}, b: BreakpointMeta) => ({...byLine, [b.location.line]: b}), {});
-  const completedBreakpointsByLine = completedBreakpoints.reduce((byLine: {[key: number]: BreakpointMeta}, b: BreakpointMeta) => ({...byLine, [b.location.line]: b}), {})
-
-  lineNumberNodes.forEach((node, index) => {
-    const lineNumber = index + 1;
-    const rowNode = node.parentNode;
-    let mountNode = rowNode.querySelector(".cdbg-extension-row-mount");
-
-    if(!mountNode) {
-      mountNode = document.createElement("div");
-      mountNode.classList.add("cdbg-extension-row-mount");
-      rowNode.prepend(mountNode);
-    }
-
-    let marker;
-
-    if(activeBreakpointsByLine[lineNumber]) {
-      marker = <ActiveBreakpointMarker/>
-    } else if (completedBreakpointsByLine[lineNumber]) {
-      marker = <CompletedBreakpointMarker/>
-    } else {
-      marker = <NewBreakpointMarker onClick={() => createBreakpoint(fileName, lineNumber)}/>
-    }
-    markers.push(ReactDOM.createPortal(marker, mountNode));
-  });
-
-  return markers;
-}
 
 // Mounts injected App once html is loaded
 const mount = document.createElement("div");
