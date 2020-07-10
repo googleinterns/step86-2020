@@ -8,7 +8,7 @@
   "browser_action": {
     "default_popup": "src/client/popup/popup.html"
   },
-  "permissions": ["activeTab", "tabs", "identity"],
+  "permissions": ["activeTab", "tabs", "identity", "storage"],
   "content_scripts": [
     {
       "matches": ["http://github.com/*", "https://github.com/*"],
