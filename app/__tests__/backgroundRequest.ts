@@ -4,6 +4,11 @@ import {
   BackgroundRequestType,
   BackgroundRequestData,
   BackgroundRequest,
+  SetBreakpointRequestData,
+  FetchBreakpointRequestData,
+  FetchDebuggeesRequestData,
+  ListBreakPointsRequest,
+  ListBreakpointsData
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -35,6 +40,47 @@ describe("BackgroundRequestData", () => {
     expect(data.sampleProp).toBe("test");
   });
 });
+
+// tests that setBreakPoint class is well instantiated with the right attributes
+describe("SetBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new SetBreakpointRequestData("test", "test2", 2);
+    expect(data.type).toBe(BackgroundRequestType.SET_BREAKPOINT);
+    expect(data.debuggeeId).toBe("test");
+    expect(data.fileName).toBe("test2");
+    expect(data.lineNumber).toBe(2);
+  });
+});
+
+// tests that FetchBreakPoint class is well instantiated with the right attributes
+describe("FetchBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new FetchBreakpointRequestData("test1", "test2");
+    expect(data.type).toBe(BackgroundRequestType.FETCH_BREAKPOINT);
+    expect(data.debuggeeId).toBe("test1");
+    expect(data.breakpointId).toBe("test2");
+  });
+});
+
+// tests that FetchDebuggees class is well instantiated with the right attributes
+describe("FetchDebuggeesRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new FetchDebuggeesRequestData("test");
+    expect(data.type).toBe(BackgroundRequestType.FETCH_DEBUGGEES);
+    expect(data.projectId).toBe("test");
+  });
+});
+
+// tests that ListBreakpoint class is well instantiated with the right attributes
+describe("ListBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new ListBreakpointsData("test1","test2");
+    expect(data.type).toBe(BackgroundRequestType.LIST_BREAKPOINTS);
+    expect(data.debuggeeId).toBe("test1");
+    expect(data.waitToken).toBe("test2");
+  });
+});
+
 
 describe("BackgroundRequest", () => {
   beforeEach(() => {
