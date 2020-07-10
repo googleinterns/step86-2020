@@ -8,7 +8,9 @@ import {
   FetchBreakpointRequestData,
   FetchDebuggeesRequestData,
   ListBreakPointsRequest,
-  ListBreakpointsData
+  ListBreakpointsData,
+  AuthenticationRequestData,
+  GetAuthStateRequestData
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -80,6 +82,21 @@ describe("ListBreakpointRequestData", () => {
     expect(data.waitToken).toBe("test2");
   });
 });
+
+describe("AuthenticationRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new AuthenticationRequestData();
+    expect(data.type).toBe(BackgroundRequestType.AUTHENTICATION);
+  });
+});
+
+describe("GetAuthStateRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new GetAuthStateRequestData();
+    expect(data.type).toBe(BackgroundRequestType.IS_AUTHENTICATED);
+  });
+});
+
 
 
 describe("BackgroundRequest", () => {
