@@ -69,7 +69,7 @@ interface InjectedAppState{
       completedBreakpointsList: []
     }
   }
-
+                                              
 
 
 
@@ -81,24 +81,23 @@ interface InjectedAppState{
 
 // just a function that return a random project name
   getProjectNameFromGithub(){
-    return "hanane-ikhelef2020";
+    return "hanane-ikhelef2020"; // this will be replaced by  getting the github project
   }
 
   storesProjectsInChrome() {
-    let projectId = this.getProjectNameFromGithub();
+    let projectIdList = this.getProjectNameFromGithub();
     // Save it using the Chrome extension storage API.
-    chrome.storage.sync.set({'projects': projectId}, function() {
-      // Notify that we saved.
-      alert('Settings saved');
-    });
+    // chrome.storage.sync.set({'projects': projectIdList}, function() {
+    //   // Notify that we saved.
+    //   alert('Settings saved');
+    // });
 
-        // Get a value saved in a form.
     chrome.storage.sync.get(['projects'], function(result) {
       console.log("results are", result);
-      console.log("results are here :", result.key);
+      console.log("results are");
     });
 
-    return projectId;
+    return projectIdList;
   }
   
 
