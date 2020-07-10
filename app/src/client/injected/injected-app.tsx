@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
-import { NewBreakpointMarker } from "../markers/BreakpointMarker";
+import { NewBreakpointMarker, ActiveBreakpointMarker, CompletedBreakpointMarker } from "../markers/BreakpointMarker";
+import { BreakpointMeta } from "../../common/types/debugger";
 
 
 const Wrapper = styled.section`
@@ -178,29 +179,47 @@ interface InjectedAppState{
         <Input placeholder="File Name " />
         <Input placeholder="Line Number " />
         <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button> */}
-        <BreakpointMarkers createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}/>
+        <BreakpointMarkers
+          activeBreakpoints={Object.values(this.state.activeBreakpoints)}
+          completedBreakpoints={this.state.completedBreakpointsList}
+          createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
+        />
       </>
     );
   }
 }
 
 
-const BreakpointMarkers = ({createBreakpoint}) => {
+const BreakpointMarkers = ({activeBreakpoints, completedBreakpoints, createBreakpoint}) => {
   const fileName = document.querySelector(".final-path").innerHTML;
   const markers = [];
   //@ts-ignore
   const lineNumberNodes = [...document.querySelectorAll(".js-line-number")];
 
+  const activeBreakpointsByLine = activeBreakpoints.reduce((byLine: {[key: number]: BreakpointMeta}, b: BreakpointMeta) => ({...byLine, [b.location.line]: b}), {});
+  const completedBreakpointsByLine = completedBreakpoints.reduce((byLine: {[key: number]: BreakpointMeta}, b: BreakpointMeta) => ({...byLine, [b.location.line]: b}), {})
+
   lineNumberNodes.forEach((node, index) => {
     const lineNumber = index + 1;
     const rowNode = node.parentNode;
     let mountNode = rowNode.querySelector(".cdbg-extension-row-mount");
+
     if(!mountNode) {
       mountNode = document.createElement("div");
       mountNode.classList.add("cdbg-extension-row-mount");
       rowNode.prepend(mountNode);
     }
-    markers.push(ReactDOM.createPortal(<NewBreakpointMarker onClick={() => createBreakpoint(fileName, lineNumber)}/>, mountNode));
+
+    let marker;
+
+    if(activeBreakpointsByLine[lineNumber]) {
+      marker = <ActiveBreakpointMarker/>
+    } else if (completedBreakpointsByLine[lineNumber]) {
+      marker = <CompletedBreakpointMarker/>
+    } else {
+      marker = <NewBreakpointMarker onClick={() => createBreakpoint(fileName, lineNumber)}/>
+    }
+    markers.push(ReactDOM.createPortal(marker, mountNode));
   });
 
   return markers;

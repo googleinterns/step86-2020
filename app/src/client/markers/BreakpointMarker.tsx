@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 
@@ -16,7 +16,7 @@ interface ActiveBreakpointMarkerProps {
 }
 
 export const ActiveBreakpointMarker = ({breakpointMeta}) => {
-
+    return <ActiveBreakpointMarkerWrapper/>
 }
 
 interface CompletedBreakpointMarkerProps {
@@ -24,7 +24,7 @@ interface CompletedBreakpointMarkerProps {
 }
 
 export const CompletedBreakpointMarker = ({breakpoint}) => {
-
+    return <CompletedBreakpointMarkerWrapper/>
 }
 
 const GeneralBreakpointMarkerWrapper = styled.div`
@@ -37,11 +37,32 @@ const GeneralBreakpointMarkerWrapper = styled.div`
     border-left: none;
     border-right: none;
     clip-path: polygon(0% 0%, 50% 0%, 100% 50%, 50% 100%, 0% 100%);
+    box-shadow: inset 0px -6px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const NewBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
-    background: transparent;
+    background: #ccc;
+    opacity: 0;
     &:hover {
         background: #ccc;
+        opacity: 1;
     }
+`;
+
+const ActiveBreakpointMarkerPulsate = keyframes`
+  from {
+      transform: scale(1);
+  }
+  to {
+      transform: scale(1.1);
+  }
+`
+
+const ActiveBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
+    background: gold;
+    animation: ${ActiveBreakpointMarkerPulsate} 0.4s alternate infinite;
+`;
+
+const CompletedBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
+    background: cornflowerblue;
 `;
