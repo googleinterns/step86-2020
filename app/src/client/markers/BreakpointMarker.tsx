@@ -8,7 +8,7 @@ interface NewBreakpointMarkerProps {
 }
 
 export const NewBreakpointMarker = ({onClick}) => {
-
+    return <NewBreakpointMarkerWrapper onClick={onClick}/>
 }
 
 interface ActiveBreakpointMarkerProps {
@@ -27,3 +27,21 @@ export const CompletedBreakpointMarker = ({breakpoint}) => {
 
 }
 
+const GeneralBreakpointMarkerWrapper = styled.div`
+    width: 16px;
+    height: 20px;
+    margin-left: 4px;
+
+    background-clip: content-box;
+    border: 4px solid white;
+    border-left: none;
+    border-right: none;
+    clip-path: polygon(0% 0%, 50% 0%, 100% 50%, 50% 100%, 0% 100%);
+`;
+
+const NewBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
+    background: transparent;
+    &:hover {
+        background: #ccc;
+    }
+`;

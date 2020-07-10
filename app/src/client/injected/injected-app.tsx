@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
+import { NewBreakpointMarker } from "../markers/BreakpointMarker";
 
 
 const Wrapper = styled.section`
@@ -177,10 +178,32 @@ interface InjectedAppState{
         <Input placeholder="File Name " />
         <Input placeholder="Line Number " />
         <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button> */}
+        <BreakpointMarkers createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}/>
       </>
     );
   }
+}
 
+
+const BreakpointMarkers = ({createBreakpoint}) => {
+  const fileName = document.querySelector(".final-path").innerHTML;
+  const markers = [];
+  //@ts-ignore
+  const lineNumberNodes = [...document.querySelectorAll(".js-line-number")];
+
+  lineNumberNodes.forEach((node, index) => {
+    const lineNumber = index + 1;
+    const rowNode = node.parentNode;
+    let mountNode = rowNode.querySelector(".cdbg-extension-row-mount");
+    if(!mountNode) {
+      mountNode = document.createElement("div");
+      mountNode.classList.add("cdbg-extension-row-mount");
+      rowNode.prepend(mountNode);
+    }
+    markers.push(ReactDOM.createPortal(<NewBreakpointMarker onClick={() => createBreakpoint(fileName, lineNumber)}/>, mountNode));
+  });
+
+  return markers;
 }
 
 // Mounts injected App once html is loaded
