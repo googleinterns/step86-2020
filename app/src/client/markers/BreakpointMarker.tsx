@@ -7,7 +7,8 @@ interface NewBreakpointMarkerProps {
     onClick: () => void;
 }
 
-export const NewBreakpointMarker = ({onClick}) => {
+/** Displayed next to line number to set new breakpoint when clicked. */
+export const NewBreakpointMarker = ({onClick}: NewBreakpointMarkerProps) => {
     return <NewBreakpointMarkerWrapper onClick={onClick}/>
 }
 
@@ -15,7 +16,8 @@ interface ActiveBreakpointMarkerProps {
     breakpointMeta: BreakpointMeta;
 }
 
-export const ActiveBreakpointMarker = ({breakpointMeta}) => {
+/** Displayed next to line number to show currently active (pending) breakpoints */
+export const ActiveBreakpointMarker = ({breakpointMeta}: ActiveBreakpointMarkerProps) => {
     return <ActiveBreakpointMarkerWrapper/>
 }
 
@@ -23,10 +25,14 @@ interface CompletedBreakpointMarkerProps {
     breakpoint: Breakpoint;
 }
 
-export const CompletedBreakpointMarker = ({breakpoint}) => {
+/** Displayed next to line number to show completed breakpoints */
+export const CompletedBreakpointMarker = ({breakpoint}: CompletedBreakpointMarkerProps) => {
     return <CompletedBreakpointMarkerWrapper/>
 }
 
+/** UI that is shared by all types of breakpoint markers.
+ *  Defines basic shape and positioning.
+ */
 const GeneralBreakpointMarkerWrapper = styled.div`
     width: 16px;
     height: 20px;
@@ -40,6 +46,7 @@ const GeneralBreakpointMarkerWrapper = styled.div`
     box-shadow: inset 0px -6px 0px rgba(0, 0, 0, 0.1);
 `;
 
+/** Makes new breakpoint button invisible until hovered. */
 const NewBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
     background: #ccc;
     opacity: 0;
@@ -49,6 +56,7 @@ const NewBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
     }
 `;
 
+/** Animation to show loading state of active breakpoints */
 const ActiveBreakpointMarkerPulsate = keyframes`
   from {
       transform: scale(1);
@@ -58,11 +66,13 @@ const ActiveBreakpointMarkerPulsate = keyframes`
   }
 `
 
+/** Makes active breakpoints yellow (like a traffic light...halfway), and pulse. */
 const ActiveBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
     background: gold;
     animation: ${ActiveBreakpointMarkerPulsate} 0.4s alternate infinite;
 `;
 
+/** Makes completed breakpoints appear blue and static. */
 const CompletedBreakpointMarkerWrapper = styled(GeneralBreakpointMarkerWrapper)`
     background: cornflowerblue;
 `;

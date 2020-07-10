@@ -164,6 +164,9 @@ interface InjectedAppState{
  
 
   render() {
+    /** Active and completed breakpoints are kept in state differently because active breakpoints must be deletable.
+     *  However, as far as UI is concerned, they are both lists. This conversion helps simplify markup.
+     */
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
     const completedBreakpoints = this.state.completedBreakpointsList;
 
@@ -178,10 +181,7 @@ interface InjectedAppState{
           setDebuggee={debuggeeId => this.setState({debuggeeId})}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
         />
-        {/* <p>Create a Break Point</p>
-        <Input placeholder="File Name " />
-        <Input placeholder="Line Number " />
-        <Button primary onClick={this.createBreakPoint(this.state.lineNumber)}> CREATE </Button> */}
+
         <BreakpointMarkers
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
