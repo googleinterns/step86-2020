@@ -115,7 +115,7 @@ interface InjectedAppState{
     var waitToken = null;
     // Checks if debuggeeId is not undefined
       setInterval(async () => {
-        if (this.state.debuggeeId !== undefined) {         
+        if (this.state.debuggeeId !== undefined && Object.keys(this.state.activeBreakpoints).length > 0) {         
           // Make the list breakpoint request
           let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
           waitToken = breakpointListResponse.nextWaitToken
