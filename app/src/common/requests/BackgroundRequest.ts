@@ -14,7 +14,9 @@ export enum BackgroundRequestType {
   FETCH_BREAKPOINT,
   SET_BREAKPOINT,
   LIST_BREAKPOINTS,
-  DELETE_BREAKPOINT
+  DELETE_BREAKPOINT,
+  AUTHENTICATION,
+  IS_AUTHENTICATED
 }
 
 /**
@@ -189,3 +191,30 @@ interface FetchBreakpointRequestResponse {
 export class FetchBreakpointRequest extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
 
 }
+
+/**
+ *  Lets UI trigger authentication
+ */
+export class AuthenticationRequestData extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.AUTHENTICATION);
+  }
+}
+interface AuthenticationRequestResponse {}
+
+export class AuthenticationRequest extends BackgroundRequest<AuthenticationRequestData, AuthenticationRequestResponse> {}
+
+/**
+ *  Lets UI get current auth state from backend.
+ */
+export class GetAuthStateRequestData extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.IS_AUTHENTICATED);
+  }
+}
+interface GetAuthStateRequestResponse {
+  isAuthenticated: boolean
+}
+
+export class GetAuthStateRequest extends BackgroundRequest<GetAuthStateRequestData, GetAuthStateRequestResponse> {}
+
