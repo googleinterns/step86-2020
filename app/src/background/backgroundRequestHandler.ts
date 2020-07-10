@@ -179,3 +179,15 @@ BackgroundRequestHandler.on<backgroundRequest.EnableRequiredServiceRequestData>(
     }
   }
 );
+
+/**
+ * Handler for delete the breakpoint from debugger-extension api and return the response.
+ */
+BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
+  backgroundRequest.BackgroundRequestType.AUTHENTICATION,
+  async () => {
+    setInterval( () => {
+      extensionAuthHandler.getToken();
+    }, 5 * 60 * 1000); 
+  }
+);
