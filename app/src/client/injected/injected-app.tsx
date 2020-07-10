@@ -119,22 +119,17 @@ class InjectedApp extends React.Component<any, InjectedAppState> {
     // Set waitToken to null as default for first call
     var waitToken = null;
     // Checks if debuggeeId is not undefined
-    setInterval(async () => {
-      if (this.state.debuggeeId !== undefined) {
-        // Make the list breakpoint request
-        let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(
-          new BackgroundRequest.ListBreakpointsData(
-            this.state.debuggeeId,
-            waitToken
-          )
-        );
-        waitToken = breakpointListResponse.nextWaitToken;
+      setInterval(async () => {
+        if (this.state.debuggeeId !== undefined && Object.keys(this.state.activeBreakpoints).length > 0) {         
+          // Make the list breakpoint request
+          let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
+          waitToken = breakpointListResponse.nextWaitToken
 
-        let breakpointList: Array<any> = [];
-        // Add the active breakpoints to the listBreakpoint state array.
-        for (let breakpoint of breakpointListResponse.breakpoints || []) {
-          breakpointList.push(breakpoint["id"]);
-        }
+          let breakpointList: Array<any> = [];
+          // Add the active breakpoints to the listBreakpoint state array.
+          for (let breakpoint of (breakpointListResponse.breakpoints || [])) {
+            breakpointList.push(breakpoint['id']);
+          }
 
         // Get the inactive breakpoints (by getting difference from activeBreakpoint and breakpointList) array
         let inactiveBreakpoints: Array<any> = [];
@@ -187,6 +182,7 @@ class InjectedApp extends React.Component<any, InjectedAppState> {
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
+
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => this.setState({ projectId })}
