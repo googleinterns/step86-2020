@@ -190,7 +190,7 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
     let response = false;
     if (request !== "") {
       response = true;
-    } 
+    }
     return response;
   }
 );
@@ -201,8 +201,8 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
   backgroundRequest.BackgroundRequestType.AUTHENTICATION,
   async () => {
-    setInterval( () => {
+    setInterval(() => {
       extensionAuthHandler.getToken();
-    }, 5 * 60 * 1000); 
+    }, 5 * 60 * 1000);
   }
 );
