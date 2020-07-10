@@ -6,7 +6,9 @@ import {
   BackgroundRequest,
   SetBreakpointRequestData,
   FetchBreakpointRequestData,
-  FetchDebuggeesRequestData
+  FetchDebuggeesRequestData,
+  ListBreakPointsRequest,
+  ListBreakpointsData
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -66,6 +68,14 @@ describe("FetchDebuggeesRequestData", () => {
   });
 });
 
+describe("ListBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new ListBreakpointsData("test1","test2");
+    expect(data.type).toBe(BackgroundRequestType.LIST_BREAKPOINTS);
+    expect(data.debuggeeId).toBe("test1");
+    expect(data.waitToken).toBe("test2");
+  });
+});
 
 
 describe("BackgroundRequest", () => {
