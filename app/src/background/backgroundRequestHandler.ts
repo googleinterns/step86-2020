@@ -181,7 +181,22 @@ BackgroundRequestHandler.on<backgroundRequest.EnableRequiredServiceRequestData>(
 );
 
 /**
- * Handler for delete the breakpoint from debugger-extension api and return the response.
+ * Handler for Request if user is authenticated by checking from debugger-extension.
+ */
+BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
+  backgroundRequest.BackgroundRequestType.IS_AUTHENTICATED,
+  async () => {
+    const request = await api.getAuthToken();
+    let response = false;
+    if (request !== "") {
+      response = true;
+    } 
+    return response;
+  }
+);
+
+/**
+ * Handler for Request the token from extensionAuthHandler.
  */
 BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
   backgroundRequest.BackgroundRequestType.AUTHENTICATION,
