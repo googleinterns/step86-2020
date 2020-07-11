@@ -72,39 +72,31 @@ interface InjectedAppState{
                                               
 
 
-
-
-
-
-
-
-
-// just a function that return a random project name
-  getProjectNameFromGithub(){
-    return "hanane-ikhelef2020"; // this will be replaced by  getting the github project
-  }
-
   storesProjectsInChrome() {
-    let projectIdList = this.getProjectNameFromGithub();
-    // Save it using the Chrome extension storage API.
-    // chrome.storage.sync.set({'projects': projectIdList}, function() {
-    //   // Notify that we saved.
-    //   alert('Settings saved');
-    // });
 
-    chrome.storage.sync.get(['projects'], function(result) {
-      console.log("results are", result);
-      console.log("results are");
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      let url = tabs[0].url;
+      console.log("the url is : ", url);
+      // use `url` here inside the callback because it's asynchronous!
+    });
+    let projects = new Map();
+    projects.set("hanane-ikhelef-step2020", "hananeikhelef-step-2020-new");
+    projects.set("lolo-step2020", "lolo-gcp-2020")
+    // Save it using the Chrome extension storage API.
+
+    if(projects.has("hanane-ikhelef-step2020")){
+      return projects.get("hanane-ikhelef-step2020");
+    }
+
+    chrome.storage.sync.set({'projects': projects}, function() {
+      // Notify that we saved.
+      console.log("projects are ", projects);
+      alert('Settings saved');
     });
 
-    return projectIdList;
+    return projects;
   }
   
-
-
-
-
-
 
 
 
@@ -116,7 +108,7 @@ interface InjectedAppState{
     return this.state.lineNumber;
   }
 
-  get fileName(){
+  get fileName() {
     return this.state.fileName;
   }
 
@@ -207,7 +199,7 @@ interface InjectedAppState{
     return (
       <>
         <Chathead
-          projectId={this.storesProjectsInChrome()}
+          projectId={this.storesProjectsInChrome() }
           debuggeeId={this.state.debuggeeId}
           activeBreakpoints={Object.values(this.state.activeBreakpoints)}
           completedBreakpoints={this.state.completedBreakpointsList}
