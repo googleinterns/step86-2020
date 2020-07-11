@@ -80,6 +80,7 @@ interface InjectedAppState{
   storesProjectsInChrome() {
     let title = document.querySelector(".js-path-segment:first-child");
     var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
+
     console.log("Project Name is : ", projectName);
     console.log("GCP project ID : ", this.state.projectId);
     console.log(localStorage);
@@ -91,21 +92,11 @@ interface InjectedAppState{
         return value;
       }
     }
-    localStorage.setItem(projectName, this.state.projectId);
+    console.log(this.state.projectId);
+    localStorage.setItem(projectName, "sc-usaa-private-service");
     return this.state.projectId;
   }
-
-
-
-
-
-
-
-
-
-
-
-
+  
 
   get lineNumber(){
     return this.state.lineNumber;
@@ -202,7 +193,7 @@ interface InjectedAppState{
     return (
       <>
         <Chathead
-          projectId={this.storesProjectsInChrome() }
+          projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
           activeBreakpoints={Object.values(this.state.activeBreakpoints)}
           completedBreakpoints={this.state.completedBreakpointsList}
