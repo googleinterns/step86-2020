@@ -70,37 +70,30 @@ interface InjectedAppState{
     }
   }
           
-  // getFileName(): string {
-  //   console.log("get the project title ",document.querySelector(".final-path").innerHTML);
-  //   return document.querySelector(".final-path").innerHTML;
-  // }
-
-
   storesProjectsInChrome() {
     let title = document.querySelector(".js-path-segment:first-child");
-    var anchor = title.querySelector("a[data-pjax='true'] span").innerHTML;
-    console.log("Project Name is : ", anchor);
+    var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
+    console.log("Project Name is : ", projectName);
 
     let projects = new Map();
     projects.set("hanane-ikhelef-step2020", "hananeikhelef-step-2020-new");
     projects.set("lolo-step2020", "lolo-gcp-2020")
-    // Save it using the Chrome extension storage API.
+    projects.set("step-my-portfolio", "hananeikhelef-step-2020-new")
+    console.log("GCP project ID : ", this.state.projectId);
 
-
-
-    chrome.storage.local.set({'projects': projects}, function() {
+ // if the project exists already in the dictionnary we return it directly to the projectId   
+    if(projects.has(projectName)){
+      return projects.get(projectName);
+    }
+    else if(!projects.has(projectName)) {
+        projects.set(projectName, "hananeikhelef-step-2020-new"); // i pass the GCP projectId manually for now 
+    }
+    chrome.storage.local.set({'projects': projectName}, function() {
       // Notify that we saved.
       console.log("projects are ", projects);
       alert('Settings saved');
     });
-
-    if(projects.has("hanane-ikhelef-step2020")){
-      return projects.get("hanane-ikhelef-step2020");
-    }
-    else if(!projects.has(title)) {
-        projects.set(title, "GCP-projecttt");
-    }
-
+  
     return projects;
   }
 
