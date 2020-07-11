@@ -69,40 +69,45 @@ interface InjectedAppState{
       completedBreakpointsList: []
     }
   }
-                                              
+          
+  // getFileName(): string {
+  //   console.log("get the project title ",document.querySelector(".final-path").innerHTML);
+  //   return document.querySelector(".final-path").innerHTML;
+  // }
 
 
   storesProjectsInChrome() {
+    let title = document.querySelector(".js-path-segment:first-child");
+    var anchor = title.querySelector("a[data-pjax='true'] span").innerHTML;
+    console.log("Project title is :  ", title);
+    console.log(" anchor is :  ", anchor);
 
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-      let url = tabs[0].url;
-      console.log("the url is : ", url);
-      // use `url` here inside the callback because it's asynchronous!
-    });
+
+
+
+
     let projects = new Map();
     projects.set("hanane-ikhelef-step2020", "hananeikhelef-step-2020-new");
     projects.set("lolo-step2020", "lolo-gcp-2020")
     // Save it using the Chrome extension storage API.
 
-    if(projects.has("hanane-ikhelef-step2020")){
-      return projects.get("hanane-ikhelef-step2020");
-    }
 
-    chrome.storage.sync.set({'projects': projects}, function() {
+
+    chrome.storage.local.set({'projects': projects}, function() {
       // Notify that we saved.
       console.log("projects are ", projects);
       alert('Settings saved');
     });
 
+    if(projects.has("hanane-ikhelef-step2020")){
+      return projects.get("hanane-ikhelef-step2020");
+    }
+    else if(!projects.has(title)) {
+        projects.set(title, "GCP-projecttt");
+    }
+
     return projects;
   }
-  
-
-
-
-
-
-
 
   get lineNumber(){
     return this.state.lineNumber;

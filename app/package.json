@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@types/jest": "^26.0.3",
+    "@types/jquery": "^3.5.0",
     "@types/react": "^16.9.41",
     "debugger-extension-api": "file:../api",
     "enzyme-adapter-react-16": "^1.15.2",
