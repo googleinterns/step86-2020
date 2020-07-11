@@ -79,12 +79,7 @@ interface InjectedAppState{
   storesProjectsInChrome() {
     let title = document.querySelector(".js-path-segment:first-child");
     var anchor = title.querySelector("a[data-pjax='true'] span").innerHTML;
-    console.log("Project title is :  ", title);
-    console.log(" anchor is :  ", anchor);
-
-
-
-
+    console.log("Project Name is : ", anchor);
 
     let projects = new Map();
     projects.set("hanane-ikhelef-step2020", "hananeikhelef-step-2020-new");
