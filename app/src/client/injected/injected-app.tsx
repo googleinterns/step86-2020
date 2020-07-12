@@ -71,7 +71,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    */
   getProjectNameFromGithub(): string{
     let title = document.querySelector(".js-path-segment:first-child");
-    if(title !== null){
+    if (title !== null){
       var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
       return projectName;
     }
