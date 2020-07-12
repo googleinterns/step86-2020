@@ -45,7 +45,6 @@ const Button = styled.button`
 interface InjectedAppState{
   projectId: string,
   debuggeeId: string,
-  counter: number,
   breakpoints: Array<any>,
   lineNum: number;
   fileName: string;
