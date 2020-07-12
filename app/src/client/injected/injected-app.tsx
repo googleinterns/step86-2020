@@ -59,7 +59,7 @@ interface InjectedAppState{
   constructor(){
     super();
     this.state = {
-      projectId: localStorage.getItem(this.getProjectNameFromGithub()) !==  null ? localStorage.getItem(this.getProjectNameFromGithub()): undefined,
+      projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
       counter: 20,
       breakpoints : {},
@@ -72,8 +72,19 @@ interface InjectedAppState{
 
   getProjectNameFromGithub(): string{
     let title = document.querySelector(".js-path-segment:first-child");
-    var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
-    return projectName;
+    if(title !== null){
+      var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
+      return projectName;
+    }
+  }
+
+  getGcpProjectId(): string {
+    if (localStorage.getItem(this.getProjectNameFromGithub()) !==  null ) {
+      return localStorage.getItem(this.getProjectNameFromGithub());
+    }
+    else {
+      return undefined;
+    }
   }
           
   get lineNumber(){
@@ -177,7 +188,6 @@ interface InjectedAppState{
           completedBreakpoints={this.state.completedBreakpointsList}
           setProject={(projectId) => {
               localStorage.setItem(this.getProjectNameFromGithub(), projectId);
-              console.log(localStorage);
               this.setState({projectId})}
             }
           setDebuggee={debuggeeId => this.setState({debuggeeId})}
