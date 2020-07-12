@@ -23,21 +23,16 @@ describe("Injected App", () => {
       expect(wrapper.find(Chathead)).toHaveLength(1);
     });
 
-    it("displays injected app when no project selected.", () => {
-        const wrapper = mount(
-          <InjectedApp
-            projectId={"a"}
-            debuggeeId={undefined}
-            breakpoints={[]}
-            lineNum={5}
-            fileName={"index.js"}
-            activeBreakpoints={[]}
-            completedBreakpoints={[]}
-          />
-        );
-        expect(wrapper.find(Chathead)).toHaveLength(1);
+    it("checks getGcpProjectId method is called", () => {
+      jest.spyOn(InjectedApp.prototype, 'getGcpProjectId');
+      shallow(<InjectedApp />);
+      expect(InjectedApp.prototype.getGcpProjectId).toHaveBeenCalled();
     });
 
-    
+    it("displays injected app when no project selected.", () => {
+      jest.spyOn(InjectedApp.prototype, 'getProjectNameFromGithub');
+      shallow(<InjectedApp />);
+      expect(InjectedApp.prototype.getProjectNameFromGithub).toHaveBeenCalled();
+    });
 });
   
