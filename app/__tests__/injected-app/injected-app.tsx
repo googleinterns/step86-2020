@@ -23,13 +23,13 @@ describe("Injected App", () => {
       expect(wrapper.find(Chathead)).toHaveLength(1);
     });
 
-    it("checks getGcpProjectId method is called", () => {
+    it("checks getGcpProjectId method is called.", () => {
       jest.spyOn(InjectedApp.prototype, 'getGcpProjectId');
       shallow(<InjectedApp />);
       expect(InjectedApp.prototype.getGcpProjectId).toHaveBeenCalled();
     });
 
-    it("displays injected app when no project selected.", () => {
+    it("checks getProjectNameFromGithub method is called.", () => {
       jest.spyOn(InjectedApp.prototype, 'getProjectNameFromGithub');
       shallow(<InjectedApp />);
       expect(InjectedApp.prototype.getProjectNameFromGithub).toHaveBeenCalled();
