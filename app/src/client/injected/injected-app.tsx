@@ -51,7 +51,6 @@ interface InjectedAppState{
   fileName: string;
   activeBreakpoints: {[key: string]: BreakpointMeta};
   completedBreakpointsList: Array<any>;
-
 }
 
  class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -70,6 +69,9 @@ interface InjectedAppState{
     }
   }
 
+  /**
+   * This function fetches projects names on Github and return the title of the project
+   */
   getProjectNameFromGithub(): string{
     let title = document.querySelector(".js-path-segment:first-child");
     if(title !== null){
@@ -77,8 +79,11 @@ interface InjectedAppState{
       return projectName;
     }
   }
-
-  getGcpProjectId(): string {
+  
+  /**
+   * This function fetches projects names on Github and return the title of the project
+   */
+  getGcpProjectId(): string{
     if (localStorage.getItem(this.getProjectNameFromGithub()) !==  null ) {
       return localStorage.getItem(this.getProjectNameFromGithub());
     }
