@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
 
-
 const Wrapper = styled.section`
   padding: 6em;
   float:right; 
@@ -41,7 +40,6 @@ const Button = styled.button`
   border-radius: 3px;
 `;
 
-// declare attributs here
 interface InjectedAppState{
   projectId: string,
   debuggeeId: string,
@@ -52,7 +50,7 @@ interface InjectedAppState{
   completedBreakpointsList: Array<any>;
 }
 
- export class InjectedApp extends React.Component<any,InjectedAppState> {
+export class InjectedApp extends React.Component<any,InjectedAppState> {
 
   constructor(props: InjectedAppState){
     super(props);
