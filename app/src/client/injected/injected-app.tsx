@@ -53,17 +53,17 @@ interface InjectedAppState{
   completedBreakpointsList: Array<any>;
 }
 
- class InjectedApp extends React.Component<any,InjectedAppState> {
+ export class InjectedApp extends React.Component<any,InjectedAppState> {
 
-  constructor(){
-    super();
+  constructor(props: InjectedAppState){
+    super(props);
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
       counter: 20,
       breakpoints : {},
       lineNumber: 29,
-      fileName: "index.js"
+      fileName: "index.js",
       activeBreakpoints : {},
       completedBreakpointsList: []
     }
@@ -79,7 +79,7 @@ interface InjectedAppState{
       return projectName;
     }
   }
-  
+
   /**
    * This function fetches projects names on Github and return the title of the project
    */
