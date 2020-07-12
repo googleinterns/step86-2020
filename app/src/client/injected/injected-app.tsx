@@ -59,7 +59,7 @@ interface InjectedAppState{
   constructor(){
     super();
     this.state = {
-      projectId: undefined,
+      projectId: localStorage.getItem(this.getProjectNameFromGithub()) !==  null ? localStorage.getItem(this.getProjectNameFromGithub()): undefined,
       debuggeeId: undefined,
       counter: 20,
       breakpoints : {},
@@ -70,33 +70,12 @@ interface InjectedAppState{
     }
   }
 
-
-
-
-
-
-
-          
-  storesProjectsInChrome() {
+  getProjectNameFromGithub(): string{
     let title = document.querySelector(".js-path-segment:first-child");
     var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
-    console.log("Project Name is : ", projectName);
-    console.log("GCP project ID : ", this.state.projectId);
-    console.log(localStorage);
-
-    for(let i=0; i < localStorage.length;i++){
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key);
-      if(projectName === key){
-        return value;
-      }
-    }
-    console.log("GCP project ID here : ", this.state.projectId);
-    localStorage.setItem(projectName, this.state.projectId);
-    return this.state.projectId;
+    return projectName;
   }
-  
-
+          
   get lineNumber(){
     return this.state.lineNumber;
   }
@@ -192,11 +171,15 @@ interface InjectedAppState{
     return (
       <>
         <Chathead
-          projectId={this.storesProjectsInChrome()}
+          projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
           activeBreakpoints={Object.values(this.state.activeBreakpoints)}
           completedBreakpoints={this.state.completedBreakpointsList}
-          setProject={projectId => this.setState({projectId})}
+          setProject={(projectId) => {
+              localStorage.setItem(this.getProjectNameFromGithub(), projectId);
+              console.log(localStorage);
+              this.setState({projectId})}
+            }
           setDebuggee={debuggeeId => this.setState({debuggeeId})}
           createBreakpoint={(fileName, lineNumber) => this.createBreakPoint(fileName, lineNumber)}
         />
