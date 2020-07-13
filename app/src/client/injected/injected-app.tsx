@@ -80,7 +80,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   }
 
   /**
-   * This function fetches projects names on Github and return the title of the project
+   * This function checks of the project name already exists in the local storage 
    */
   getGcpProjectId(): string{
     let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
