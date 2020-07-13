@@ -6,6 +6,7 @@ import { CreateBreakpointForm } from "./CreateBreakpointForm";
 import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
+import "fontsource-roboto";
 
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
