@@ -42,11 +42,9 @@ const Button = styled.button`
   border-radius: 3px;
 `;
 
-// declare attributs here
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
-  counter: number;
   breakpoints: Array<any>;
   lineNum: number;
   fileName: string;
@@ -54,22 +52,42 @@ interface InjectedAppState {
   completedBreakpointsList: Array<any>;
 }
 
-class InjectedApp extends React.Component<any, InjectedAppState> {
-  constructor() {
-    super();
+export class InjectedApp extends React.Component<any,InjectedAppState> {
+
+  constructor(props: InjectedAppState){
+    super(props);
     this.state = {
-      projectId: undefined,
+      projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
       counter: 20,
       breakpoints: {},
       lineNumber: 29,
       fileName: "index.js",
-      activeBreakpoints: {},
-      completedBreakpointsList: [],
-    };
+      activeBreakpoints : {},
+      completedBreakpointsList: []
+    }
   }
 
-  get lineNumber() {
+  /**
+   * This function fetches projects names on Github and return the title of the project
+   */
+  getProjectNameFromGithub(): string{
+    let title = document.querySelector(".js-path-segment:first-child");
+    if (title !== null){
+      var projectName = title.innerText;
+      return projectName;
+    }
+  }
+
+  /**
+   * This function checks of the project name already exists in the local storage 
+   */
+  getGcpProjectId(): string{
+    let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
+    return gcpProjectId !== null ? gcpProjectId : undefined;
+  }
+          
+  get lineNumber(){
     return this.state.lineNumber;
   }
 
@@ -185,7 +203,10 @@ class InjectedApp extends React.Component<any, InjectedAppState> {
 
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
-          setProject={(projectId) => this.setState({ projectId })}
+          setProject={(projectId) => {
+            localStorage.setItem(this.getProjectNameFromGithub(), projectId);
+            this.setState({projectId})}
+          }
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
           createBreakpoint={(fileName, lineNumber) =>
             this.createBreakPoint(fileName, lineNumber)

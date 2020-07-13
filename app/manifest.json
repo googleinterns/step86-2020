@@ -8,7 +8,7 @@
   "browser_action": {
     "default_popup": "src/client/popup/popup.html"
   },
-  "permissions": ["activeTab", "tabs", "identity"],
+  "permissions": ["activeTab", "identity", "storage", "tabs"],
   "content_scripts": [
     {
       "matches": ["http://github.com/*", "https://github.com/*"],
@@ -20,7 +20,7 @@
   },
 
   "oauth2": {
-    "client_id": "814996444798-qs7alptifoqe7pqhcao40epof3p6tjue.apps.googleusercontent.com",
+    "client_id": "975956245065-kiec30fc8k9v7l8bgake6mqhe33aenv9.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/userinfo.profile"
