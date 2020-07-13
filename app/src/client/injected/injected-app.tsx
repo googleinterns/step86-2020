@@ -72,7 +72,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   getProjectNameFromGithub(): string{
     let title = document.querySelector(".js-path-segment:first-child");
     if (title !== null){
-      var projectName = title.querySelector("a[data-pjax='true'] span").innerHTML;
+      var projectName = title.innerText;
       return projectName;
     }
   }
@@ -81,12 +81,8 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    * This function fetches projects names on Github and return the title of the project
    */
   getGcpProjectId(): string{
-    if (localStorage.getItem(this.getProjectNameFromGithub()) !==  null ) {
-      return localStorage.getItem(this.getProjectNameFromGithub());
-    }
-    else {
-      return undefined;
-    }
+    let gcpProjecId = localStorage.getItem(this.getProjectNameFromGithub());
+    return gcpProjecId !== null ? gcpProjecId : undefined;
   }
           
   get lineNumber(){
