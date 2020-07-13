@@ -3,27 +3,28 @@ import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 /** Used to display a breakpoint that has not yet hit. */
-export const PendingBreakpointView = ({ breakpointMeta }) => (
-  <Accordion>
-    <BreakpointHeader
-      id={breakpointMeta.id}
-      location={breakpointMeta.location}
-    />
-    <AccordionDetails>
-      <CircularProgress/>
-    </AccordionDetails>
-  </Accordion>
-);
+export const PendingBreakpointView = ({ breakpointMeta }) => {
+  const {location} = breakpointMeta;
+  return (
+    <Accordion>
+      <AccordionSummary disabled expandIcon={<CircularProgress/>}>
+        <Typography>{location.path}:{location.line}</Typography>
+      </AccordionSummary>
+    </Accordion>
+  );
+};
 
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint }) => {
-  //console.log(breakpoint);
-  const stackframe = breakpoint.stackFrames[0];
+  const {stackFrames, location} = breakpoint;
+  const stackframe = stackFrames[0];
   return (
-    <Accordion>
-      <BreakpointHeader id={breakpoint.id} location={breakpoint.location} />
+    <Accordion defaultExpanded>
+      <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+        <Typography>{location.path}:{location.line}</Typography>
+      </AccordionSummary>
       <AccordionDetails>
-        <List>
+        <List dense>
           {
             stackframe.locals.map(variable => (
               <ListItem>
@@ -39,8 +40,6 @@ export const CompletedBreakpointView = ({ breakpoint }) => {
 
 const BreakpointHeader = ({ id, location }) => (
   <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-    <Typography>{location.path}</Typography>
-    {/* <span>{location.path}</span>
-    <span>{location.line}</span> */}
+    <Typography>{location.path}:{location.line}</Typography>
   </AccordionSummary>
 );

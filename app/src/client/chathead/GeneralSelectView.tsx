@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, MenuItem, FormControl } from "@material-ui/core";
+import { Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 
 interface SelectViewProps {
   options: any[];
@@ -24,8 +24,8 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
         {optionsLoading === true && <LoadingView />}
         {optionsLoading === false && (
           <FormControl variant="outlined" style={{width: "100%"}}>
+            <InputLabel>{label}</InputLabel>
             <Select
-              label={label}
               value={selectedOptionId}
               onChange={event => this.onChange(event.target.value)}
             >
