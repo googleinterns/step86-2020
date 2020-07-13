@@ -3,6 +3,7 @@ import { Select, MenuItem, FormControl } from "@material-ui/core";
 
 interface SelectViewProps {
   options: any[];
+  label?: string;
   optionsLoading: boolean;
   selectedOptionId?: string;
   // Gets an ID to internally represent an option (will be stored and sent to API)
@@ -12,19 +13,21 @@ interface SelectViewProps {
 
 export class SelectView extends React.Component<SelectViewProps, {}> {
   onChange(optionId) {
+    console.log(optionId);
     this.props.onChange(optionId);
   }
 
   render() {
-    const { options, selectedOptionId, optionsLoading, optionToId } = this.props;
+    const { options, selectedOptionId, optionsLoading, optionToId, label } = this.props;
     return (
       <div>
         {optionsLoading === true && <LoadingView />}
         {optionsLoading === false && (
-          <FormControl variant="outlined">
+          <FormControl variant="outlined" style={{width: "100%"}}>
             <Select
+              label={label}
               value={selectedOptionId}
-              onChange={this.onChange}
+              onChange={event => this.onChange(event.target.value)}
             >
               {
                 options.map(optionToId).map(opt => <MenuItem value={opt}>{opt}</MenuItem>)

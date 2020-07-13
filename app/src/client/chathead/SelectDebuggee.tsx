@@ -1,7 +1,7 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Debuggee } from "../../common/types/debugger";
-import { Toolbar, Typography, AppBar } from "@material-ui/core";
+import { Toolbar, Typography, AppBar, Card, CardContent } from "@material-ui/core";
 
 interface SelectDebuggeeContainerProps {
   projectId: string;
@@ -48,14 +48,19 @@ export class SelectDebuggeeContainer extends React.Component<
             <Typography variant="h6">{this.props.projectId}</Typography>
           </Toolbar>
         </AppBar>
-        <h3>Select Debuggee</h3>
-        <SelectView
-          options={this.state.debuggees}
-          optionsLoading={this.state.debuggeesLoading}
-          selectedOptionId={this.props.debuggeeId}
-          onChange={(debuggeeId) => this.onChange(debuggeeId)}
-          optionToId={(debuggee: Debuggee) => debuggee.id}
-        />
+        <Card>
+          <CardContent>
+            <h3>Select Debuggee</h3>
+            <SelectView
+              label="Debuggee ID"
+              options={this.state.debuggees}
+              optionsLoading={this.state.debuggeesLoading}
+              selectedOptionId={this.props.debuggeeId}
+              onChange={(debuggeeId) => this.onChange(debuggeeId)}
+              optionToId={(debuggee: Debuggee) => debuggee.id}
+            />
+          </CardContent>
+        </Card>
       </>
     );
   }
