@@ -6,6 +6,8 @@ import { CreateBreakpointForm } from "./CreateBreakpointForm";
 import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
+
+import Paper from "@material-ui/core/Paper";
 import "fontsource-roboto";
 
 interface ChatheadProps {
@@ -72,13 +74,12 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 }
 
-const ChatheadWrapper = styled.div`
+const ChatheadWrapper = styled(Paper)`
   position: fixed;
   top: 20px;
+
   right: 20px;
-  width: 200px;
-  padding: 20px;
-  background: white;
-  box-shadow: 0px 2px 8px 0px rgba(20, 20, 20, 0.4);
-  z-index: 10000;
+  width: 300px;
+
+  z-index: 1000;
 `;

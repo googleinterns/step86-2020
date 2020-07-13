@@ -1,4 +1,5 @@
 import React from "react";
+import { Select, MenuItem, FormControl } from "@material-ui/core";
 
 interface SelectViewProps {
   options: any[];
@@ -20,12 +21,16 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
       <div>
         {optionsLoading === true && <LoadingView />}
         {optionsLoading === false && (
-          <OptionSelect
-            selectedOptionId={selectedOptionId}
-            options={options}
-            onChange={(optionId) => this.onChange(optionId)}
-            optionToId={optionToId}
-          />
+          <FormControl variant="outlined">
+            <Select
+              value={selectedOptionId}
+              onChange={this.onChange}
+            >
+              {
+                options.map(optionToId).map(opt => <MenuItem value={opt}>{opt}</MenuItem>)
+              }
+            </Select>
+          </FormControl>
         )}
       </div>
     );

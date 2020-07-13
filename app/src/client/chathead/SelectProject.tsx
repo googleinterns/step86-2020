@@ -1,6 +1,7 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 interface SelectProjectContainerProps {
   projectId?: string;
@@ -41,7 +42,11 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <h3>Select Project</h3>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">Select Project</Typography> 
+          </Toolbar>
+        </AppBar>
         <SelectView
           options={this.state.projects}
           optionsLoading={this.state.projectsLoading}
