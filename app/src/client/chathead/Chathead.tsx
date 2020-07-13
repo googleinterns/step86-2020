@@ -9,6 +9,7 @@ import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView
 
 import Paper from "@material-ui/core/Paper";
 import "fontsource-roboto";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
@@ -59,7 +60,14 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           />
         )}
         {projectId && debuggeeId && (
-          <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
+          <>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h6">Breakpoints</Typography>
+              </Toolbar>
+            </AppBar>
+            <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
+          </>
         )}
 
         {
