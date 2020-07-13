@@ -4,6 +4,10 @@ import styled, { keyframes } from "styled-components";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 
 interface NewBreakpointMarkerProps {
+  /** Callback for when new-breakpoint marker is clicked.
+   *  Using a callback for this lets us centralize breakpoint setting logic
+   * in InjectedApp
+   */
   onClick: () => void;
 }
 
@@ -13,6 +17,7 @@ export const NewBreakpointMarker = ({ onClick }: NewBreakpointMarkerProps) => {
 };
 
 interface ActiveBreakpointMarkerProps {
+  /** Data for an active (pending) breakpoint */
   breakpointMeta: BreakpointMeta;
 }
 
@@ -24,6 +29,7 @@ export const ActiveBreakpointMarker = ({
 };
 
 interface CompletedBreakpointMarkerProps {
+  /** Data for a completed breakpoint. */
   breakpoint: Breakpoint;
 }
 
