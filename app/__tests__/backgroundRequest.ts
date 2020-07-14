@@ -10,7 +10,9 @@ import {
   ListBreakPointsRequest,
   ListBreakpointsData,
   AuthenticationRequestData,
-  GetAuthStateRequestData
+  GetAuthStateRequestData,
+  DeleteBreakpointRequestData,
+  EnableRequiredServiceRequestData
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -94,6 +96,22 @@ describe("GetAuthStateRequestData", () => {
   it("can be instantiated", () => {
     const data = new GetAuthStateRequestData();
     expect(data.type).toBe(BackgroundRequestType.IS_AUTHENTICATED);
+  });
+});
+
+describe("DeleteBreakpointRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new DeleteBreakpointRequestData("test1", "test2");
+    expect(data.debuggeeId).toBe("test1");
+    expect(data.breakpointId).toBe("test2");
+    expect(data.type).toBe(BackgroundRequestType.DELETE_BREAKPOINT);
+  });
+});
+
+describe("EnableRequiredServiceRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new EnableRequiredServiceRequestData();
+    expect(data.type).toBe(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
   });
 });
 
