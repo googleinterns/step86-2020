@@ -17,7 +17,8 @@ export enum BackgroundRequestType {
   DELETE_BREAKPOINT,
   AUTHENTICATION,
   IS_AUTHENTICATED,
-  ENABLE_REQUIRED_SERVICE
+  ENABLE_REQUIRED_SERVICE,
+  IS_SERVICE_ENABLED
 }
 
 /**
@@ -245,8 +246,20 @@ export class EnableRequiredServiceRequestData extends BackgroundRequestData {
     super(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
   }
 }
-interface EnableRequiredServiceRequestResponse {
+interface EnableRequiredServiceRequestResponse {}
+
+export class EnableRequiredServiceRequest extends BackgroundRequest<EnableRequiredServiceRequestData, EnableRequiredServiceRequestResponse> {}
+
+/**
+ *  Lets UI get enabling state.
+ */
+export class  RequiredServicesEnabledRequestData  extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.IS_SERVICE_ENABLED);
+  }
+}
+interface RequiredServicesEnabledRequestResponse {
   isRequiredServicesEnabled: boolean
 }
 
-export class EnableRequiredServiceRequest extends BackgroundRequest<EnableRequiredServiceRequestData, EnableRequiredServiceRequestResponse> {}
+export class RequiredServicesEnabledRequest extends BackgroundRequest<RequiredServicesEnabledRequestData, RequiredServicesEnabledRequestResponse> {}

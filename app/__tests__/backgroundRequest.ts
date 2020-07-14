@@ -12,7 +12,8 @@ import {
   AuthenticationRequestData,
   GetAuthStateRequestData,
   DeleteBreakpointRequestData,
-  EnableRequiredServiceRequestData
+  EnableRequiredServiceRequestData,
+  RequiredServicesEnabledRequestData
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -112,6 +113,13 @@ describe("EnableRequiredServiceRequestData", () => {
   it("can be instantiated", () => {
     const data = new EnableRequiredServiceRequestData();
     expect(data.type).toBe(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
+  });
+});
+
+describe("RequiredServicesEnabledRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new RequiredServicesEnabledRequestData();
+    expect(data.type).toBe(BackgroundRequestType.IS_SERVICE_ENABLED);
   });
 });
 
