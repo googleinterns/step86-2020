@@ -145,6 +145,8 @@ export abstract class BreakpointMarkers extends React.Component<BreakpointMarker
     // Only create a new mount if it doesn't already exist.
     if (!this.mountNodes.has(lineNumber)) {
       const mountNode = document.createElement("div");
+      // Prevents our injection from interfering with repo line formatting.
+      mountNode.style = "width: 0px;float: left;"
       this.mountNodes.set(lineNumber, mountNode);
       rowNode.prepend(mountNode);
     }

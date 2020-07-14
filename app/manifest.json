@@ -13,6 +13,10 @@
     {
       "matches": ["http://github.com/*", "https://github.com/*"],
       "js": ["src/client/injected/github.tsx"]
+    },
+    {
+      "matches": ["https://opensource.ncsa.illinois.edu/bitbucket/projects/BD/repos/bdcli/browse/docker.sh"],
+      "js": ["src/client/injected/bitbucket.tsx"]
     }
   ],
   "background": {

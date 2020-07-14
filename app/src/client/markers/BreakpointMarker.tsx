@@ -48,6 +48,7 @@ const GeneralBreakpointMarkerWrapper = styled.div`
   height: 20px;
   margin-left: 4px;
 
+  box-sizing: border-box;
   background-clip: content-box;
   border: 4px solid white;
   border-left: none;
