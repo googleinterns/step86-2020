@@ -15,7 +15,11 @@
       "js": ["src/client/injected/github.tsx"]
     },
     {
-      "matches": ["https://opensource.ncsa.illinois.edu/bitbucket/projects/BD/repos/bdcli/browse/docker.sh"],
+      "matches": ["http://gitlab.com/*", "https://gitlab.com/*"],
+      "js": ["src/client/injected/gitlab.tsx"]
+    },
+    {
+      "matches": ["http://bitbucket.com/*", "https://bitbucket.com/*"],
       "js": ["src/client/injected/bitbucket.tsx"]
     }
   ],
