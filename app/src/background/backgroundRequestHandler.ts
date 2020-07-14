@@ -187,9 +187,9 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
   backgroundRequest.BackgroundRequestType.IS_AUTHENTICATED,
   async () => {
     const request = await api.getAuthToken();
-    let response = false;
+    let response = {isAuthenticated: false};
     if (request !== "") {
-      response = true;
+      response = {isAuthenticated: true};
     }
     return response;
   }
