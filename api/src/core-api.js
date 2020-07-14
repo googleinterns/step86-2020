@@ -175,3 +175,17 @@ exports.fetchServices= async (projectNumber) => {
   return data;
 };
 
+
+exports.enableServices = async (name) => {
+
+  const url = "https://serviceusage.googleapis.com/v1/".concat(name,":enable")
+  console.log(url);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${userAuth}`,
+    },
+  });
+  return response;
+};
