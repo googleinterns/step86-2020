@@ -43,6 +43,40 @@ export abstract class BackgroundRequestData {
   }
 }
 
+/** A response provided from the background. Only the data field will actually be returned to UI.
+ * This class exists to allow detection of an error and subsequent promise rejection.
+ * Since we're using chrome message passing, error from background won't automatically throw in UI,
+ * so this intermediary representation is needed.
+ */
+export interface BackgroundRequestResponse<R> {
+  isError: boolean;
+  error?: any;
+  data?: R;
+}
+
+/** A standard format for reporting errors back to ui. */
+export interface BackgroundRequestError {
+  message: string;
+}
+
+/** Used to generate BackgroundRequestResponses more consistently. */
+export class BackgroundRequestResponseFactory {
+  /** Generate a response for an error state. */
+  static fromError(error: BackgroundRequestError): BackgroundRequestResponse<undefined> {
+    return {
+      isError: true,
+      error
+    }
+  }
+  /** Generate a successful response with useful payload. */
+  static fromData<R>(data: R): BackgroundRequestResponse<R> {
+    return {
+      isError: false,
+      data
+    }
+  }
+}
+
 /**
  * Used to send requests (with optional response) from UI to API background.
  * This isn't meant to be used directly, instead through derived classes for each request type.
@@ -72,9 +106,12 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
    * @return Promise<R> The response from API, if there is one.
    */
   run(data: D): Promise<R> {
-    return new Promise((resolve) => {
-      this.chromeApi.runtime.sendMessage(data, (response: R) => {
-        resolve(response);
+    return new Promise((resolve, reject) => {
+      this.chromeApi.runtime.sendMessage(data, (response: BackgroundRequestResponse<R>) => {
+        if (response.isError) {
+          return reject(response.error);
+        }
+        return resolve(response.data);
       });
     });
   }

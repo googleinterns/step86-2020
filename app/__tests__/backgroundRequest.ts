@@ -10,7 +10,10 @@ import {
   ListBreakPointsRequest,
   ListBreakpointsData,
   AuthenticationRequestData,
-  GetAuthStateRequestData
+  GetAuthStateRequestData,
+  BackgroundRequestResponse,
+  BackgroundRequestResponseFactory,
+  BackgroundRequestError
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -97,7 +100,17 @@ describe("GetAuthStateRequestData", () => {
   });
 });
 
+describe("BackgroundRequestResponseFactory", () => {
+  it("can generate response", () => {
+    const data = {foo: "bar"};
+    expect(BackgroundRequestResponseFactory.fromData(data)).toEqual({isError: false, data});
+  });
 
+  it("can generate error", () => {
+    const error = {message: "foo"} as BackgroundRequestError;
+    expect(BackgroundRequestResponseFactory.fromError(error)).toEqual({isError: true, error});
+  });
+});
 
 describe("BackgroundRequest", () => {
   beforeEach(() => {
@@ -125,7 +138,7 @@ describe("BackgroundRequest", () => {
     const data = new SampleRequestData("test");
     const req = new SampleRequest((chromeApi as unknown) as typeof chrome);
 
-    const stub = { foo: "bar" } as SampleResponse;
+    const stub = BackgroundRequestResponseFactory.fromData({foo: "bar"});
 
     // Intercept the message and send a stubbed response.
     // "1" represents the index of the sendMessage response function.
@@ -134,6 +147,25 @@ describe("BackgroundRequest", () => {
     // Need to explicitly declare number of assertions to expect if async.
     expect.assertions(1);
     const response = await req.run(data);
-    expect(response).toEqual(stub);
+    expect(response).toEqual(stub.data);
+  });
+
+  it("throws an error", async () => {
+    const data = new SampleRequestData("test");
+    const req = new SampleRequest((chromeApi as unknown) as typeof chrome);
+
+    const stub = BackgroundRequestResponseFactory.fromError({message: "foo"});
+
+    // Intercept the message and send a stubbed response.
+    // "1" represents the index of the sendMessage response function.
+    chromeApi.runtime.sendMessage.callsArgWith(1, stub);
+
+    // Need to explicitly declare number of assertions to expect if async.
+    expect.assertions(1);
+    try {
+      await req.run(data);
+    } catch (expectedError) {
+      expect(expectedError).toEqual(stub.error);
+    }
   });
 });
