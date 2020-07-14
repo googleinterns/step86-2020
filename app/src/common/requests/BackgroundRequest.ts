@@ -16,7 +16,9 @@ export enum BackgroundRequestType {
   LIST_BREAKPOINTS,
   DELETE_BREAKPOINT,
   AUTHENTICATION,
-  IS_AUTHENTICATED
+  IS_AUTHENTICATED,
+  ENABLE_REQUIRED_SERVICE,
+  IS_SERVICE_ENABLED
 }
 
 /**
@@ -255,3 +257,46 @@ interface GetAuthStateRequestResponse {
 
 export class GetAuthStateRequest extends BackgroundRequest<GetAuthStateRequestData, GetAuthStateRequestResponse> {}
 
+
+/**
+ *  Lets UI get delete a Breakpoint.
+ */
+export class DeleteBreakpointRequestData extends BackgroundRequestData {
+  debuggeeId: string;
+  breakpointId: string;
+  constructor(debuggeeId: string, breakpointId: string) {
+    super(BackgroundRequestType.DELETE_BREAKPOINT);
+    this.debuggeeId = debuggeeId;
+    this.breakpointId = breakpointId;
+  }
+}
+interface DeleteBreakpointRequestResponse {
+}
+
+export class DeleteBreakpointRequest extends BackgroundRequest<DeleteBreakpointRequestData, DeleteBreakpointRequestResponse> {}
+
+/**
+ *  Lets UI enable required service.
+ */
+export class EnableRequiredServiceRequestData extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
+  }
+}
+interface EnableRequiredServiceRequestResponse {}
+
+export class EnableRequiredServiceRequest extends BackgroundRequest<EnableRequiredServiceRequestData, EnableRequiredServiceRequestResponse> {}
+
+/**
+ *  Lets UI get enabling state.
+ */
+export class  RequiredServicesEnabledRequestData  extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.IS_SERVICE_ENABLED);
+  }
+}
+interface RequiredServicesEnabledRequestResponse {
+  isRequiredServicesEnabled: boolean
+}
+
+export class RequiredServicesEnabledRequest extends BackgroundRequest<RequiredServicesEnabledRequestData, RequiredServicesEnabledRequestResponse> {}

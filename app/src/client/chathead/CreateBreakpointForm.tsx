@@ -1,4 +1,5 @@
 import React from "react";
+import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
@@ -36,29 +37,38 @@ export class CreateBreakpointForm extends React.Component<
   render() {
     const { fileName, lineNumber } = this.state;
     return (
-      <form>
-        <label>File Name</label>
-        <input
-          style={{width: "100%"}}
-          data-testid="fileName"
-          value={fileName}
-          onChange={(e) => this.onFileName(e.target.value)}
-        />
-
-        <label>Line Number</label>
-        <input
-          style={{width: "100%"}}
-          data-testid="lineNumber"
-          value={lineNumber}
-          onChange={(e) => this.onLineNumber(e.target.value)}
-        />
-        <button onClick={(e) => {
-          e.preventDefault(); // Prevents a page reload from form submit.
-          this.onCreateBreakpoint();
-          }}>
-          Create Breakpoint
-        </button>
-      </form>
+      <Box m={1}>
+        <Card elevation={1}>
+          <CardContent>
+            <form>
+              <TextField
+                label="File Name"
+                style={{width: "100%"}}
+                data-testid="fileName"
+                value={fileName}
+                onChange={(e) => this.onFileName(e.target.value)}
+                variant="outlined"
+              />
+              <br/><br/>
+              <TextField
+                label="Line Number"
+                style={{width: "100%"}}
+                data-testid="lineNumber"
+                value={lineNumber}
+                onChange={(e) => this.onLineNumber(e.target.value)}
+                variant="outlined"
+              />
+              <br/><br/>
+              <Button onClick={(e) => {
+                e.preventDefault(); // Prevents a page reload from form submit.
+                this.onCreateBreakpoint();
+                }}>
+                Create Breakpoint
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Box>      
     );
   }
 }

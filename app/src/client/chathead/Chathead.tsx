@@ -7,6 +7,12 @@ import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestDa
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
 
+import Paper from "@material-ui/core/Paper";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
+// Jest has trouble with this, so only import in actual builds.
+if(process.env.NODE_ENV !== "test"){
+  import("fontsource-roboto");
+}
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
   projectId: string | undefined;
@@ -43,6 +49,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             }}
           />
         )}
+        
         {projectId && !debuggeeId && (
           <SelectDebuggeeContainer
             projectId={this.props.projectId}
@@ -55,8 +62,16 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             }}
           />
         )}
+
         {projectId && debuggeeId && (
-          <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
+          <>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h6">Breakpoints</Typography>
+              </Toolbar>
+            </AppBar>
+            <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
+          </>
         )}
 
         {
@@ -71,13 +86,12 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 }
 
-const ChatheadWrapper = styled.div`
+const ChatheadWrapper = styled(Paper)`
   position: fixed;
   top: 20px;
+
   right: 20px;
-  width: 200px;
-  padding: 20px;
-  background: white;
-  box-shadow: 0px 2px 8px 0px rgba(20, 20, 20, 0.4);
-  z-index: 10000;
+  width: 300px;
+
+  z-index: 1000;
 `;
