@@ -152,3 +152,23 @@ exports.deleteBreakpoint = async (debuggeeId, breakpointId) => {
   const data = response.data;
   return data;
 };
+
+
+
+exports.fetchServices= async (projectNumber) => {
+  const response = await axios.get(
+    "https://serviceusage.googleapis.com/v1/{parent=*/*}/services",
+    {
+      headers: {
+        Authorization: `Bearer ${userAuth}`,
+      },      
+      params: {
+          parent: "projects/".concat(projectNumber),
+          pageSize: 200,
+          filter: "state:ENABLED"
+        },
+    }
+  );
+  const data = response.data;
+  return data;
+};
