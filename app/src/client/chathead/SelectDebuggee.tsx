@@ -5,6 +5,7 @@ import { Debuggee } from "../../common/types/debugger";
 import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Alert from '@material-ui/lab/Alert';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
 
 interface SelectDebuggeeContainerProps {
@@ -64,6 +65,12 @@ export class SelectDebuggeeContainer extends React.Component<
               <ArrowBackIcon/>
             </IconButton>
             <Typography variant="h6">{this.props.projectId}</Typography>
+            {!this.state.debuggeesLoading && (
+                <IconButton color="inherit" onClick={() => this.loadDebuggees()}>
+                  <RefreshIcon/>
+                </IconButton>
+              )
+            }
           </Toolbar>
         </AppBar>
         <Box m={1}>

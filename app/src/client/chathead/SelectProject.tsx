@@ -1,8 +1,9 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
-import { AppBar, Toolbar, Typography, Card, CardContent, Box } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
 
 interface SelectProjectContainerProps {
@@ -56,7 +57,13 @@ export class SelectProjectContainer extends React.Component<
       <>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6">Select Project</Typography> 
+            <Typography variant="h6">Select Project</Typography>
+            {!this.state.projectsLoading && (
+                <IconButton color="inherit" onClick={() => this.loadProjects()}>
+                  <RefreshIcon/>
+                </IconButton>
+              )
+            }
           </Toolbar>
         </AppBar>
         <Box m={1}>
