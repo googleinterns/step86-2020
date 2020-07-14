@@ -154,6 +154,10 @@ exports.deleteBreakpoint = async (debuggeeId, breakpointId) => {
   return data;
 };
 
+/**
+ * Fetches all the enabled services using Service Usage API .
+ * @param {String} projectNumber User's current project number.
+ */
 exports.fetchServices = async (projectNumber) => {
   const response = await axios.get(
     "https://serviceusage.googleapis.com/v1/{parent=*/*}/services",
@@ -172,6 +176,10 @@ exports.fetchServices = async (projectNumber) => {
   return data;
 };
 
+/**
+ * Enables the service by making a POST call to Service Usage API .
+ * @param {String} name User's current project number.
+ */
 exports.enableServices = async (name) => {
   const url = "https://serviceusage.googleapis.com/v1/".concat(name, ":enable");
   console.log(url);
