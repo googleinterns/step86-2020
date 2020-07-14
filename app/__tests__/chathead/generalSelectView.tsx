@@ -10,6 +10,7 @@ import {
   OptionSelect,
   Option,
 } from "../../src/client/chathead/GeneralSelectView";
+import { MenuItem, Select } from "@material-ui/core";
 
 describe("SelectView", () => {
   it("displays loading state", () => {
@@ -25,39 +26,6 @@ describe("SelectView", () => {
     expect(wrapper.find(LoadingView)).toHaveLength(1);
   });
 
-  it("displays options", () => {
-    const wrapper = mount(
-      <SelectView
-        optionsLoading={false}
-        options={["a", "b", "c"]}
-        optionToId={opt => opt}
-        selectedOptionId={"b"}
-        onChange={() => {}}
-      />
-    );
-    // Make sure three options are displayed
-    const options = wrapper.find(Option);
-    expect(options).toHaveLength(3);
-    expect(options.at(0).text()).toEqual("a");
-  });
-
-  it("displays selected option", () => {
-    const wrapper = mount(
-      <SelectView
-        optionsLoading={false}
-        options={["a", "b", "c"]}
-        optionToId={opt => opt}
-        selectedOptionId={"b"}
-        onChange={() => {}}
-      />
-    );
-
-    // Find selected option
-    expect(
-      wrapper.find(OptionSelect).first().getElement().props.selectedOptionId
-    ).toEqual("b");
-  });
-
   it("calls back on option change", () => {
     const spy = jest.fn();
     const wrapper = mount(
@@ -71,7 +39,7 @@ describe("SelectView", () => {
     );
 
     // Find and click option
-    wrapper.find(OptionSelect).simulate("change", { target: { value: "a" } });
+    wrapper.find("input").simulate("change", { target: { value: "a" } });
     expect(spy).toHaveBeenCalledWith("a");
   });
 });

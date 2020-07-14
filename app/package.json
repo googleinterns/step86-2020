@@ -35,7 +35,9 @@
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^9.1.2",
     "enzyme": "^3.11.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.1.0",
+    "jest-css-modules": "^2.1.0",
     "jest-puppeteer": "^4.4.0",
     "jest-webextension-mock": "^3.6.0",
     "parcel-bundler": "^1.12.4",
@@ -62,6 +64,9 @@
   "jest": {
     "setupFiles": [
       "jest-webextension-mock"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules"
+    }
   }
 }

@@ -8,9 +8,10 @@ import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
 
 import Paper from "@material-ui/core/Paper";
-import "fontsource-roboto";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
-
+if(process.env.NODE_ENV !== "test"){
+  import("fontsource-roboto");
+}
 interface ChatheadProps {
   /** The current selected project. Undefined if no project selected. */
   projectId: string | undefined;

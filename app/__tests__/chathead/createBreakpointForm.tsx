@@ -2,6 +2,7 @@ import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { CreateBreakpointForm } from "../../src/client/chathead/CreateBreakpointForm";
+import { Button } from "@material-ui/core";
 
 configure({ adapter: new Adapter() });
 
@@ -33,7 +34,7 @@ describe("CreateBreakpointForm", () => {
     const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} />);
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    wrapper.find("button").simulate("click", {preventDefault: preventFormSubmitSpy});
+    wrapper.find(Button).simulate("click", {preventDefault: preventFormSubmitSpy});
 
     expect(spy).toHaveBeenCalledWith("a", 1);
     expect(preventFormSubmitSpy).toHaveBeenCalled();
