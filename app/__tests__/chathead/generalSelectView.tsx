@@ -10,7 +10,7 @@ import {
   OptionSelect,
   Option,
 } from "../../src/client/chathead/GeneralSelectView";
-import { MenuItem, Select } from "@material-ui/core";
+import { MenuItem, Select, CircularProgress } from "@material-ui/core";
 
 describe("SelectView", () => {
   it("displays loading state", () => {
@@ -23,7 +23,7 @@ describe("SelectView", () => {
         onChange={() => {}}
       />
     );
-    expect(wrapper.find(LoadingView)).toHaveLength(1);
+    expect(wrapper.find(CircularProgress)).toHaveLength(1);
   });
 
   it("calls back on option change", () => {
