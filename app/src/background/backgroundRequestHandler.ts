@@ -1,5 +1,7 @@
 import api from "debugger-extension-api";
 import * as backgroundRequest from "../common/requests/BackgroundRequest";
+import * as serviceUsageHandler from "./serviceUsageHandler";
+
 
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
@@ -101,13 +103,10 @@ BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
 /**
  * Handler for delete the breakpoint from debugger-extension api and return the response.
  */
-BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
-  backgroundRequest.BackgroundRequestType.DELETE_BREAKPOINT,
+BackgroundRequestHandler.on<backgroundRequest.RequiredServicesEnabledRequestData>(
+  backgroundRequest.BackgroundRequestType.IS_SERVICE_ENABLED,
   async (data) => {
-    const response = await api.deleteBreakpoint(
-      data.debuggeeId,
-      data.breakpointId
-    );
-    return response;
+    const request = await serviceUsageHandler.checkRequiredServices(data.projectNumber);
+    return { isRequiredServicesEnabled: request}
   }
 );
