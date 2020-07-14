@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["http://github.com/*", "https://github.com/*"],
-      "js": ["src/client/injected/injected-app.tsx"]
+      "js": ["src/client/injected/github.tsx"]
     }
   ],
   "background": {
@@ -20,7 +20,7 @@
   },
 
   "oauth2": {
-    "client_id": "975956245065-kiec30fc8k9v7l8bgake6mqhe33aenv9.apps.googleusercontent.com",
+    "client_id": "83418787829-oi2em2j1vr46rir80bvkhv8bkbup72o0.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/userinfo.profile"

@@ -23,8 +23,10 @@ interface BreakpointMarkersProps {
  *   - No breakpoint on line => marker to set new breakpoint
  *   - Active breakpoint on line => marker to indicate pending status
  *   - Completed breakpoint on line => marker to indicate completed status.
+ *  This generic version contains core logic, and should be extended for each
+ *  host site to provide integration with its specific HTML selectors.
  */
-export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
+export abstract class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
   /** Each line number has a DOM node to mount its marker to.
    *  These are kept in memory so we don't have to constantly make (expensive) querySelector operations.
    */
@@ -46,10 +48,15 @@ export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
     // This is because (on github at least) clicking the <td/> directly causes a navigation event.
     // Mounting on the <tr/> and positioning properly is a workaround.
     //@ts-ignore
-    return [...document.querySelectorAll(".js-line-number")].map(
+    return [...document.querySelectorAll(this.getLineNumberSelector())].map(
       (node) => node.parentNode
     );
   }
+
+  /** Keeping this abstract allows the same class to target multiple
+   * host sites with different markup.
+   */
+  abstract getLineNumberSelector(): string;
 
   /** While we recieve an array of active/completed breakpoints, we need to know whether such a breakpoint
    * exists for a given line number. (Else, we show a 'new' button).

@@ -45,24 +45,17 @@ const Button = styled.button`
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
-  breakpoints: Array<any>;
-  lineNum: number;
-  fileName: string;
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpointsList: Array<any>;
 }
 
-export class InjectedApp extends React.Component<any,InjectedAppState> {
+export abstract class InjectedApp<M extends BreakpointMarkers> extends React.Component<any,InjectedAppState> {
 
   constructor(props: InjectedAppState){
     super(props);
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
-      counter: 20,
-      breakpoints: {},
-      lineNumber: 29,
-      fileName: "index.js",
       activeBreakpoints : {},
       completedBreakpointsList: []
     }
@@ -85,22 +78,6 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   getGcpProjectId(): string{
     let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
-  }
-          
-  get lineNumber(){
-    return this.state.lineNumber;
-  }
-
-  get fileName() {
-    return this.state.fileName;
-  }
-
-  set lineNumber(value: number) {
-    this.setState({ lineNumber: value });
-  }
-
-  set fileName(value: string) {
-    this.setState({ fileName: value });
   }
 
   /**
@@ -195,6 +172,8 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
     const completedBreakpoints = this.state.completedBreakpointsList;
 
+    const Markers = this.getBreakpointMarkers();
+
     return (
       <>
         <Chathead
@@ -213,7 +192,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           }
         />
 
-        <BreakpointMarkers
+        <Markers
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           createBreakpoint={(fileName, lineNumber) =>
@@ -223,9 +202,17 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
       </>
     );
   }
+
+  /** Gets a BreakpointMarkers object integrated into the host site. */
+  abstract getBreakpointMarkers(): new () => M;
 }
 
-// Mounts injected App once html is loaded
-const mount = document.createElement("div");
-document.body.appendChild(mount);
-ReactDOM.render(<InjectedApp />, mount);
+/** Injects an InjectedApp into the DOM. */
+export class Injector<T extends InjectedApp<any>> {
+  inject(App: new () => T): void {
+    // Mounts injected App once html is loaded
+    const mount = document.createElement("div");
+    document.body.appendChild(mount);
+    ReactDOM.render(<App/>, mount);
+  }
+}
