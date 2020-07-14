@@ -41,3 +41,10 @@ export interface Debuggee {
     sourceContext: Array<any>;
     labels: any;
 }
+
+/** A variable returned as part of a breakpoints stack frames. */
+export interface Variable {
+  name: string;
+  type: string;
+  value: string;
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
+import { AppBar, Toolbar, Typography, Card, CardContent, Box } from "@material-ui/core";
 
 interface SelectProjectContainerProps {
   projectId?: string;
@@ -41,14 +42,26 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <h3>Select Project</h3>
-        <SelectView
-          options={this.state.projects}
-          optionsLoading={this.state.projectsLoading}
-          selectedOptionId={this.props.projectId}
-          onChange={(projectId) => this.onChange(projectId)}
-          optionToId={(project: Project) => project.projectId}
-        />
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">Select Project</Typography> 
+          </Toolbar>
+        </AppBar>
+        <Box m={1}>
+          <Card>
+            <CardContent>
+              <SelectView
+                label="Project ID"
+                options={this.state.projects}
+                optionsLoading={this.state.projectsLoading}
+                selectedOptionId={this.props.projectId}
+                onChange={(projectId) => this.onChange(projectId)}
+                optionToId={(project: Project) => project.projectId}
+              />
+            </CardContent>
+          </Card>
+        </Box>
+        
       </>
     );
   }
