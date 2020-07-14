@@ -47,11 +47,12 @@ export class SelectDebuggeeContainer extends React.Component<
     this.setState({ debuggeesLoading: true, error: undefined });
     this.props.loadDebuggees()
       .then((debuggees) => {
-        this.setState({ debuggees, debuggeesLoading: false });
+        this.setState({ debuggees });
       })
       .catch((error: BackgroundRequestError) => {
-        this.setState({debuggeesLoading: false, error});
-      });
+        this.setState({ error });
+      })
+      .finally(() => this.setState({debuggeesLoading: false}))
   }
 
   render() {
