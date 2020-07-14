@@ -1,6 +1,5 @@
 import api from "debugger-extension-api";
 
-let enableURL = '';
 
 export async function checkRequiredServices(projectNumber) {
     let responseData = false
@@ -10,14 +9,13 @@ export async function checkRequiredServices(projectNumber) {
         if (service['name'].match(/projects\/\d*\/services\/clouddebugger.googleapis.com/g)){
             if (service['state'] === 'ENABLED'){
                 responseData = true
-            } else {
-                enableURL = service['name'];
             }
         }
     }
     return responseData;
 }
 
-export async function enableRequiredService() {
+export async function enableRequiredService(projectNumber) {
+    const enableURL = "projects/".concat(projectNumber,"/services/clouddebugger.googleapis.com")
     await api.enableServices(enableURL);
 }
