@@ -1,53 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
 
-const Wrapper = styled.section`
-  padding: 6em;
-  float: right;
-  background: white;
-  width: 25%;
-  height: 450px;
-  position: fixed;
-  top: 50px;
-  right: 20px;
-  box-shadow: 0 0 6px #000;
-  z-index: 10000;
-`;
-
-const Input = styled.input.attrs((props) => ({
-  size: props.size || "1em",
-}))`
-  color: #1e90ff;
-  font-size: 1em;
-  border: 2px solid #1e90ff;
-  border-radius: 3px;
-  margin: ${(props) => props.size};
-  padding: ${(props) => props.size};
-`;
-
-const Button = styled.button`
-  /* Adapt the colors based on primary prop */
-  background: ${(props) => (props.primary ? "#1E90FF" : "white")};
-  color: ${(props) => (props.primary ? "white" : "#1E90FF")};
-
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid #1e90ff;
-  border-radius: 3px;
-`;
-
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
-  breakpoints: Array<any>;
-  lineNum: number;
-  fileName: string;
+
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpointsList: Array<any>;
 }
@@ -59,10 +20,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
-      counter: 20,
-      breakpoints: {},
-      lineNumber: 29,
-      fileName: "index.js",
+
       activeBreakpoints : {},
       completedBreakpointsList: []
     }
@@ -85,22 +43,6 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   getGcpProjectId(): string{
     let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
-  }
-          
-  get lineNumber(){
-    return this.state.lineNumber;
-  }
-
-  get fileName() {
-    return this.state.fileName;
-  }
-
-  set lineNumber(value: number) {
-    this.setState({ lineNumber: value });
-  }
-
-  set fileName(value: string) {
-    this.setState({ fileName: value });
   }
 
   /**
