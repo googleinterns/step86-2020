@@ -111,15 +111,17 @@ describe("DeleteBreakpointRequestData", () => {
 
 describe("EnableRequiredServiceRequestData", () => {
   it("can be instantiated", () => {
-    const data = new EnableRequiredServiceRequestData();
+    const data = new EnableRequiredServiceRequestData(2);
     expect(data.type).toBe(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
+    expect(data.projectNumber).toBe(2);
   });
 });
 
 describe("RequiredServicesEnabledRequestData", () => {
   it("can be instantiated", () => {
-    const data = new RequiredServicesEnabledRequestData();
+    const data = new RequiredServicesEnabledRequestData(2);
     expect(data.type).toBe(BackgroundRequestType.IS_SERVICE_ENABLED);
+    expect(data.projectNumber).toBe(2);
   });
 });
 

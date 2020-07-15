@@ -242,8 +242,10 @@ export class DeleteBreakpointRequest extends BackgroundRequest<DeleteBreakpointR
  *  Lets UI enable required service.
  */
 export class EnableRequiredServiceRequestData extends BackgroundRequestData {
-  constructor() {
+  projectNumber: number;
+  constructor(projectNumber: number) {
     super(BackgroundRequestType.ENABLE_REQUIRED_SERVICE);
+    this.projectNumber = projectNumber;
   }
 }
 interface EnableRequiredServiceRequestResponse {}
@@ -254,8 +256,10 @@ export class EnableRequiredServiceRequest extends BackgroundRequest<EnableRequir
  *  Lets UI get enabling state.
  */
 export class  RequiredServicesEnabledRequestData  extends BackgroundRequestData {
-  constructor() {
+  projectNumber: number;
+  constructor(projectNumber: number) {
     super(BackgroundRequestType.IS_SERVICE_ENABLED);
+    this.projectNumber = projectNumber;
   }
 }
 interface RequiredServicesEnabledRequestResponse {
