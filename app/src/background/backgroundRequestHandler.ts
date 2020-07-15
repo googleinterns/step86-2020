@@ -132,18 +132,6 @@ BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
 );
 
 /**
- * Handler to get all the enabled services and return the response.
- */
-BackgroundRequestHandler.on<
-  backgroundRequest.RequiredServicesEnabledRequestData
->(backgroundRequest.BackgroundRequestType.IS_SERVICE_ENABLED, async (data) => {
-  const request = await serviceUsageHandler.checkRequiredServices(
-    data.projectNumber
-  );
-  return { isRequiredServicesEnabled: request };
-});
-
-/**
  * Handler for delete the breakpoint from debugger-extension api and return the response.
  */
 BackgroundRequestHandler.on<backgroundRequest.DeleteBreakpointRequestData>(
