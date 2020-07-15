@@ -163,6 +163,14 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     }, 5000);
   }
 
+  /** Deletes a breakpoint from debugger backend. */
+  async deleteBreakpoint(breakpointId: string) {
+    const deleteBreakpointRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
+      new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
+    );
+    alert("Deleted");
+  }
+
   /**
    * This function gets the data of non-active breakpoints (breakpoint that are hit)
    * and saves it to the getBreakpoint state array. Moreover removes it from active breakpoint array.
@@ -211,6 +219,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           createBreakpoint={(fileName, lineNumber) =>
             this.createBreakPoint(fileName, lineNumber)
           }
+          deleteBreakpoint={(breakpointId: string) => this.deleteBreakpoint(breakpointId)}
         />
 
         <BreakpointMarkers
