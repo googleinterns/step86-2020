@@ -1,4 +1,5 @@
 const axios = require("axios");
+const fetch = require("node-fetch");
 
 var userAuth = ""; // Create temp token using https://developers.google.com/oauthplayground/
 
@@ -151,4 +152,41 @@ exports.deleteBreakpoint = async (debuggeeId, breakpointId) => {
   );
   const data = response.data;
   return data;
+};
+
+/**
+ * Fetches all the enabled services using Service Usage API .
+ * @param {String} projectNumber User's current project number.
+ */
+exports.fetchServices = async (projectNumber) => {
+  const response = await axios.get(
+    "https://serviceusage.googleapis.com/v1/{parent=*/*}/services",
+    {
+      headers: {
+        Authorization: `Bearer ${userAuth}`,
+      },
+      params: {
+        parent: "projects/".concat(projectNumber),
+        pageSize: 200,
+        filter: "state:ENABLED",
+      },
+    }
+  );
+  const data = response.data;
+  return data;
+};
+
+/**
+ * Enables the service by making a POST call to Service Usage API .
+ * @param {String} name User's current project number.
+ */
+exports.enableService = async (name) => {
+  const url = "https://serviceusage.googleapis.com/v1/".concat(name, ":enable");
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${userAuth}`,
+    },
+  });
+  return response;
 };
