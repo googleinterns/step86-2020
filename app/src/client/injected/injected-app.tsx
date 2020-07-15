@@ -49,7 +49,7 @@ interface InjectedAppState {
   lineNum: number;
   fileName: string;
   activeBreakpoints: { [key: string]: BreakpointMeta };
-  completedBreakpointsList: Array<any>;
+  completedBreakpoints: { [key: string]: Breakpoint };
 }
 
 export class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -64,7 +64,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
       lineNumber: 29,
       fileName: "index.js",
       activeBreakpoints : {},
-      completedBreakpointsList: []
+      completedBreakpoints: {}
     }
   }
 
@@ -178,7 +178,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    */
   async loadBreakpoints(breakpointIdsToLoad: Array<any>) {
     // Make request to get the breakpoint data using breakpoint ids
-    var tempGetBreakpoints = this.state.completedBreakpointsList.slice();
+    var tempGetBreakpoints = {...this.state.completedBreakpoints};
     var updatedActiveBPs = { ...this.state.activeBreakpoints };
     for (let breakpointId of breakpointIdsToLoad) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(
@@ -188,11 +188,12 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         )
       );
       // Add it to the state array for getBreakpoint data
-      tempGetBreakpoints.push(getBreakpointresponse.breakpoint);
+      const {breakpoint} = getBreakpointresponse;
+      tempGetBreakpoints[breakpoint.id] = breakpoint;
       // Remove the breakpoint from the active breakpoint list
       delete updatedActiveBPs[breakpointId];
     }
-    this.setState({ completedBreakpointsList: tempGetBreakpoints });
+    this.setState({ completedBreakpoints: tempGetBreakpoints });
     this.setState({ activeBreakpoints: updatedActiveBPs });
   }
 
@@ -201,7 +202,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
      *  However, as far as UI is concerned, they are both lists. This conversion helps simplify markup.
      */
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
-    const completedBreakpoints = this.state.completedBreakpointsList;
+    const completedBreakpoints = Object.values(this.state.completedBreakpoints);
 
     return (
       <>
