@@ -165,10 +165,14 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
 
   /** Deletes a breakpoint from debugger backend. */
   async deleteBreakpoint(breakpointId: string) {
+    // Delete the breakpoint from remote cloud debugger.
     const deleteBreakpointRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
       new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
     );
-    alert("Deleted");
+    // Remove breakpoint from local tracking.
+    const updatedCompletedBreakpoints = {...this.state.completedBreakpoints};
+    delete updatedCompletedBreakpoints[breakpointId];
+    this.setState({completedBreakpoints: updatedCompletedBreakpoints});
   }
 
   /**

@@ -15,8 +15,13 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
   );
 };
 
+interface CompletedBreakpointViewProps {
+  breakpoint: Breakpoint;
+  /** Callback to delete a breakpoint from cloud debugger. */
+  deleteBreakpoint: (breakpointId: string) => void;
+}
 /** Used to display data for a breakpoint that has already hit. */
-export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: {breakpoint: Breakpoint}) => {
+export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {stackFrames, location} = breakpoint;
   const stackframe = stackFrames[0];
   return (
