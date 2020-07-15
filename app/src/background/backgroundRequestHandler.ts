@@ -2,7 +2,6 @@ import api from "debugger-extension-api";
 import * as backgroundRequest from "../common/requests/BackgroundRequest";
 import * as serviceUsageHandler from "./serviceUsageHandler";
 
-
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
  * dispatches them to the handlers based on their type (BackgroundRequestType) field.
@@ -30,7 +29,19 @@ export class BackgroundRequestHandler {
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
         }
-        handler(data).then(sendResponse);
+        handler(data)
+          .then((data) => {
+            const response = backgroundRequest.BackgroundRequestResponseFactory.fromData(
+              data
+            );
+            sendResponse(response);
+          })
+          .catch((data) => {
+            const error = backgroundRequest.BackgroundRequestResponseFactory.fromError(
+              data
+            );
+            sendResponse(error);
+          });
         // Need to return true to tell chrome to wait for a response.
         return true;
       }
@@ -44,8 +55,12 @@ export class BackgroundRequestHandler {
 BackgroundRequestHandler.on<backgroundRequest.FetchProjectsRequestData>(
   backgroundRequest.BackgroundRequestType.FETCH_PROJECTS,
   async (data) => {
-    const response = await api.fetchProjects();
-    return response;
+    try {
+      const response = await api.fetchProjects();
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
 
@@ -55,8 +70,12 @@ BackgroundRequestHandler.on<backgroundRequest.FetchProjectsRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.FetchDebuggeesRequestData>(
   backgroundRequest.BackgroundRequestType.FETCH_DEBUGGEES,
   async (data) => {
-    const response = await api.fetchDebuggees(data.projectId);
-    return response;
+    try {
+      const response = await api.fetchDebuggees(data.projectId);
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
 
@@ -66,12 +85,16 @@ BackgroundRequestHandler.on<backgroundRequest.FetchDebuggeesRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.SetBreakpointRequestData>(
   backgroundRequest.BackgroundRequestType.SET_BREAKPOINT,
   async (data) => {
-    const response = await api.setBreakpoint(
-      data.debuggeeId,
-      data.fileName,
-      data.lineNumber
-    );
-    return response;
+    try {
+      const response = await api.setBreakpoint(
+        data.debuggeeId,
+        data.fileName,
+        data.lineNumber
+      );
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
 
@@ -81,11 +104,15 @@ BackgroundRequestHandler.on<backgroundRequest.SetBreakpointRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
   backgroundRequest.BackgroundRequestType.FETCH_BREAKPOINT,
   async (data) => {
-    const response = await api.getBreakpoint(
-      data.debuggeeId,
-      data.breakpointId
-    );
-    return response;
+    try {
+      const response = await api.getBreakpoint(
+        data.debuggeeId,
+        data.breakpointId
+      );
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
 
@@ -95,21 +122,48 @@ BackgroundRequestHandler.on<backgroundRequest.FetchBreakpointRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.ListBreakpointsData>(
   backgroundRequest.BackgroundRequestType.LIST_BREAKPOINTS,
   async (data) => {
-    const response = await api.listBreakpoints(data.debuggeeId);
-    return response;
+    try {
+      const response = await api.listBreakpoints(data.debuggeeId);
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
+  }
+);
+
+/**
+ * Handler for delete the breakpoint from debugger-extension api and return the response.
+ */
+BackgroundRequestHandler.on<backgroundRequest.DeleteBreakpointRequestData>(
+  backgroundRequest.BackgroundRequestType.DELETE_BREAKPOINT,
+  async (data) => {
+    try {
+      const response = await api.deleteBreakpoint(
+        data.debuggeeId,
+        data.breakpointId
+      );
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
 
 /**
  * Handler to get all the enabled services and return the response.
  */
-BackgroundRequestHandler.on<backgroundRequest.RequiredServicesEnabledRequestData>(
-  backgroundRequest.BackgroundRequestType.IS_SERVICE_ENABLED,
-  async (data) => {
-    const request = await serviceUsageHandler.checkRequiredServices(data.projectNumber);
-    return { isRequiredServicesEnabled: request}
+BackgroundRequestHandler.on<
+  backgroundRequest.RequiredServicesEnabledRequestData
+>(backgroundRequest.BackgroundRequestType.IS_SERVICE_ENABLED, async (data) => {
+  try {
+    const request = await serviceUsageHandler.checkRequiredServices(
+      data.projectNumber
+    );
+    return { isRequiredServicesEnabled: request };
+  } catch (error) {
+    throw { message: error.message };
   }
-);
+});
 
 /**
  * Handler for enable the required services.
@@ -117,6 +171,10 @@ BackgroundRequestHandler.on<backgroundRequest.RequiredServicesEnabledRequestData
 BackgroundRequestHandler.on<backgroundRequest.EnableRequiredServiceRequestData>(
   backgroundRequest.BackgroundRequestType.ENABLE_REQUIRED_SERVICE,
   async (data) => {
-    serviceUsageHandler.enableRequiredService(data.projectNumber);
+    try {
+      serviceUsageHandler.enableRequiredService(data.projectNumber);
+    } catch (error) {
+      throw { message: error.message };
+    }
   }
 );
