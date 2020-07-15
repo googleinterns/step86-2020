@@ -29,7 +29,19 @@ export class BackgroundRequestHandler {
         if (handler === undefined) {
           throw new Error("Handler not registered for type: " + data.type);
         }
-        handler(data).then(sendResponse);
+        handler(data)
+          .then((data) => {
+            const response = backgroundRequest.BackgroundRequestResponseFactory.fromData(
+              data
+            );
+            sendResponse(response);
+          })
+          .catch((data) => {
+            const error = backgroundRequest.BackgroundRequestResponseFactory.fromError(
+              data
+            );
+            sendResponse(error);
+          });
         // Need to return true to tell chrome to wait for a response.
         return true;
       }
