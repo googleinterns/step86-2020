@@ -180,10 +180,8 @@ exports.fetchServices = async (projectNumber) => {
  * Enables the service by making a POST call to Service Usage API .
  * @param {String} name User's current project number.
  */
-exports.enableServices = async (name) => {
+exports.enableService = async (name) => {
   const url = "https://serviceusage.googleapis.com/v1/".concat(name, ":enable");
-  console.log(url);
-
   const response = await fetch(url, {
     method: "POST",
     headers: {
