@@ -71,7 +71,7 @@ export function getBreakpointErrorMessage(breakpoint: FailedBreakpoint): string{
   const {status} = breakpoint;
   const {format, parameters} = status.description;
   // This Regex looks for sequences like $0, $1, ... and replaces them with the parameter for their index.
-  const message = format.replace(/\$({\d}+)/, (match, index) => parameters[index]);
+  const message = format.replace(/\$(\d+)/g, (match, index) => parameters[index]);
   return message;
 }
 
