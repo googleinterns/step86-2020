@@ -1,27 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
+import { TextField, Card, CardContent, Button, Box, AppBar, Toolbar, Typography} from "@material-ui/core";
+import {AuthPopup} from '../popup/AuthPopup';
+import Paper from "@material-ui/core/Paper";
 
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
+const Wrapper = styled(Paper)`
+  width: 300px;
 `;
+interface PopupFormProps {
+}
 
-const Wrapper = styled.section`
-  padding: 6em;
-`;
-
-export class Popup extends React.Component {
-  constructor(){
-    super();
+interface PopupFormState {
+}
+export class Popup extends React.Component<PopupFormProps,PopupFormState> {
+  constructor(props: PopupFormProps){
+    super(props);
   }
   
   render() {
     return (
-      <Wrapper>
-        <Title>Welcome to Cloud Debugger !</Title>
-      </Wrapper>
+    <Wrapper> 
+      {<AuthPopup/>}
+    </Wrapper>
     );
   }
 }
