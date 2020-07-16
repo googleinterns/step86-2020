@@ -13,7 +13,7 @@ import {
   GetAuthStateRequestData,
   BackgroundRequestResponse,
   BackgroundRequestResponseFactory,
-  BackgroundRequestError
+  BackgroundRequestError,
   DeleteBreakpointRequestData,
   EnableRequiredServiceRequestData,
   RequiredServicesEnabledRequestData
