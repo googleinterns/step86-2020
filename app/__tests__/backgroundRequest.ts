@@ -11,6 +11,9 @@ import {
   ListBreakpointsData,
   AuthenticationRequestData,
   GetAuthStateRequestData,
+  BackgroundRequestResponse,
+  BackgroundRequestResponseFactory,
+  BackgroundRequestError,
   DeleteBreakpointRequestData,
   EnableRequiredServiceRequestData,
   RequiredServicesEnabledRequestData,
@@ -128,6 +131,11 @@ describe("RequiredServicesEnabledRequestData", () => {
   });
 });
 
+describe("BackgroundRequestResponseFactory", () => {
+  it("can generate response", () => {
+    const data = {foo: "bar"};
+    expect(BackgroundRequestResponseFactory.fromData(data)).toEqual({isError: false, data});
+  });
 
 describe("BackgroundRequestResponseFactory", () => {
   it("can generate response", () => {
