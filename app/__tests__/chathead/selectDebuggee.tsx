@@ -6,6 +6,7 @@ configure({ adapter: new Adapter() });
 
 import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebuggee";
 import { SelectView } from "../../src/client/chathead/GeneralSelectView";
+import { BackgroundRequestError } from "../../src/common/requests/BackgroundRequest";
 
 describe("SelectDebuggeeContainer", () => {
   it("loads debuggees when mounted", () => {
@@ -63,6 +64,25 @@ describe("SelectDebuggeeContainer", () => {
     setImmediate(() => {
       wrapper.find(SelectView).invoke("onChange")("a");
       expect(spy).toHaveBeenCalledWith("a");
+      done();
+    });
+  });
+
+  it("shows error if load fails", async (done) => {
+    const error = {message: "foo"} as BackgroundRequestError;
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => {throw error}}
+      />
+    );
+
+    // Delays the expect call until the component has a change to setState
+    setImmediate(() => {
+      // Error message is shown
+      expect(wrapper.text()).toContain("foo");
+      // Select is hidden
+      expect(wrapper.find(SelectView).isEmpty()).toBe(true);
       done();
     });
   });
