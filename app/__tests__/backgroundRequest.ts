@@ -17,9 +17,6 @@ import {
   DeleteBreakpointRequestData,
   EnableRequiredServiceRequestData,
   RequiredServicesEnabledRequestData,
-  BackgroundRequestResponse,
-  BackgroundRequestResponseFactory,
-  BackgroundRequestError
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -130,12 +127,6 @@ describe("RequiredServicesEnabledRequestData", () => {
     expect(data.projectNumber).toBe(2);
   });
 });
-
-describe("BackgroundRequestResponseFactory", () => {
-  it("can generate response", () => {
-    const data = {foo: "bar"};
-    expect(BackgroundRequestResponseFactory.fromData(data)).toEqual({isError: false, data});
-  });
 
 describe("BackgroundRequestResponseFactory", () => {
   it("can generate response", () => {
