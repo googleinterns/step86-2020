@@ -72,7 +72,7 @@ export function getBreakpointErrorMessage(breakpoint: FailedBreakpoint): string{
 }
 
 /** Displays a set of variables from a debugger stack frame. */
-const VariablesView = ({variables}: {variables: Variable[]}) => {
+export const VariablesView = ({variables}: {variables: Variable[]}) => {
   return (
     <List dense>
       {
