@@ -22,6 +22,19 @@ export interface Breakpoint extends BreakpointMeta {
     labels: any;
 }
 
+/** A breakpoint that has completed with errors. */
+export interface FailedBreakpoint extends Breakpoint {
+  status: {
+    isError: boolean;
+    // Debugger returns the error message in the form of a bash style template string.
+    // Example: format = "Hello $0", parameters = ["Bob"]
+    description: {
+      format: string;
+      parameters: string[]
+    }
+  }
+}
+
 /* A single GCP project */
 export interface Project {
     projectNumber: string;
