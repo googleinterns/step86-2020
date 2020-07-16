@@ -19,11 +19,12 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
 
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint }) => {
+  console.log(breakpoint);
   const {status} = breakpoint;
-  if (status.isError) {
-    return <SuccessfulCompletedBreakpointView breakpoint={breakpoint}/>;
+  if (status && status.isError) {
+    return <FailedCompletedBreakpointView breakpoint={breakpoint}/>;
   }
-  return <FailedCompletedBreakpointView breakpoint={breakpoint}/>;
+  return <SuccessfulCompletedBreakpointView breakpoint={breakpoint}/>;
 };
 
 /** Shows stackframe data for a successful breakpoint. */
@@ -57,7 +58,8 @@ export const FailedCompletedBreakpointView = ({breakpoint}) => {
       </AccordionSummary>
       <AccordionDetails>
         <Alert severity="error">
-          <AlertTitle>{status.refersTo}</AlertTitle>
+          {/* Currently this title causes issues with the width of the chathead */}
+          {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
           {message}
         </Alert>
       </AccordionDetails>
