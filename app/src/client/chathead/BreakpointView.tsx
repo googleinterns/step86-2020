@@ -7,11 +7,10 @@ import { Variable, Breakpoint, FailedBreakpoint } from "../../common/types/debug
 
 /** Used to display a breakpoint that has not yet hit. */
 export const PendingBreakpointView = ({ breakpointMeta }) => {
-  const {location} = breakpointMeta;
   return (
     <Accordion>
       <AccordionSummary disabled expandIcon={<CircularProgress/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpointMeta}/>
       </AccordionSummary>
     </Accordion>
   );
@@ -19,7 +18,6 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
 
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint }) => {
-  console.log(breakpoint);
   const {status} = breakpoint;
   if (status && status.isError) {
     return <FailedCompletedBreakpointView breakpoint={breakpoint}/>;
@@ -29,12 +27,12 @@ export const CompletedBreakpointView = ({ breakpoint }) => {
 
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({breakpoint}) => {
-  const {stackFrames, location} = breakpoint;
+  const {stackFrames} = breakpoint;
   const stackframe = stackFrames[0];
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
         <VariablesView variables={stackframe.locals}/>
@@ -45,12 +43,10 @@ export const SuccessfulCompletedBreakpointView = ({breakpoint}) => {
 
 /** Shows error data for a failed breakpoint. */
 export const FailedCompletedBreakpointView = ({breakpoint}) => {
-  const {location} = breakpoint;
-
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ErrorIcon/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
         <Alert severity="error">
@@ -88,4 +84,12 @@ const VariablesView = ({variables}: {variables: Variable[]}) => {
       }
     </List>
   )
+}
+
+/** Displays file name and line number for a breakpoint. */
+export const LocationView = ({breakpoint}) => {
+  const {location} = breakpoint;
+  return (
+    <Typography>{location.path}:{location.line}</Typography>
+  );
 }
