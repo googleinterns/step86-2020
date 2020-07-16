@@ -8,7 +8,8 @@ import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
 
 import Paper from "@material-ui/core/Paper";
-import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // Jest has trouble with this, so only import in actual builds.
 if(process.env.NODE_ENV !== "test"){
   import("fontsource-roboto");
@@ -60,6 +61,9 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
               // Response.debuggees will be undefined if there are no active debuggees.
               return response.debuggees || [];
             }}
+            backToProjects={() => {
+              this.props.setProject(undefined);
+            }}
           />
         )}
 
@@ -67,6 +71,9 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <>
             <AppBar position="static">
               <Toolbar>
+                <IconButton edge="start" color="inherit" onClick={() => this.props.setDebuggee(undefined)}>
+                  <ArrowBackIcon/>
+                </IconButton>
                 <Typography variant="h6">Breakpoints</Typography>
               </Toolbar>
             </AppBar>
@@ -91,7 +98,7 @@ const ChatheadWrapper = styled(Paper)`
   top: 20px;
 
   right: 20px;
-  width: 300px;
+  width: fit-content;
 
   z-index: 1000;
 `;
