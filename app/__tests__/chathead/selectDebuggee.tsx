@@ -8,6 +8,7 @@ import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebugge
 import { SelectView } from "../../src/client/chathead/GeneralSelectView";
 import { BackgroundRequestError } from "../../src/common/requests/BackgroundRequest";
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { Alert } from "@material-ui/lab";
 
 describe("SelectDebuggeeContainer", () => {
   it("loads debuggees when mounted", () => {
@@ -107,6 +108,24 @@ describe("SelectDebuggeeContainer", () => {
     setImmediate(() => {
       // Error message is shown
       expect(wrapper.text()).toContain("foo");
+      // Select is hidden
+      expect(wrapper.find(SelectView).exists()).toBe(false);
+      done();
+    });
+  });
+
+  it("shows warning if no debuggees", async (done) => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => []}
+      />
+    );
+
+    // Delays the expect call until the component has a change to setState
+    setImmediate(() => {
+      // Warning message is shown
+      expect(wrapper.html()).toContain("MuiAlert-standardWarning");
       // Select is hidden
       expect(wrapper.find(SelectView).exists()).toBe(false);
       done();
