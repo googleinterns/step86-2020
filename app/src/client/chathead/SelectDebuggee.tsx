@@ -1,8 +1,12 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Debuggee } from "../../common/types/debugger";
+
 import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import Alert from '@material-ui/lab/Alert';
+import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+
 interface SelectDebuggeeContainerProps {
   projectId: string;
   debuggeeId?: string;
@@ -15,6 +19,7 @@ interface SelectDebuggeeContainerState {
   /** All projects this user has access to, loaded using FetchProjectsRequest */
   debuggees: any[];
   debuggeesLoading: boolean;
+  error?: BackgroundRequestError
 }
 
 export class SelectDebuggeeContainer extends React.Component<
@@ -35,10 +40,18 @@ export class SelectDebuggeeContainer extends React.Component<
   }
 
   componentDidMount() {
-    this.setState({ debuggeesLoading: true });
-    this.props.loadDebuggees().then((debuggees) => {
-      this.setState({ debuggees, debuggeesLoading: false });
-    });
+    this.loadDebuggees();
+  }
+
+  loadDebuggees() {
+    this.setState({ debuggeesLoading: true, error: undefined });
+    this.props.loadDebuggees()
+      .then((debuggees) => {
+        this.setState({ debuggees, debuggeesLoading: false });
+      })
+      .catch((error: BackgroundRequestError) => {
+        this.setState({debuggeesLoading: false, error});
+      });
   }
 
   render() {
@@ -55,14 +68,23 @@ export class SelectDebuggeeContainer extends React.Component<
         <Box m={1}>
           <Card>
             <CardContent>
-              <SelectView
-                label="Debuggee ID"
-                options={this.state.debuggees}
-                optionsLoading={this.state.debuggeesLoading}
-                selectedOptionId={this.props.debuggeeId}
-                onChange={(debuggeeId) => this.onChange(debuggeeId)}
-                optionToId={(debuggee: Debuggee) => debuggee.id}
-              />
+              {
+                !this.state.error && (
+                  <SelectView
+                    label="Debuggee ID"
+                    options={this.state.debuggees}
+                    optionsLoading={this.state.debuggeesLoading}
+                    selectedOptionId={this.props.debuggeeId}
+                    onChange={(debuggeeId) => this.onChange(debuggeeId)}
+                    optionToId={(debuggee: Debuggee) => debuggee.id}
+                  />
+                )
+              }
+              {
+                this.state.error && (
+                  <Alert severity="error">{this.state.error.message}</Alert>
+                )
+              }
             </CardContent>
           </Card>
         </Box>   
