@@ -7,6 +7,7 @@ configure({ adapter: new Adapter() });
 import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebuggee";
 import { SelectView } from "../../src/client/chathead/GeneralSelectView";
 import { BackgroundRequestError } from "../../src/common/requests/BackgroundRequest";
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 describe("SelectDebuggeeContainer", () => {
   it("loads debuggees when mounted", () => {
@@ -31,6 +32,16 @@ describe("SelectDebuggeeContainer", () => {
     expect(wrapper.state().debuggeesLoading).toEqual(true);
   });
 
+  it("hides refresh button when loading debuggees", () => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={() => new Promise((resolve) => {})}
+      />
+    );
+    expect(wrapper.find(RefreshIcon).exists()).toEqual(false);
+  });
+
   it("moves debuggees to state once loaded", async (done) => {
     const mockDebuggees = ["a", "b", "c"];
     const wrapper = shallow(
@@ -46,6 +57,21 @@ describe("SelectDebuggeeContainer", () => {
         debuggees: mockDebuggees,
         debuggeesLoading: false,
       });
+      done();
+    });
+  });
+
+  it("shows refresh button when debuggees loaded", (done) => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => []}
+      />
+    );
+
+    // Wait for the loadProjects call to resolve
+    setImmediate(() => {
+      expect(wrapper.find(RefreshIcon).exists()).toEqual(true);
       done();
     });
   });
@@ -82,7 +108,7 @@ describe("SelectDebuggeeContainer", () => {
       // Error message is shown
       expect(wrapper.text()).toContain("foo");
       // Select is hidden
-      expect(wrapper.find(SelectView).isEmpty()).toBe(true);
+      expect(wrapper.find(SelectView).exists()).toBe(false);
       done();
     });
   });
