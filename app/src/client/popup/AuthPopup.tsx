@@ -44,7 +44,6 @@ export class AuthPopup extends React.Component<
               const response = await new AuthenticationRequest().run(
                 new AuthenticationRequestData()
               );
-              alert(response);
               return response;
             }}
           />
