@@ -38,7 +38,7 @@ export class AuthPopup extends React.Component<
             <Typography variant="h6">Cloud Debugger</Typography>
           </Toolbar>
         </AppBar>
-        <Box style={{ paddingTop: "30px", paddingRight: "40px" }}>
+        <Box style={{ paddingTop: "30px", paddingLeft: "30px", paddingBottom: "30px" }}>
           <GoogleButton
             onClick={async () => {
               const response = await new AuthenticationRequest().run(
