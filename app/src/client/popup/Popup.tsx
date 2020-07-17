@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components';
-import { TextField, Card, CardContent, Button, Box, AppBar, Toolbar, Typography} from "@material-ui/core";
-import {AuthPopup} from '../popup/AuthPopup';
+import { TextField, Card, CardContent, Button, Box, AppBar, Toolbar, Typography } from "@material-ui/core";
+import { AuthPopup } from '../popup/AuthPopup';
 import Paper from "@material-ui/core/Paper";
 
 const Wrapper = styled(Paper)`
@@ -13,16 +13,16 @@ interface PopupFormProps {
 
 interface PopupFormState {
 }
-export class Popup extends React.Component<PopupFormProps,PopupFormState> {
-  constructor(props: PopupFormProps){
+export class Popup extends React.Component<PopupFormProps, PopupFormState> {
+  constructor(props: PopupFormProps) {
     super(props);
   }
-  
+
   render() {
     return (
-    <Wrapper> 
-      {<AuthPopup/>}
-    </Wrapper>
+      <Wrapper>
+        {<AuthPopup />}
+      </Wrapper>
     );
   }
 }
