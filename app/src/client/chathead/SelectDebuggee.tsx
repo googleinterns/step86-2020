@@ -1,13 +1,14 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Debuggee } from "../../common/types/debugger";
-import { Toolbar, Typography, AppBar, Card, CardContent, Box } from "@material-ui/core";
-
+import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton } from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 interface SelectDebuggeeContainerProps {
   projectId: string;
   debuggeeId?: string;
   loadDebuggees: () => Promise<Debuggee[]>;
   onChange: (debuggeeId) => void;
+  backToProjects: () => void;
 }
 
 interface SelectDebuggeeContainerState {
@@ -45,6 +46,9 @@ export class SelectDebuggeeContainer extends React.Component<
       <>
         <AppBar position="static">
           <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={this.props.backToProjects}>
+              <ArrowBackIcon/>
+            </IconButton>
             <Typography variant="h6">{this.props.projectId}</Typography>
           </Toolbar>
         </AppBar>
