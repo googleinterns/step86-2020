@@ -1,29 +1,35 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
-import GoogleButton from 'react-google-button';
-import { AuthenticationRequest, GetAuthStateRequest, AuthenticationRequestData, GetAuthStateRequestData } from "../../common/requests/BackgroundRequest";
+import GoogleButton from "react-google-button";
+import {
+  AuthenticationRequest,
+  GetAuthStateRequest,
+  AuthenticationRequestData,
+  GetAuthStateRequestData,
+} from "../../common/requests/BackgroundRequest";
 
+interface AuthPopupFormProps {}
 
-interface AuthPopupFormProps {
-}
-
-interface AuthPopupFormState {
-}
-export class AuthPopup extends React.Component<AuthPopupFormProps, AuthPopupFormState> {
+interface AuthPopupFormState {}
+export class AuthPopup extends React.Component<
+  AuthPopupFormProps,
+  AuthPopupFormState
+> {
   constructor(props: AuthPopupFormProps) {
     super(props);
   }
 
   render() {
-
     const getAuthState = async () => {
-      const response = await new GetAuthStateRequest().run(new GetAuthStateRequestData());
+      const response = await new GetAuthStateRequest().run(
+        new GetAuthStateRequestData()
+      );
       if (response.isAuthenticated) {
         chrome.tabs.executeScript({
-          file: 'Chathead.tsx'
+          file: "Chathead.tsx",
         });
       }
-    }
+    };
 
     return (
       <>
@@ -32,15 +38,18 @@ export class AuthPopup extends React.Component<AuthPopupFormProps, AuthPopupForm
             <Typography variant="h6">Cloud Debugger</Typography>
           </Toolbar>
         </AppBar>
-        <Box style={{ paddingTop: '30px', paddingRight: '40px' }} >
-          <GoogleButton onClick={async () => {
-            const response = await new AuthenticationRequest().run(new AuthenticationRequestData());
-            alert(response);
-            return response;
-          }} />
+        <Box style={{ paddingTop: "30px", paddingRight: "40px" }}>
+          <GoogleButton
+            onClick={async () => {
+              const response = await new AuthenticationRequest().run(
+                new AuthenticationRequestData()
+              );
+              alert(response);
+              return response;
+            }}
+          />
         </Box>
       </>
     );
   }
 }
-
