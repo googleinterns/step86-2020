@@ -7,7 +7,6 @@ import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestDa
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
 
-
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 // Jest has trouble with this, so only import in actual builds.
 if(process.env.NODE_ENV !== "test"){
