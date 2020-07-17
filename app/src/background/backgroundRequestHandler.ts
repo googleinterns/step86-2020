@@ -201,8 +201,10 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
   backgroundRequest.BackgroundRequestType.AUTHENTICATION,
   async () => {
+    await extensionAuthHandler.getToken();
     setInterval(() => {
       extensionAuthHandler.getToken();
     }, 5 * 60 * 1000);
-  }
+    return {}
+  },
 );
