@@ -1,6 +1,7 @@
 import api from "debugger-extension-api";
 import * as backgroundRequest from "../common/requests/BackgroundRequest";
 import * as serviceUsageHandler from "./serviceUsageHandler";
+import * as extensionAuthHandler from "./extensionAuthHandler"
 
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
@@ -177,4 +178,33 @@ BackgroundRequestHandler.on<backgroundRequest.EnableRequiredServiceRequestData>(
       throw { message: error.message };
     }
   }
+);
+
+/**
+ * Handler for Request if user is authenticated by checking from debugger-extension.
+ */
+BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
+  backgroundRequest.BackgroundRequestType.IS_AUTHENTICATED,
+  async () => {
+    const request = await api.getAuthToken();
+    let response = {isAuthenticated: false};
+    if (request !== "") {
+      response = {isAuthenticated: true};
+    }
+    return response;
+  }
+);
+
+/**
+ * Handler for Request the token from extensionAuthHandler.
+ */
+BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
+  backgroundRequest.BackgroundRequestType.AUTHENTICATION,
+  async () => {
+    await extensionAuthHandler.getToken();
+    setInterval(() => {
+      extensionAuthHandler.getToken();
+    }, 5 * 60 * 1000);
+    return {}
+  },
 );
