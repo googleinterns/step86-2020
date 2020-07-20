@@ -1,16 +1,15 @@
 import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+import { createMount } from '@material-ui/core/test-utils';
 
 configure({ adapter: new Adapter() });
 
 import {
-  SelectView,
-  LoadingView,
-  OptionSelect,
-  Option,
+  SelectView
 } from "../../src/client/chathead/GeneralSelectView";
 import { MenuItem, Select, CircularProgress } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 describe("SelectView", () => {
   it("displays loading state", () => {
@@ -24,22 +23,5 @@ describe("SelectView", () => {
       />
     );
     expect(wrapper.find(CircularProgress)).toHaveLength(1);
-  });
-
-  it("calls back on option change", () => {
-    const spy = jest.fn();
-    const wrapper = mount(
-      <SelectView
-        optionsLoading={false}
-        options={["a", "b", "c"]}
-        optionToId={opt => opt}
-        selectedOptionId={"b"}
-        onChange={spy}
-      />
-    );
-
-    // Find and click option
-    wrapper.find("input").simulate("change", { target: { value: "a" } });
-    expect(spy).toHaveBeenCalledWith("a");
   });
 });

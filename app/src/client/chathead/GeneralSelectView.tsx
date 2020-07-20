@@ -1,6 +1,6 @@
 import React from "react";
-import { Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@material-ui/core";
-
+import { Select, MenuItem, FormControl, InputLabel, CircularProgress, TextField } from "@material-ui/core";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 interface SelectViewProps {
   options: any[];
   label?: string;
@@ -24,17 +24,16 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
       return <CircularProgress/>
     }
 
-    const menuItems = options.map(optionToId).map(optId => <MenuItem value={optId}>{optId}</MenuItem>);
-
     return (
       <FormControl variant="outlined" style={{width: "100%"}}>
-        <InputLabel>{label}</InputLabel>
-        <Select
+        {/* <InputLabel>{label}</InputLabel> */}
+        <Autocomplete
+          options={options.map(optionToId)}
+          style={{width: 300}}
           value={selectedOptionId}
-          onChange={event => this.onChange(event.target.value)}
-        >
-          {menuItems}
-        </Select>
+          onChange={(event, newValue) => this.onChange(newValue)}
+          renderInput={(params) => <TextField {...params} label={label} variant="outlined"/>}
+        />
       </FormControl>
     );
   }
