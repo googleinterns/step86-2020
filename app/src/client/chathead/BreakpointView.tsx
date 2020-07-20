@@ -1,7 +1,7 @@
 import React from "react";
-import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress } from "@material-ui/core";
+import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Variable } from "../../common/types/debugger";
+import { Variable, Breakpoint } from "../../common/types/debugger";
 
 /** Used to display a breakpoint that has not yet hit. */
 export const PendingBreakpointView = ({ breakpointMeta }) => {
@@ -15,8 +15,13 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
   );
 };
 
+interface CompletedBreakpointViewProps {
+  breakpoint: Breakpoint;
+  /** Callback to delete a breakpoint from cloud debugger. */
+  deleteBreakpoint: (breakpointId: string) => void;
+}
 /** Used to display data for a breakpoint that has already hit. */
-export const CompletedBreakpointView = ({ breakpoint }) => {
+export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {stackFrames, location} = breakpoint;
   const stackframe = stackFrames[0];
   return (
@@ -27,6 +32,10 @@ export const CompletedBreakpointView = ({ breakpoint }) => {
       <AccordionDetails>
         <VariablesView variables={stackframe.locals}/>
       </AccordionDetails>
+      <Divider/>
+      <AccordionActions>
+        <Button size="small" color="secondary" onClick={() => deleteBreakpoint(breakpoint.id)}>Delete</Button>
+      </AccordionActions>
     </Accordion>
   )
 };
