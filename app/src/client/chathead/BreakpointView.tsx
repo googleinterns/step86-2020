@@ -19,7 +19,6 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
 
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint }) => {
-  console.log(breakpoint);
   const {status} = breakpoint;
   if (status && status.isError) {
     return <FailedCompletedBreakpointView breakpoint={breakpoint}/>;
