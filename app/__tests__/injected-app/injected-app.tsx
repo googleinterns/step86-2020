@@ -35,4 +35,61 @@ describe("Injected App", () => {
       expect(InjectedApp.prototype.getProjectNameFromGithub).toHaveBeenCalled();
     });
 });
+
+describe("Saving Project IDs", () => {
+  const localStorageMock = {
+    setItem: jest.fn(),
+    getItem: jest.fn(),
+    removeItem: jest.fn()
+  };
+
+  let getProjectNameMock: jest.SpyInstance;
+
+  beforeAll(() => {
+    getProjectNameMock = jest.spyOn(InjectedApp.prototype, "getProjectNameFromGithub");
+  });
+
+  afterEach(() => {
+    localStorageMock.setItem.mockClear();
+    localStorageMock.getItem.mockClear();
+    localStorageMock.removeItem.mockClear();
+
+    getProjectNameMock.mockClear();
+  });
+
+  afterAll(() => {
+    getProjectNameMock.mockRestore();
+  });
+
+  it("sets if projectId defined and projectName defined", () => {
+    getProjectNameMock.mockReturnValue("projectName");
+    const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
+    wrapper.instance().saveGcpProjectId("projectId");
+    expect(localStorageMock.setItem).toHaveBeenCalledWith("projectName", "projectId");
+  });
+
+  it("does not set if projectId defined and projectName not defined", () => {
+    getProjectNameMock.mockReturnValue(undefined);
+    const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
+    wrapper.instance().saveGcpProjectId("projectId");
+    expect(localStorageMock.setItem).not.toHaveBeenCalled();
+    expect(localStorageMock.removeItem).not.toHaveBeenCalled();
+  });
+
+  it("does not set if projectId not defined and projectName not defined", () => {
+    getProjectNameMock.mockReturnValue(undefined);
+    const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
+    wrapper.instance().saveGcpProjectId(undefined);
+    expect(localStorageMock.setItem).not.toHaveBeenCalled();
+    expect(localStorageMock.removeItem).not.toHaveBeenCalled();
+  });
+
+  it("clears item if projectId not defined and projectName defined", () => {
+    getProjectNameMock.mockReturnValue("projectName");
+    const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
+    wrapper.instance().saveGcpProjectId(undefined);
+    expect(localStorageMock.setItem).not.toHaveBeenCalled();
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith("projectName")
+  });
+});
   

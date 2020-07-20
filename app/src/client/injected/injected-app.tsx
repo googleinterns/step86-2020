@@ -11,6 +11,8 @@ interface InjectedAppState {
 
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
+
+  localStorage?: Storage
 }
 
 export class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -41,7 +43,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    * This function checks of the project name already exists in the local storage 
    */
   getGcpProjectId(): string{
-    let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
+    let gcpProjectId = this.getLocalStorage().getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
   }
 
@@ -53,10 +55,10 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
       // Save new project ID only if there is a projectId.
       // Otherwise, localStorage saves the string "undefined" which throws things off.
       if (projectId) {
-        localStorage.setItem(projectName, projectId);
+        this.getLocalStorage().setItem(projectName, projectId);
       } else {
         // In the undefined case, manually remove the saved project.
-        localStorage.removeItem(projectName);
+        this.getLocalStorage().removeItem(projectName);
       }
     }
   }
@@ -111,7 +113,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         let inactiveBreakpoints: Array<any> = [];
         for (let breakpointId in this.state.activeBreakpoints) {
           if (!breakpointList.includes(breakpointId)) {
-            inactiveBreakpoints.push(brseakpointId);
+            inactiveBreakpoints.push(breakpointId);
           }
         }
 
@@ -194,6 +196,11 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         />
       </>
     );
+  }
+
+  /** Get the windows local storage object. This accepts a prop to allow mocks. */
+  getLocalStorage() {
+    return this.props.localStorage || window.localStorage;
   }
 }
 
