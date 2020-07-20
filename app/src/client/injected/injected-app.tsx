@@ -111,7 +111,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         let inactiveBreakpoints: Array<any> = [];
         for (let breakpointId in this.state.activeBreakpoints) {
           if (!breakpointList.includes(breakpointId)) {
-            inactiveBreakpoints.push(breakpointId);
+            inactiveBreakpoints.push(brseakpointId);
           }
         }
 
