@@ -65,7 +65,6 @@ export class AuthPopup extends React.Component<
                   new AuthenticationRequestData()
                 );
                 this.getAuthState();
-                <h1>Hello world</h1>;
               }}
             />
           </Box>
