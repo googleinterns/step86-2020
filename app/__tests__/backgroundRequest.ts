@@ -16,7 +16,7 @@ import {
   BackgroundRequestError,
   DeleteBreakpointRequestData,
   EnableRequiredServiceRequestData,
-  RequiredServicesEnabledRequestData
+  RequiredServicesEnabledRequestData,
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock

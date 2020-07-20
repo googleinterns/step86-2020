@@ -6,6 +6,9 @@ configure({ adapter: new Adapter() });
 
 import { SelectDebuggeeContainer } from "../../src/client/chathead/SelectDebuggee";
 import { SelectView } from "../../src/client/chathead/GeneralSelectView";
+import { BackgroundRequestError } from "../../src/common/requests/BackgroundRequest";
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { Alert } from "@material-ui/lab";
 
 describe("SelectDebuggeeContainer", () => {
   it("loads debuggees when mounted", () => {
@@ -30,6 +33,16 @@ describe("SelectDebuggeeContainer", () => {
     expect(wrapper.state().debuggeesLoading).toEqual(true);
   });
 
+  it("hides refresh button when loading debuggees", () => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={() => new Promise((resolve) => {})}
+      />
+    );
+    expect(wrapper.find(RefreshIcon).exists()).toEqual(false);
+  });
+
   it("moves debuggees to state once loaded", async (done) => {
     const mockDebuggees = ["a", "b", "c"];
     const wrapper = shallow(
@@ -49,6 +62,21 @@ describe("SelectDebuggeeContainer", () => {
     });
   });
 
+  it("shows refresh button when debuggees loaded", (done) => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => []}
+      />
+    );
+
+    // Wait for the loadProjects call to resolve
+    setImmediate(() => {
+      expect(wrapper.find(RefreshIcon).exists()).toEqual(true);
+      done();
+    });
+  });
+
   it("bubbles up onChange from nested SelectView", async (done) => {
     const spy = jest.fn();
     const wrapper = shallow(
@@ -63,6 +91,43 @@ describe("SelectDebuggeeContainer", () => {
     setImmediate(() => {
       wrapper.find(SelectView).invoke("onChange")("a");
       expect(spy).toHaveBeenCalledWith("a");
+      done();
+    });
+  });
+
+  it("shows error if load fails", async (done) => {
+    const error = {message: "foo"} as BackgroundRequestError;
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => {throw error}}
+      />
+    );
+
+    // Delays the expect call until the component has a change to setState
+    setImmediate(() => {
+      // Error message is shown
+      expect(wrapper.text()).toContain("foo");
+      // Select is hidden
+      expect(wrapper.find(SelectView).exists()).toBe(false);
+      done();
+    });
+  });
+
+  it("shows warning if no debuggees", async (done) => {
+    const wrapper = shallow(
+      <SelectDebuggeeContainer
+        debuggeeId={undefined}
+        loadDebuggees={async () => []}
+      />
+    );
+
+    // Delays the expect call until the component has a change to setState
+    setImmediate(() => {
+      // Warning message is shown
+      expect(wrapper.html()).toContain("MuiAlert-standardWarning");
+      // Select is hidden
+      expect(wrapper.find(SelectView).exists()).toBe(false);
       done();
     });
   });
