@@ -20,8 +20,8 @@ export class AuthPopup extends React.Component<
   constructor(props: AuthPopupFormProps) {
     super(props);
     this.state = {
-      isAuthenticated: false
-    }
+      isAuthenticated: false,
+    };
   }
 
   async getAuthState() {
@@ -35,7 +35,6 @@ export class AuthPopup extends React.Component<
   }
 
   render() {
-    console.log("state1 is :", this.state.isAuthenticated);
     if (this.state.isAuthenticated == false) {
       return (
         <>
@@ -57,15 +56,12 @@ export class AuthPopup extends React.Component<
                   new AuthenticationRequestData()
                 );
                 this.getAuthState();
-                console.log("state3 is :", this.state.isAuthenticated);
               }}
             />
           </Box>
         </>
       );
-    }
-    else{
-      console.log("state2 is :", this.state.isAuthenticated);
+    } else {
       chrome.tabs.executeScript({
         file: "injected-app.tsx",
       });
