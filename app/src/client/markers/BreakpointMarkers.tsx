@@ -78,18 +78,23 @@ export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
     return rowNodes.map((node, index) => {
       const lineNumber = index + 1;
       // DOM node where marker will be portaled to.
-      const mountNode = this.getOrCreateBPMarkerMount(node, lineNumber);
+      const mountingNode = this.getOrCreateBPMarkerMount(node, lineNumber);
 
-      return ReactDOM.createPortal(
+      return this.mountMarker(
         this.getMarker(
           activeBreakpoints,
           completedBreakpoints,
           lineNumber,
           this.props.createBreakpoint
         ),
-        mountNode
+        mountingNode
       );
     });
+  }
+
+  /** Mount a marker into the DOM and return the node for react to use. */
+  mountMarker(marker, mountNode) {
+    return ReactDOM.createPortal(marker, mountNode);
   }
 
   /** Get the appropriate breakpoint marker for a given line.
@@ -116,7 +121,8 @@ export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
         />
       );
     }
-    /** Note that this means we can't create new breakpoints on a line with existing breakpoints.
+
+    /* Note that this means we can't create new breakpoints on a line with existing breakpoints.
      * TODO: address this somehow. May want to add something similar to cloud console with dropdown.
      * In the short term, could just add ability to delete then re-create.
      */
@@ -137,10 +143,18 @@ export class BreakpointMarkers extends React.Component<BreakpointMarkersProps> {
   getOrCreateBPMarkerMount(rowNode, lineNumber): Node {
     // Only create a new mount if it doesn't already exist.
     if (!this.mountNodes.has(lineNumber)) {
-      const mountNode = document.createElement("div");
-      this.mountNodes.set(lineNumber, mountNode);
-      rowNode.prepend(mountNode);
+      return this.createMount(rowNode, lineNumber);
     }
     return this.mountNodes.get(lineNumber);
+  }
+
+  /** Injects a mounting node into the DOM and saves it in instance. */
+  createMount(rowNode, lineNumber) {
+    const mountNode = document.createElement("div");
+    // Save the created node to index (by line) so we don't have to keep recreating.
+    this.mountNodes.set(lineNumber, mountNode);
+    // We must add mount to BEGINNING of row.
+    rowNode.prepend(mountNode);
+    return mountNode;
   }
 }
