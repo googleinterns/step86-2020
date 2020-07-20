@@ -1,55 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
 import { Chathead } from "../chathead/Chathead";
 import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
 
-const Wrapper = styled.section`
-  padding: 6em;
-  float: right;
-  background: white;
-  width: 25%;
-  height: 450px;
-  position: fixed;
-  top: 50px;
-  right: 20px;
-  box-shadow: 0 0 6px #000;
-  z-index: 10000;
-`;
-
-const Input = styled.input.attrs((props) => ({
-  size: props.size || "1em",
-}))`
-  color: #1e90ff;
-  font-size: 1em;
-  border: 2px solid #1e90ff;
-  border-radius: 3px;
-  margin: ${(props) => props.size};
-  padding: ${(props) => props.size};
-`;
-
-const Button = styled.button`
-  /* Adapt the colors based on primary prop */
-  background: ${(props) => (props.primary ? "#1E90FF" : "white")};
-  color: ${(props) => (props.primary ? "white" : "#1E90FF")};
-
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid #1e90ff;
-  border-radius: 3px;
-`;
-
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
-  breakpoints: Array<any>;
-  lineNum: number;
-  fileName: string;
+
   activeBreakpoints: { [key: string]: BreakpointMeta };
-  completedBreakpointsList: Array<any>;
+  completedBreakpoints: { [key: string]: Breakpoint };
 }
 
 export class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -59,12 +20,9 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
-      counter: 20,
-      breakpoints: {},
-      lineNumber: 29,
-      fileName: "index.js",
+
       activeBreakpoints : {},
-      completedBreakpointsList: []
+      completedBreakpoints: {}
     }
   }
 
@@ -85,22 +43,6 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   getGcpProjectId(): string{
     let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
-  }
-          
-  get lineNumber(){
-    return this.state.lineNumber;
-  }
-
-  get fileName() {
-    return this.state.fileName;
-  }
-
-  set lineNumber(value: number) {
-    this.setState({ lineNumber: value });
-  }
-
-  set fileName(value: string) {
-    this.setState({ fileName: value });
   }
 
   /**
@@ -163,6 +105,18 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     }, 5000);
   }
 
+  /** Deletes a breakpoint from debugger backend. */
+  async deleteBreakpoint(breakpointId: string) {
+    // Delete the breakpoint from remote cloud debugger.
+    const deleteBreakpointRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
+      new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
+    );
+    // Remove breakpoint from local tracking.
+    const updatedCompletedBreakpoints = {...this.state.completedBreakpoints};
+    delete updatedCompletedBreakpoints[breakpointId];
+    this.setState({completedBreakpoints: updatedCompletedBreakpoints});
+  }
+
   /**
    * This function gets the data of non-active breakpoints (breakpoint that are hit)
    * and saves it to the getBreakpoint state array. Moreover removes it from active breakpoint array.
@@ -170,7 +124,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    */
   async loadBreakpoints(breakpointIdsToLoad: Array<any>) {
     // Make request to get the breakpoint data using breakpoint ids
-    var tempGetBreakpoints = this.state.completedBreakpointsList.slice();
+    var tempGetBreakpoints = {...this.state.completedBreakpoints};
     var updatedActiveBPs = { ...this.state.activeBreakpoints };
     for (let breakpointId of breakpointIdsToLoad) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(
@@ -180,11 +134,12 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         )
       );
       // Add it to the state array for getBreakpoint data
-      tempGetBreakpoints.push(getBreakpointresponse.breakpoint);
+      const {breakpoint} = getBreakpointresponse;
+      tempGetBreakpoints[breakpoint.id] = breakpoint;
       // Remove the breakpoint from the active breakpoint list
       delete updatedActiveBPs[breakpointId];
     }
-    this.setState({ completedBreakpointsList: tempGetBreakpoints });
+    this.setState({ completedBreakpoints: tempGetBreakpoints });
     this.setState({ activeBreakpoints: updatedActiveBPs });
   }
 
@@ -193,7 +148,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
      *  However, as far as UI is concerned, they are both lists. This conversion helps simplify markup.
      */
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
-    const completedBreakpoints = this.state.completedBreakpointsList;
+    const completedBreakpoints = Object.values(this.state.completedBreakpoints);
 
     return (
       <>
@@ -211,6 +166,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           createBreakpoint={(fileName, lineNumber) =>
             this.createBreakPoint(fileName, lineNumber)
           }
+          deleteBreakpoint={(breakpointId: string) => this.deleteBreakpoint(breakpointId)}
         />
 
         <BreakpointMarkers
