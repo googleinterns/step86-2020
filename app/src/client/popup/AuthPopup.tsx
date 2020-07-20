@@ -1,6 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
 import GoogleButton from "react-google-button";
+import CheckIcon from '@material-ui/icons/Check';
 import {
   AuthenticationRequest,
   GetAuthStateRequest,
@@ -64,9 +65,21 @@ export class AuthPopup extends React.Component<
                   new AuthenticationRequestData()
                 );
                 this.getAuthState();
+                <h1>Hello world</h1>
               }}
             />
           </Box>
+        </>
+      );
+    }
+    if(this.state.isAuthenticated){
+      return (
+        <>
+          <AppBar position="static">
+            <Toolbar>
+             <CheckIcon></CheckIcon> <Typography variant="h6">You are signed in</Typography> <CheckIcon></CheckIcon> 
+            </Toolbar>
+          </AppBar>
         </>
       );
     }
