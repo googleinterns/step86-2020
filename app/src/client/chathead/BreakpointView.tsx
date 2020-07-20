@@ -4,15 +4,14 @@ import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, 
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ErrorIcon from '@material-ui/icons/Error';
-import { Variable, Breakpoint } from "../../common/types/debugger";
+import { Variable, Breakpoint, FailedBreakpoint } from "../../common/types/debugger";
 
 /** Used to display a breakpoint that has not yet hit. */
 export const PendingBreakpointView = ({ breakpointMeta }) => {
-  const {location} = breakpointMeta;
   return (
     <Accordion>
       <AccordionSummary disabled expandIcon={<CircularProgress/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpointMeta}/>
       </AccordionSummary>
     </Accordion>
   );
@@ -35,12 +34,12 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {stackFrames, location} = breakpoint;
+  const {stackFrames} = breakpoint;
   const stackframe = stackFrames[0];
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
         <VariablesView variables={stackframe.locals}/>
@@ -55,22 +54,16 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
 
 /** Shows error data for a failed breakpoint. */
 export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {location, status} = breakpoint;
-  // Debugger returns the error message in the form of a bash style template string.
-  // Example: format = "Hello $0", parameters = ["Bob"]
-  const {format, parameters} = status.description;
-  // This Regex looks for sequences like $0, $1, ... and replaces them with the parameter for their index.
-  const message = format.replace(/\$({\d}+)/, (match, index) => parameters[index]);
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ErrorIcon/>}>
-        <Typography>{location.path}:{location.line}</Typography>
+        <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
         <Alert severity="error">
           {/* Currently this title causes issues with the width of the chathead */}
           {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
-          {message}
+          {getBreakpointErrorMessage(breakpoint)}
         </Alert>
       </AccordionDetails>
       <Divider/>
@@ -81,8 +74,20 @@ export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: 
   );
 }
 
+/**
+ * Debugger returns the error message in the form of a bash style template string.
+ * Example: format = "Hello $0", parameters = ["Bob"]
+ */
+export function getBreakpointErrorMessage(breakpoint: FailedBreakpoint): string{
+  const {status} = breakpoint;
+  const {format, parameters} = status.description;
+  // This Regex looks for sequences like $0, $1, ... and replaces them with the parameter for their index.
+  const message = format.replace(/\$(\d+)/g, (match, index) => parameters[index]);
+  return message;
+}
+
 /** Displays a set of variables from a debugger stack frame. */
-const VariablesView = ({variables}: {variables: Variable[]}) => {
+export const VariablesView = ({variables}: {variables: Variable[]}) => {
   return (
     <List dense>
       {
@@ -94,4 +99,12 @@ const VariablesView = ({variables}: {variables: Variable[]}) => {
       }
     </List>
   )
+}
+
+/** Displays file name and line number for a breakpoint. */
+export const LocationView = ({breakpoint}) => {
+  const {location} = breakpoint;
+  return (
+    <Typography>{location.path}:{location.line}</Typography>
+  );
 }
