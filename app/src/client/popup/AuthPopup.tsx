@@ -33,6 +33,9 @@ export class AuthPopup extends React.Component<
       file: "injected-app.tsx",
     });
   }
+  componentDidMount(){
+    this.getAuthState();
+  }
 
   render() {
     if (this.state.isAuthenticated == false) {
