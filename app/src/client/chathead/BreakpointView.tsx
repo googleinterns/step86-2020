@@ -1,9 +1,10 @@
 import React from "react";
-import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress } from "@material-ui/core";
+
+import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ErrorIcon from '@material-ui/icons/Error';
-import { Variable } from "../../common/types/debugger";
+import { Variable, Breakpoint } from "../../common/types/debugger";
 
 /** Used to display a breakpoint that has not yet hit. */
 export const PendingBreakpointView = ({ breakpointMeta }) => {
@@ -17,17 +18,23 @@ export const PendingBreakpointView = ({ breakpointMeta }) => {
   );
 };
 
+interface CompletedBreakpointViewProps {
+  breakpoint: Breakpoint;
+  /** Callback to delete a breakpoint from cloud debugger. */
+  deleteBreakpoint: (breakpointId: string) => void;
+}
+  
 /** Used to display data for a breakpoint that has already hit. */
-export const CompletedBreakpointView = ({ breakpoint }) => {
+export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {status} = breakpoint;
   if (status && status.isError) {
-    return <FailedCompletedBreakpointView breakpoint={breakpoint}/>;
+    return <FailedCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
   }
-  return <SuccessfulCompletedBreakpointView breakpoint={breakpoint}/>;
+  return <SuccessfulCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
 };
 
 /** Shows stackframe data for a successful breakpoint. */
-export const SuccessfulCompletedBreakpointView = ({breakpoint}) => {
+export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {stackFrames, location} = breakpoint;
   const stackframe = stackFrames[0];
   return (
@@ -38,12 +45,16 @@ export const SuccessfulCompletedBreakpointView = ({breakpoint}) => {
       <AccordionDetails>
         <VariablesView variables={stackframe.locals}/>
       </AccordionDetails>
+      <Divider/>
+      <AccordionActions>
+        <Button size="small" color="secondary" onClick={() => deleteBreakpoint(breakpoint.id)}>Delete</Button>
+      </AccordionActions>
     </Accordion>
   );
 }
 
 /** Shows error data for a failed breakpoint. */
-export const FailedCompletedBreakpointView = ({breakpoint}) => {
+export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {location, status} = breakpoint;
   // Debugger returns the error message in the form of a bash style template string.
   // Example: format = "Hello $0", parameters = ["Bob"]
@@ -62,6 +73,10 @@ export const FailedCompletedBreakpointView = ({breakpoint}) => {
           {message}
         </Alert>
       </AccordionDetails>
+      <Divider/>
+      <AccordionActions>
+        <Button size="small" color="secondary" onClick={() => deleteBreakpoint(breakpoint.id)}>Delete</Button>
+      </AccordionActions>
     </Accordion>
   );
 }

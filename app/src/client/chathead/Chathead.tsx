@@ -27,6 +27,7 @@ interface ChatheadProps {
   setProject: (projectId: string) => void;
   setDebuggee: (debuggeeId: string) => void;
   createBreakpoint: (fileName: string, lineNumber: number) => void;
+  deleteBreakpoint: (breakpointId: string) => void;
 }
 
 interface ChatheadState {}
@@ -86,7 +87,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
         }
 
         {
-          this.props.completedBreakpoints.map(b => <CompletedBreakpointView breakpoint={b}/>)
+          this.props.completedBreakpoints.map(b => <CompletedBreakpointView breakpoint={b} deleteBreakpoint={this.props.deleteBreakpoint}/>)
         }
       </ChatheadWrapper>
     );
