@@ -159,7 +159,19 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
-            localStorage.setItem(this.getProjectNameFromGithub(), projectId);
+            const projectName = this.getProjectNameFromGithub();
+            // Only save if we're able to pull the project name.
+            if (projectName) {
+              // Save new project ID only if there is a projectId.
+              // Otherwise, localStorage saves the string "undefined" which throws things off.
+              if (projectId) {
+                localStorage.setItem(projectName, projectId);
+              } else {
+                // In the undefined case, manually remove the saved project.
+                localStorage.removeItem(projectName);
+              }
+            }
+            
             this.setState({projectId})}
           }
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
