@@ -64,14 +64,14 @@ describe("Saving Project IDs", () => {
   it("sets if projectId defined and projectName defined", () => {
     getProjectNameMock.mockReturnValue("projectName");
     const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
-    wrapper.instance().saveGcpProjectId("projectId");
+    (wrapper.instance() as InjectedApp).saveGcpProjectId("projectId");
     expect(localStorageMock.setItem).toHaveBeenCalledWith("projectName", "projectId");
   });
 
   it("does not set if projectId defined and projectName not defined", () => {
     getProjectNameMock.mockReturnValue(undefined);
     const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
-    wrapper.instance().saveGcpProjectId("projectId");
+    (wrapper.instance() as InjectedApp).saveGcpProjectId("projectId");
     expect(localStorageMock.setItem).not.toHaveBeenCalled();
     expect(localStorageMock.removeItem).not.toHaveBeenCalled();
   });
@@ -79,7 +79,7 @@ describe("Saving Project IDs", () => {
   it("does not set if projectId not defined and projectName not defined", () => {
     getProjectNameMock.mockReturnValue(undefined);
     const wrapper = shallow(<InjectedApp localStorage={localStorageMock}/>); 
-    wrapper.instance().saveGcpProjectId(undefined);
+    (wrapper.instance() as InjectedApp).saveGcpProjectId(undefined);
     expect(localStorageMock.setItem).not.toHaveBeenCalled();
     expect(localStorageMock.removeItem).not.toHaveBeenCalled();
   });
