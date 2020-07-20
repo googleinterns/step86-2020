@@ -13,6 +13,9 @@ interface AuthPopupFormProps {}
 interface AuthPopupFormState {
   isAuthenticated: boolean;
 }
+/**
+ *  This class is responsible of authenticating users in the small popup
+ */
 export class AuthPopup extends React.Component<
   AuthPopupFormProps,
   AuthPopupFormState
@@ -23,22 +26,23 @@ export class AuthPopup extends React.Component<
       isAuthenticated: false,
     };
   }
+  /**
+   *  get authentication state by making a call to backend requests 
+   */
 
   async getAuthState() {
     const response = await new GetAuthStateRequest().run(
       new GetAuthStateRequestData()
     );
     this.setState({ isAuthenticated: response.isAuthenticated });
-    chrome.tabs.executeScript({
-      file: "injected-app.tsx",
-    });
   }
+
   componentDidMount(){
     this.getAuthState();
   }
 
   render() {
-    if (this.state.isAuthenticated == false) {
+    if (!this.state.isAuthenticated) {
       return (
         <>
           <AppBar position="static">
@@ -64,11 +68,6 @@ export class AuthPopup extends React.Component<
           </Box>
         </>
       );
-    } else {
-      chrome.tabs.executeScript({
-        file: "injected-app.tsx",
-      });
-      return;
-    }
+    } 
   }
 }
