@@ -45,6 +45,22 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     return gcpProjectId !== null ? gcpProjectId : undefined;
   }
 
+  /** Saves the current project name - project id association (if possible) */
+  saveGcpProjectId(projectId: string): void {
+    const projectName = this.getProjectNameFromGithub();
+    // Only save if we're able to pull the project name.
+    if (projectName) {
+      // Save new project ID only if there is a projectId.
+      // Otherwise, localStorage saves the string "undefined" which throws things off.
+      if (projectId) {
+        localStorage.setItem(projectName, projectId);
+      } else {
+        // In the undefined case, manually remove the saved project.
+        localStorage.removeItem(projectName);
+      }
+    }
+  }
+
   /**
    * Makes request to the BackgroundRequest to set the breakpoint
    * using debuggee id, file name and line number
@@ -159,19 +175,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
-            const projectName = this.getProjectNameFromGithub();
-            // Only save if we're able to pull the project name.
-            if (projectName) {
-              // Save new project ID only if there is a projectId.
-              // Otherwise, localStorage saves the string "undefined" which throws things off.
-              if (projectId) {
-                localStorage.setItem(projectName, projectId);
-              } else {
-                // In the undefined case, manually remove the saved project.
-                localStorage.removeItem(projectName);
-              }
-            }
-            
+            this.saveGcpProjectId(projectId);
             this.setState({projectId})}
           }
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
