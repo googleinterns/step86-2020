@@ -1,9 +1,14 @@
 import React from "react";
 import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
+import { BreakpointMeta } from "../../common/types/debugger";
+import Alert from '@material-ui/lab/Alert';
+
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
   deleteAllActiveBreakpoints: () => void;
+  activeBreakpoints: BreakpointMeta[];
+
 }
 
 interface CreateBreakpointFormState {
@@ -38,6 +43,14 @@ export class CreateBreakpointForm extends React.Component<
   onDeleteAllActiveBreakpoints() {
     this.props.deleteAllActiveBreakpoints();
   }
+  checkValidBreakpoint(){
+    for (let breakpoint of this.props.activeBreakpoints) {
+      if (breakpoint.location.path == this.state.fileName && breakpoint.location.line == this.state.lineNumber) {
+          return false;
+      }
+    }
+    return true;
+  }
 
   render() {
     const { fileName, lineNumber } = this.state;
@@ -64,14 +77,15 @@ export class CreateBreakpointForm extends React.Component<
                 onChange={(e) => this.onLineNumber(e.target.value)}
                 variant="outlined"
               />
-              <br />
-              <br />
-              <Button id='createBpButton'
-                onClick={(e) => {
-                  e.preventDefault(); // Prevents a page reload from form submit.
+              <br/><br/>
+              <Button id='createBpButton' onClick={(e) => {
+                e.preventDefault(); // Prevents a page reload from form submit.
+                if (this.checkValidBreakpoint()){
                   this.onCreateBreakpoint();
-                }}
-              >
+                } else {
+                  alert("The breakpoint on file: "+ this.state.fileName + " and line number: "+ this.state.lineNumber+ " already exists");
+                };
+                }}>
                 Create Breakpoint
               </Button>
               <Button id='deleteActiveBpButton'

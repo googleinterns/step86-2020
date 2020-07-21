@@ -95,10 +95,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
                 <Typography variant="h6">Breakpoints</Typography>
               </Toolbar>
             </AppBar>
-            <CreateBreakpointForm
-              createBreakpoint={this.props.createBreakpoint}
-              deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
-            />
+            <CreateBreakpointForm activeBreakpoints={this.props.activeBreakpoints} deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints} createBreakpoint={this.props.createBreakpoint}/>
           </>
         )}
 
