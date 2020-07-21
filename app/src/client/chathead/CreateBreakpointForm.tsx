@@ -3,7 +3,7 @@ import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
-  deleteAllActiveBreakpoints: (activeBreakpoints: Array<any>) => void;
+  deleteAllActiveBreakpoints: () => void;
 }
 
 interface CreateBreakpointFormState {
@@ -38,7 +38,7 @@ export class CreateBreakpointForm extends React.Component<
   }
 
   onDeleteAllActiveBreakpoints() {
-    this.props.deleteAllActiveBreakpoints(this.state.activeBreakpoints);
+    this.props.deleteAllActiveBreakpoints();
   }
 
   render() {

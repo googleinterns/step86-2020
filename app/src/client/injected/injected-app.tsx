@@ -165,11 +165,11 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    * Delete a batch of inactive breakpoints 
    * @param {Array<any>} activeBreakpoints list of active breakpoints
    */
-  async deleteAllActiveBreakpoints(activeBreakpoints: Array<any>){
+  async deleteAllActiveBreakpoints(){
 
-      for(let breakpointId of activeBreakpoints){
+      for(let breakpointId of Object.values(this.state.activeBreakpoints)){
         const deletionRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
-          new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
+          new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId.id)
         );
       }
       this.setState({completedBreakpoints: {}});
@@ -200,7 +200,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
             this.createBreakPoint(fileName, lineNumber)
           }
           deleteBreakpoint={(breakpointId: string) => this.deleteBreakpoint(breakpointId)}
-          deleteAllActiveBreakpoints={(activeBreakpoints:Array<any>) => this.deleteAllActiveBreakpoints(activeBreakpoints)}
+          deleteAllActiveBreakpoints={() => this.deleteAllActiveBreakpoints()}
         />
 
         <BreakpointMarkers

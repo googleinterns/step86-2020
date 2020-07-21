@@ -36,7 +36,7 @@ interface ChatheadProps {
   setDebuggee: (debuggeeId: string) => void;
   createBreakpoint: (fileName: string, lineNumber: number) => void;
   deleteBreakpoint: (breakpointId: string) => void;
-  deleteAllActiveBreakpoints: (breakpointsIds: Array<any>) => void;
+  deleteAllActiveBreakpoints: () => void;
 }
 
 interface ChatheadState {}
