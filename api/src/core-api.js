@@ -65,7 +65,7 @@ exports.fetchDebuggees = async (projectId) => {
  * @param {String} file Name of the file to set the breakpoint on.
  * @param {String} line line number of that file to set the breakpoint.
  */
-exports.setBreakpoint = async (debuggeeId, file, line) => {
+exports.setBreakpoint = async (debuggeeId, file, line, condition = "", expressions=[]) => {
   const response = await axios.post(
     "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set",
     {
@@ -73,6 +73,8 @@ exports.setBreakpoint = async (debuggeeId, file, line) => {
         path: file,
         line: line,
       },
+      condition: condition,
+      expressions: expressions
     },
     {
       headers: {
@@ -80,7 +82,7 @@ exports.setBreakpoint = async (debuggeeId, file, line) => {
       },
       params: {
         debuggeeId: debuggeeId,
-      },
+      }
     }
   );
   const data = response.data;
