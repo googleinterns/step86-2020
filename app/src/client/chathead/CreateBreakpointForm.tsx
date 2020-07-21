@@ -20,7 +20,6 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
-      activeBreakpoints: undefined,
     };
   }
 
