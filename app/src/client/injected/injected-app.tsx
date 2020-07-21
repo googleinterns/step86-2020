@@ -119,6 +119,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
 
         // Call function to get the breakpoint data sending non-active breakpoints.
         this.loadBreakpoints(inactiveBreakpoints);
+
       }
     }, 5000);
   }
@@ -134,7 +135,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     delete updatedCompletedBreakpoints[breakpointId];
     this.setState({completedBreakpoints: updatedCompletedBreakpoints});
   }
-
+  
   /**
    * This function gets the data of non-active breakpoints (breakpoint that are hit)
    * and saves it to the getBreakpoint state array. Moreover removes it from active breakpoint array.
@@ -159,6 +160,24 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     }
     this.setState({ completedBreakpoints: tempGetBreakpoints });
     this.setState({ activeBreakpoints: updatedActiveBPs });
+  }
+  /**
+   * Delete a batch of inactive breakpoints 
+   * @param {Array<any>} activeBreakpoints list of active breakpoints
+   */
+  async deleteAllActiveBreakpoints(activeBreakpoints: Array<any>){
+
+      for(let breakpointId of activeBreakpoints){
+        const deletionRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
+          new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
+        );
+
+        const updatedCompletedBreakpoints = {...this.state.completedBreakpoints};
+        delete updatedCompletedBreakpoints[breakpointId];
+        this.setState({completedBreakpoints: updatedCompletedBreakpoints});
+      }
+      const updatedActiveBPs = {...this.state.activeBreakpoints};
+      this.setState({ activeBreakpoints:  updatedActiveBPs});
   }
 
   render() {
@@ -185,6 +204,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
             this.createBreakPoint(fileName, lineNumber)
           }
           deleteBreakpoint={(breakpointId: string) => this.deleteBreakpoint(breakpointId)}
+          deleteAllActiveBreakpoints={(activeBreakpoints:Array<any>) => this.deleteAllActiveBreakpoints(activeBreakpoints)}
         />
 
         <BreakpointMarkers
