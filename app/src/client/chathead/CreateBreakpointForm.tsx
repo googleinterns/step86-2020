@@ -3,11 +3,13 @@ import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
+  deleteAllActiveBreakpoints: (activeBreakpoints: Array<any>) => void;
 }
 
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
+  activeBreakpoints: Array<any>;
 }
 
 export class CreateBreakpointForm extends React.Component<
@@ -19,6 +21,7 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
+      activeBreakpoints: undefined,
     };
   }
 
@@ -32,6 +35,10 @@ export class CreateBreakpointForm extends React.Component<
 
   onCreateBreakpoint() {
     this.props.createBreakpoint(this.state.fileName, this.state.lineNumber);
+  }
+
+  onDeleteAllActiveBreakpoints() {
+    this.props.deleteAllActiveBreakpoints(this.state.activeBreakpoints);
   }
 
   render() {
@@ -64,6 +71,12 @@ export class CreateBreakpointForm extends React.Component<
                 this.onCreateBreakpoint();
                 }}>
                 Create Breakpoint
+              </Button>
+              <Button onClick={(e) => {
+                e.preventDefault(); // Prevents a page reload from form submit.
+                this.onDeleteAllActiveBreakpoints();
+                }}>
+                Delete all active breakpoints
               </Button>
             </form>
           </CardContent>

@@ -3,15 +3,23 @@ import styled from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
-import { FetchProjectsRequest, FetchProjectsRequestData, FetchDebuggeesRequestData, FetchDebuggeesRequest} from "../../common/requests/BackgroundRequest";
+import {
+  FetchProjectsRequest,
+  FetchProjectsRequestData,
+  FetchDebuggeesRequestData,
+  FetchDebuggeesRequest,
+} from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
-import { PendingBreakpointView, CompletedBreakpointView } from "./BreakpointView";
+import {
+  PendingBreakpointView,
+  CompletedBreakpointView,
+} from "./BreakpointView";
 
 import Paper from "@material-ui/core/Paper";
 import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // Jest has trouble with this, so only import in actual builds.
-if(process.env.NODE_ENV !== "test"){
+if (process.env.NODE_ENV !== "test") {
   import("fontsource-roboto");
 }
 interface ChatheadProps {
@@ -28,6 +36,7 @@ interface ChatheadProps {
   setDebuggee: (debuggeeId: string) => void;
   createBreakpoint: (fileName: string, lineNumber: number) => void;
   deleteBreakpoint: (breakpointId: string) => void;
+  deleteAllActiveBreakpoints: (breakpointsIds: Array<any>) => void;
 }
 
 interface ChatheadState {}
@@ -38,7 +47,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 
   render() {
-    const {projectId, debuggeeId} = this.props;
+    const { projectId, debuggeeId } = this.props;
     return (
       <ChatheadWrapper>
         {!projectId && (
@@ -46,19 +55,23 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             projectId={this.props.projectId}
             onChange={this.props.setProject}
             loadProjects={async () => {
-              const response = await new FetchProjectsRequest().run(new FetchProjectsRequestData());
+              const response = await new FetchProjectsRequest().run(
+                new FetchProjectsRequestData()
+              );
               return response.projects;
             }}
           />
         )}
-        
+
         {projectId && !debuggeeId && (
           <SelectDebuggeeContainer
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
             onChange={this.props.setDebuggee}
             loadDebuggees={async () => {
-              const response = await new FetchDebuggeesRequest().run(new FetchDebuggeesRequestData(this.props.projectId));
+              const response = await new FetchDebuggeesRequest().run(
+                new FetchDebuggeesRequestData(this.props.projectId)
+              );
               // Response.debuggees will be undefined if there are no active debuggees.
               return response.debuggees || [];
             }}
@@ -72,23 +85,33 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           <>
             <AppBar position="static">
               <Toolbar>
-                <IconButton edge="start" color="inherit" onClick={() => this.props.setDebuggee(undefined)}>
-                  <ArrowBackIcon/>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={() => this.props.setDebuggee(undefined)}
+                >
+                  <ArrowBackIcon />
                 </IconButton>
                 <Typography variant="h6">Breakpoints</Typography>
               </Toolbar>
             </AppBar>
-            <CreateBreakpointForm createBreakpoint={this.props.createBreakpoint}/>
+            <CreateBreakpointForm
+              createBreakpoint={this.props.createBreakpoint}
+              deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
+            />
           </>
         )}
 
-        {
-          this.props.activeBreakpoints.map(b => <PendingBreakpointView breakpointMeta={b}/>)
-        }
+        {this.props.activeBreakpoints.map((b) => (
+          <PendingBreakpointView breakpointMeta={b} />
+        ))}
 
-        {
-          this.props.completedBreakpoints.map(b => <CompletedBreakpointView breakpoint={b} deleteBreakpoint={this.props.deleteBreakpoint}/>)
-        }
+        {this.props.completedBreakpoints.map((b) => (
+          <CompletedBreakpointView
+            breakpoint={b}
+            deleteBreakpoint={this.props.deleteBreakpoint}
+          />
+        ))}
       </ChatheadWrapper>
     );
   }

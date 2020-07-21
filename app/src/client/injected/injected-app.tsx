@@ -171,13 +171,9 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         const deletionRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
           new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
         );
-
-        const updatedCompletedBreakpoints = {...this.state.completedBreakpoints};
-        delete updatedCompletedBreakpoints[breakpointId];
-        this.setState({completedBreakpoints: updatedCompletedBreakpoints});
       }
-      const updatedActiveBPs = {...this.state.activeBreakpoints};
-      this.setState({ activeBreakpoints:  updatedActiveBPs});
+      this.setState({completedBreakpoints: {}});
+      this.setState({ activeBreakpoints:  {}});
   }
 
   render() {
