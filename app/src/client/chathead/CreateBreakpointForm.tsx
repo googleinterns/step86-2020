@@ -9,7 +9,6 @@ interface CreateBreakpointFormProps {
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
-  activeBreakpoints: Array<any>;
 }
 
 export class CreateBreakpointForm extends React.Component<
