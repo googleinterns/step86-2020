@@ -90,7 +90,9 @@ BackgroundRequestHandler.on<backgroundRequest.SetBreakpointRequestData>(
       const response = await api.setBreakpoint(
         data.debuggeeId,
         data.fileName,
-        data.lineNumber
+        data.lineNumber,
+        data.condition,
+        data.expressions
       );
       return response;
     } catch (error) {
