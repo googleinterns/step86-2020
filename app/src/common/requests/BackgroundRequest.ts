@@ -192,12 +192,17 @@ export class FetchDebuggeesRequest extends BackgroundRequest<FetchDebuggeesReque
   debuggeeId: string;
   fileName: string;
   lineNumber: number;
+  condition: string;
+  expressions: Array<any>;
+
 
   constructor(debuggeeId: string, fileName: string, lineNumber: number) {
     super(BackgroundRequestType.SET_BREAKPOINT);
     this.debuggeeId = debuggeeId;
     this.fileName = fileName;
     this.lineNumber = lineNumber; 
+    this.condition = condition;
+    this.expressions = expressions;
   }
 }
 
