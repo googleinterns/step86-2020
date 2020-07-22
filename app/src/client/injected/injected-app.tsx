@@ -11,6 +11,8 @@ interface InjectedAppState {
 
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
+
+  localStorage?: Storage
 }
 
 export class InjectedApp extends React.Component<any,InjectedAppState> {
@@ -41,8 +43,24 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    * This function checks of the project name already exists in the local storage 
    */
   getGcpProjectId(): string{
-    let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
+    let gcpProjectId = this.getLocalStorage().getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
+  }
+
+  /** Saves the current project name - project id association (if possible) */
+  saveGcpProjectId(projectId: string): void {
+    const projectName = this.getProjectNameFromGithub();
+    // Only save if we're able to pull the project name.
+    if (projectName) {
+      // Save new project ID only if there is a projectId.
+      // Otherwise, localStorage saves the string "undefined" which throws things off.
+      if (projectId) {
+        this.getLocalStorage().setItem(projectName, projectId);
+      } else {
+        // In the undefined case, manually remove the saved project.
+        this.getLocalStorage().removeItem(projectName);
+      }
+    }
   }
 
   /**
@@ -159,7 +177,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
-            localStorage.setItem(this.getProjectNameFromGithub(), projectId);
+            this.saveGcpProjectId(projectId);
             this.setState({projectId})}
           }
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
@@ -178,6 +196,11 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         />
       </>
     );
+  }
+
+  /** Get the windows local storage object. This accepts a prop to allow mocks. */
+  getLocalStorage() {
+    return this.props.localStorage || window.localStorage;
   }
 }
 
