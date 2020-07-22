@@ -31,7 +31,7 @@ describe("CreateBreakpointForm", () => {
   it("calls createBreakpoint", () => {
     const spy = jest.fn();
     const preventFormSubmitSpy = jest.fn();
-    const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} />);
+    const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} activeBreakpoints={[]}/>);
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
     wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
