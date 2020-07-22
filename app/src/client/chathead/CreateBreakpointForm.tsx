@@ -1,5 +1,6 @@
 import React from "react";
-import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
+import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
@@ -8,6 +9,8 @@ interface CreateBreakpointFormProps {
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
+  condition: string;
+  expressions: string[];
 }
 
 export class CreateBreakpointForm extends React.Component<
@@ -19,6 +22,8 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
+      condition: "",
+      expressions: []
     };
   }
 
@@ -35,7 +40,7 @@ export class CreateBreakpointForm extends React.Component<
   }
 
   render() {
-    const { fileName, lineNumber } = this.state;
+    const { fileName, lineNumber, condition, expressions } = this.state;
     return (
       <Box m={1}>
         <Card elevation={1}>
@@ -59,6 +64,13 @@ export class CreateBreakpointForm extends React.Component<
                 variant="outlined"
               />
               <br/><br/>
+              <ConditionAndExpressionsForm
+                condition={condition}
+                expressions={expressions}
+                setCondition={condition => this.setState({condition})}
+                setExpressions={expressions => this.setState({expressions})}
+              />
+              <br/><br/>
               <Button onClick={(e) => {
                 e.preventDefault(); // Prevents a page reload from form submit.
                 this.onCreateBreakpoint();
@@ -71,4 +83,54 @@ export class CreateBreakpointForm extends React.Component<
       </Box>      
     );
   }
+}
+
+const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setExpressions}) => {
+  return (
+    <Accordion>
+      <AccordionSummary>
+        <Typography variant="body2">Condition and Expressions</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <List>
+          <TextField
+            label="Condition"
+            size="small"
+            style={{width: "100%"}}
+            variant="outlined"
+            value={condition}
+            onChange={e => setCondition(e.target.value)}
+          />
+          <List>
+            {
+              expressions.map((expression, index) => (
+                <ListItem>
+                  <TextField
+                    size="small"
+                    label={`Expression ${index + 1}`}
+                    variant="outlined"
+                    value={expression}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => {
+                            const updatedExpressions = [...expressions];
+                            updatedExpressions.splice(index, 1);
+                            setExpressions(updatedExpressions);
+                          }}>
+                            <DeleteIcon/>
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </ListItem>
+              ))
+            }
+            <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
+          </List>
+        </List>
+      </AccordionDetails>
+    </Accordion>
+  )
 }
