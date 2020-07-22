@@ -48,38 +48,44 @@ export class CreateBreakpointForm extends React.Component<
             <form>
               <TextField
                 label="File Name"
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 data-testid="fileName"
                 value={fileName}
                 onChange={(e) => this.onFileName(e.target.value)}
                 variant="outlined"
               />
-              <br/><br/>
+              <br />
+              <br />
               <TextField
                 label="Line Number"
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 data-testid="lineNumber"
                 value={lineNumber}
                 onChange={(e) => this.onLineNumber(e.target.value)}
                 variant="outlined"
               />
-              <br/><br/>
-              <Button onClick={(e) => {
-                e.preventDefault(); // Prevents a page reload from form submit.
-                this.onCreateBreakpoint();
-                }}>
+              <br />
+              <br />
+              <Button id='createBpButton'
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents a page reload from form submit.
+                  this.onCreateBreakpoint();
+                }}
+              >
                 Create Breakpoint
               </Button>
-              <Button onClick={(e) => {
-                e.preventDefault(); // Prevents a page reload from form submit.
-                this.onDeleteAllActiveBreakpoints();
-                }}>
+              <Button id='deleteActiveBpButton'
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents a page reload from form submit.
+                  this.onDeleteAllActiveBreakpoints();
+                }}
+              >
                 Delete all active breakpoints
               </Button>
             </form>
           </CardContent>
         </Card>
-      </Box>      
+      </Box>
     );
   }
 }
