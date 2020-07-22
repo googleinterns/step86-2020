@@ -83,6 +83,118 @@ describe("Testing API functions", () => {
     expect(breakpoint).toEqual(mockResponse.response);
   });
 
+  it("Can set breakpoint with condition", async () => {
+    const mockDebuggeeId = "foo";
+    const mockFile = "bar";
+    const mockLineNumber = 88;
+    const mockCondition = "testCondition";
+
+    const mockResponse = {
+      status: 200,
+      response: { data: { breakpointid: 1 } },
+    };
+
+    // This depends on the number of "expect" checks we have below
+    expect.assertions(2);
+
+    // Before calling the API, set up a function to intercept the API request.
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+
+      expect(request.config.url).toEqual(
+        "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set"
+      );
+      request.respondWith(mockResponse);
+    });
+
+    // Call the API
+    const breakpoint = await api.setBreakpoint(
+      mockDebuggeeId,
+      mockFile,
+      mockLineNumber,
+      mockCondition
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
+  });
+
+  it("Can set breakpoint with expression", async () => {
+    const mockDebuggeeId = "foo";
+    const mockFile = "bar";
+    const mockLineNumber = 88;
+    const mockExpression = [
+      "testExpression1",
+      "testExpression2",
+      "testExpression3",
+    ];
+
+    const mockResponse = {
+      status: 200,
+      response: { data: { breakpointid: 1 } },
+    };
+
+    // This depends on the number of "expect" checks we have below
+    expect.assertions(2);
+
+    // Before calling the API, set up a function to intercept the API request.
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+
+      expect(request.config.url).toEqual(
+        "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set"
+      );
+      request.respondWith(mockResponse);
+    });
+
+    // Call the API
+    const breakpoint = await api.setBreakpoint(
+      mockDebuggeeId,
+      mockFile,
+      mockLineNumber,
+      mockExpression
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
+  });
+
+  it("Can set breakpoint with condition and expression", async () => {
+    const mockDebuggeeId = "foo";
+    const mockFile = "bar";
+    const mockLineNumber = 88;
+    const mockCondition = "testCondition";
+    const mockExpression = [
+      "testExpression1",
+      "testExpression2",
+      "testExpression3",
+    ];
+
+    const mockResponse = {
+      status: 200,
+      response: { data: { breakpointid: 1 } },
+    };
+
+    // This depends on the number of "expect" checks we have below
+    expect.assertions(2);
+
+    // Before calling the API, set up a function to intercept the API request.
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+
+      expect(request.config.url).toEqual(
+        "https://clouddebugger.googleapis.com/v2/debugger/debuggees/{debuggeeId}/breakpoints/set"
+      );
+      request.respondWith(mockResponse);
+    });
+
+    // Call the API
+    const breakpoint = await api.setBreakpoint(
+      mockDebuggeeId,
+      mockFile,
+      mockLineNumber,
+      mockCondition,
+      mockExpression
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
+  });
+
   it("Can list breakpoints", async () => {
     const mockDebuggeeId = "foo";
     const debuggeeId = "foo";
@@ -147,7 +259,7 @@ describe("Testing API functions", () => {
 
     const mockResponse = {
       status: 200,
-      response: [{ }],
+      response: [{}],
     };
 
     // This depends on the number of "expect" checks we have below
@@ -170,6 +282,4 @@ describe("Testing API functions", () => {
     );
     expect(breakpoint).toEqual(mockResponse.response);
   });
-
-
 });

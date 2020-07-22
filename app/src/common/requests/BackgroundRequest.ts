@@ -18,13 +18,13 @@ export enum BackgroundRequestType {
   AUTHENTICATION,
   IS_AUTHENTICATED,
   ENABLE_REQUIRED_SERVICE,
-  IS_SERVICE_ENABLED
+  IS_SERVICE_ENABLED,
 }
 
 /**
  * A standardized format for all background requests.
  * Each type of request must extend this with its required parameters.
- * 
+ *
  * @example <caption>Creating a new data type</caption>
  * ```
  * class MyData extends BackgroundRequestData {
@@ -64,25 +64,27 @@ export interface BackgroundRequestError {
 /** Used to generate BackgroundRequestResponses more consistently. */
 export class BackgroundRequestResponseFactory {
   /** Generate a response for an error state. */
-  static fromError(error: BackgroundRequestError): BackgroundRequestResponse<undefined> {
+  static fromError(
+    error: BackgroundRequestError
+  ): BackgroundRequestResponse<undefined> {
     return {
       isError: true,
-      error
-    }
+      error,
+    };
   }
   /** Generate a successful response with useful payload. */
   static fromData<R>(data: R): BackgroundRequestResponse<R> {
     return {
       isError: false,
-      data
-    }
+      data,
+    };
   }
 }
 
 /**
  * Used to send requests (with optional response) from UI to API background.
  * This isn't meant to be used directly, instead through derived classes for each request type.
- * 
+ *
  * @example <caption>Creating a new request type</caption>
  * ```
  * class MyRequest extends BackgroundRequest<MyRequestData, MyRequestResponse>{}
@@ -109,23 +111,24 @@ export abstract class BackgroundRequest<D extends BackgroundRequestData, R> {
    */
   run(data: D): Promise<R> {
     return new Promise((resolve, reject) => {
-      this.chromeApi.runtime.sendMessage(data, (response: BackgroundRequestResponse<R>) => {
-        if (response.isError) {
-          return reject(response.error);
+      this.chromeApi.runtime.sendMessage(
+        data,
+        (response: BackgroundRequestResponse<R>) => {
+          if (response.isError) {
+            return reject(response.error);
+          }
+          return resolve(response.data);
         }
-        return resolve(response.data);
-      });
+      );
     });
   }
 }
-
 
 /**
  *  This class lets UI request a list of user's projects
  */
 
 export class FetchProjectsRequestData extends BackgroundRequestData {
-
   constructor() {
     super(BackgroundRequestType.FETCH_PROJECTS);
   }
@@ -135,9 +138,10 @@ interface FetchProjectsRequestResponse {
   projects: Array<any>;
 }
 
-export class FetchProjectsRequest extends BackgroundRequest<FetchProjectsRequestData,FetchProjectsRequestResponse> {
-
-}
+export class FetchProjectsRequest extends BackgroundRequest<
+  FetchProjectsRequestData,
+  FetchProjectsRequestResponse
+> {}
 
 /**
  *  This class lets UI request a list of a debuggee breakpoints
@@ -159,9 +163,10 @@ interface ListBreakpointsResponse {
   nextWaitToken: string;
 }
 
-export class ListBreakPointsRequest extends BackgroundRequest<ListBreakpointsData,ListBreakpointsResponse> {
-
-}
+export class ListBreakPointsRequest extends BackgroundRequest<
+  ListBreakpointsData,
+  ListBreakpointsResponse
+> {}
 
 /**
  *  This class lets UI request a list of project's debuggees
@@ -172,7 +177,7 @@ export class FetchDebuggeesRequestData extends BackgroundRequestData {
 
   constructor(projectId: string) {
     super(BackgroundRequestType.FETCH_DEBUGGEES);
-    this.projectId = projectId; 
+    this.projectId = projectId;
   }
 }
 
@@ -180,24 +185,35 @@ interface FetchDebuggeesRequestResponse {
   debuggees: Array<any>;
 }
 
-export class FetchDebuggeesRequest extends BackgroundRequest<FetchDebuggeesRequestData,FetchDebuggeesRequestResponse> {
-
-}
+export class FetchDebuggeesRequest extends BackgroundRequest<
+  FetchDebuggeesRequestData,
+  FetchDebuggeesRequestResponse
+> {}
 
 /**
  *  This class lets UI set a new breakpoint
  */
 
- export class SetBreakpointRequestData extends BackgroundRequestData {
+export class SetBreakpointRequestData extends BackgroundRequestData {
   debuggeeId: string;
   fileName: string;
   lineNumber: number;
+  condition: string;
+  expressions: Array<any>;
 
-  constructor(debuggeeId: string, fileName: string, lineNumber: number) {
+  constructor(
+    debuggeeId: string,
+    fileName: string,
+    lineNumber: number,
+    condition: string,
+    expressions: Array<any>
+  ) {
     super(BackgroundRequestType.SET_BREAKPOINT);
     this.debuggeeId = debuggeeId;
     this.fileName = fileName;
-    this.lineNumber = lineNumber; 
+    this.lineNumber = lineNumber;
+    this.condition = condition;
+    this.expressions = expressions;
   }
 }
 
@@ -205,9 +221,10 @@ interface SetBreakpointRequestResponse {
   breakpoint: any;
 }
 
-export class SetBreakpointRequest extends BackgroundRequest<SetBreakpointRequestData,SetBreakpointRequestResponse> {
-
-}
+export class SetBreakpointRequest extends BackgroundRequest<
+  SetBreakpointRequestData,
+  SetBreakpointRequestResponse
+> {}
 
 /**
  *  This class lets UI request full data for a specific breakpoint
@@ -227,9 +244,10 @@ interface FetchBreakpointRequestResponse {
   breakpoint: any;
 }
 
-export class FetchBreakpointRequest extends BackgroundRequest<FetchBreakpointRequestData,FetchBreakpointRequestResponse> {
-
-}
+export class FetchBreakpointRequest extends BackgroundRequest<
+  FetchBreakpointRequestData,
+  FetchBreakpointRequestResponse
+> {}
 
 /**
  *  Lets UI trigger authentication
@@ -241,7 +259,10 @@ export class AuthenticationRequestData extends BackgroundRequestData {
 }
 interface AuthenticationRequestResponse {}
 
-export class AuthenticationRequest extends BackgroundRequest<AuthenticationRequestData, AuthenticationRequestResponse> {}
+export class AuthenticationRequest extends BackgroundRequest<
+  AuthenticationRequestData,
+  AuthenticationRequestResponse
+> {}
 
 /**
  *  Lets UI get current auth state from backend.
@@ -252,11 +273,13 @@ export class GetAuthStateRequestData extends BackgroundRequestData {
   }
 }
 interface GetAuthStateRequestResponse {
-  isAuthenticated: boolean
+  isAuthenticated: boolean;
 }
 
-export class GetAuthStateRequest extends BackgroundRequest<GetAuthStateRequestData, GetAuthStateRequestResponse> {}
-
+export class GetAuthStateRequest extends BackgroundRequest<
+  GetAuthStateRequestData,
+  GetAuthStateRequestResponse
+> {}
 
 /**
  *  Lets UI get delete a Breakpoint.
@@ -270,10 +293,12 @@ export class DeleteBreakpointRequestData extends BackgroundRequestData {
     this.breakpointId = breakpointId;
   }
 }
-interface DeleteBreakpointRequestResponse {
-}
+interface DeleteBreakpointRequestResponse {}
 
-export class DeleteBreakpointRequest extends BackgroundRequest<DeleteBreakpointRequestData, DeleteBreakpointRequestResponse> {}
+export class DeleteBreakpointRequest extends BackgroundRequest<
+  DeleteBreakpointRequestData,
+  DeleteBreakpointRequestResponse
+> {}
 
 /**
  *  Lets UI enable required service.
@@ -287,12 +312,15 @@ export class EnableRequiredServiceRequestData extends BackgroundRequestData {
 }
 interface EnableRequiredServiceRequestResponse {}
 
-export class EnableRequiredServiceRequest extends BackgroundRequest<EnableRequiredServiceRequestData, EnableRequiredServiceRequestResponse> {}
+export class EnableRequiredServiceRequest extends BackgroundRequest<
+  EnableRequiredServiceRequestData,
+  EnableRequiredServiceRequestResponse
+> {}
 
 /**
  *  Lets UI get enabling state.
  */
-export class  RequiredServicesEnabledRequestData  extends BackgroundRequestData {
+export class RequiredServicesEnabledRequestData extends BackgroundRequestData {
   projectNumber: number;
   constructor(projectNumber: number) {
     super(BackgroundRequestType.IS_SERVICE_ENABLED);
@@ -300,7 +328,10 @@ export class  RequiredServicesEnabledRequestData  extends BackgroundRequestData 
   }
 }
 interface RequiredServicesEnabledRequestResponse {
-  isRequiredServicesEnabled: boolean
+  isRequiredServicesEnabled: boolean;
 }
 
-export class RequiredServicesEnabledRequest extends BackgroundRequest<RequiredServicesEnabledRequestData, RequiredServicesEnabledRequestResponse> {}
+export class RequiredServicesEnabledRequest extends BackgroundRequest<
+  RequiredServicesEnabledRequestData,
+  RequiredServicesEnabledRequestResponse
+> {}

@@ -1,7 +1,7 @@
 import api from "debugger-extension-api";
 import * as backgroundRequest from "../common/requests/BackgroundRequest";
 import * as serviceUsageHandler from "./serviceUsageHandler";
-import * as extensionAuthHandler from "./extensionAuthHandler"
+import * as extensionAuthHandler from "./extensionAuthHandler";
 
 /**
  * BackgroundRequestHandler receives chrome runtime messages (i.e. BackgroundRequestData) and it
@@ -90,7 +90,9 @@ BackgroundRequestHandler.on<backgroundRequest.SetBreakpointRequestData>(
       const response = await api.setBreakpoint(
         data.debuggeeId,
         data.fileName,
-        data.lineNumber
+        data.lineNumber,
+        data.condition,
+        data.expressions
       );
       return response;
     } catch (error) {
@@ -187,9 +189,9 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
   backgroundRequest.BackgroundRequestType.IS_AUTHENTICATED,
   async () => {
     const request = await api.getAuthToken();
-    let response = {isAuthenticated: false};
+    let response = { isAuthenticated: false };
     if (request !== "") {
-      response = {isAuthenticated: true};
+      response = { isAuthenticated: true };
     }
     return response;
   }
@@ -205,6 +207,6 @@ BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
     setInterval(() => {
       extensionAuthHandler.getToken();
     }, 5 * 60 * 1000);
-    return {}
-  },
+    return {};
+  }
 );
