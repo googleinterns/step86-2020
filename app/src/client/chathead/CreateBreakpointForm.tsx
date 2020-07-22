@@ -96,41 +96,62 @@ const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setE
           <TextField
             label="Condition"
             size="small"
-            style={{width: "100%"}}
+            fullWidth
             variant="outlined"
             value={condition}
             onChange={e => setCondition(e.target.value)}
           />
-          <List>
-            {
-              expressions.map((expression, index) => (
-                <ListItem>
-                  <TextField
-                    size="small"
-                    label={`Expression ${index + 1}`}
-                    variant="outlined"
-                    value={expression}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => {
-                            const updatedExpressions = [...expressions];
-                            updatedExpressions.splice(index, 1);
-                            setExpressions(updatedExpressions);
-                          }}>
-                            <DeleteIcon/>
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </ListItem>
-              ))
-            }
-            <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
-          </List>
+          <ExpressionsList expressions={expressions} setExpressions={setExpressions}/>
         </List>
       </AccordionDetails>
     </Accordion>
+  )
+}
+
+const ExpressionsList = ({expressions, setExpressions}) => {
+  return (
+    <List>
+      {
+        expressions.map((expression, index) => (
+          <ExpressionView
+            expression={expression}
+            onChange={updatedExpression => {
+              const updatedExpressions = [...expressions];
+              updatedExpressions[index] = expression;
+              setExpressions(updatedExpressions);
+            }}
+            onDelete={() => {
+              const updatedExpressions = [...expressions];
+              updatedExpressions.splice(index, 1);
+              setExpressions(updatedExpressions);
+            }}
+          />
+        ))
+      }
+      <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
+    </List>
+  );
+}
+
+const ExpressionView = ({expression, onChange, onDelete}) => {
+  return (
+    <ListItem>
+      <TextField
+        size="small"
+        label="Expression"
+        variant="outlined"
+        value={expression}
+        onChange={e => onChange(e.target.value)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={onDelete}>
+                <DeleteIcon/>
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
+      />
+    </ListItem>
   )
 }
