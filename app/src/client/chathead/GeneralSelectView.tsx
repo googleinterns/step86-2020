@@ -6,6 +6,7 @@ interface SelectViewProps {
   label?: string;
   optionsLoading: boolean;
   selectedOptionId?: string;
+  projectDescription?: string;
   // Gets an ID to internally represent an option (will be stored and sent to API)
   optionToId: (option: any) => string;
   optionToLabel: (option: any) => string;
@@ -19,7 +20,7 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
   }
 
   render() {
-    const { options, selectedOptionId, optionsLoading, optionToId, label } = this.props;
+    const { options, selectedOptionId, optionsLoading, optionToId, label, optionToLabel }  = this.props;
 
     if (optionsLoading) {
       return <CircularProgress/>
@@ -29,10 +30,12 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
       <FormControl variant="outlined" style={{width: "100%"}}>
         {/* <InputLabel>{label}</InputLabel> */}
         <Autocomplete
-          options={options.map(optionToId)}
+          options={options}
           style={{width: 300}}
+          getOptionLabel={optionToLabel}
+          getOptionSelected={(option, value) => optionToId(option) === value}
           value={selectedOptionId}
-          onChange={(event, newValue) => this.onChange(newValue)}
+          onChange={(event, newValue) => this.onChange(optionToId(newValue))}
           renderInput={(params) => <TextField {...params} label={label} variant="outlined"/>}
         />
       </FormControl>
