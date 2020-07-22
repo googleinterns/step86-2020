@@ -8,6 +8,7 @@ import { BackgroundRequestError } from "../../common/requests/BackgroundRequest"
 
 interface SelectProjectContainerProps {
   projectId?: string;
+  projectDescription?: string;
   loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
 }
@@ -78,6 +79,7 @@ export class SelectProjectContainer extends React.Component<
                     selectedOptionId={this.props.projectId}
                     onChange={(projectId) => this.onChange(projectId)}
                     optionToId={(project: Project) => project.projectId}
+                    optionToLabel={(project: Project) => project.description}
                   />
                 )
               }
