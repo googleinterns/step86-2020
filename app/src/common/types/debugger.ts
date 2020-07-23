@@ -42,7 +42,6 @@ export interface Project {
     lifecycleState: string;
     name: string;
     createTime: string;
-    description: string;
 }
 
 /** A single debuggee within a GCP project */

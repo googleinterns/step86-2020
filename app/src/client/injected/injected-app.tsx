@@ -8,7 +8,6 @@ import { BreakpointMarkers } from "../markers/BreakpointMarkers";
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
-  projectDescription: string;
 
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
@@ -22,7 +21,6 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
-      projectDescription: undefined,
 
       activeBreakpoints: {},
       completedBreakpoints: {},

@@ -6,7 +6,6 @@ interface SelectViewProps {
   label?: string;
   optionsLoading: boolean;
   selectedOptionId?: string;
-  projectDescription?: string;
   // Gets an ID to internally represent an option (will be stored and sent to API)
   optionToId: (option: any) => string;
   optionToLabel: (option: any) => string;

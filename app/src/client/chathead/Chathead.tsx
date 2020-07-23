@@ -31,8 +31,6 @@ interface ChatheadProps {
   activeBreakpoints: BreakpointMeta[];
   /** Breakpoints that have been hit, with all data loaded. */
   completedBreakpoints: Breakpoint[];
-  /** The current selected project descripttion. Undefined if no project selected. */
-  projectDescription: string | undefined;
 
   setProject: (projectId: string) => void;
   setDebuggee: (debuggeeId: string) => void;

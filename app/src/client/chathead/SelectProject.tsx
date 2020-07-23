@@ -8,7 +8,6 @@ import { BackgroundRequestError } from "../../common/requests/BackgroundRequest"
 
 interface SelectProjectContainerProps {
   projectId?: string;
-  projectDescription?: string;
   loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
 }
