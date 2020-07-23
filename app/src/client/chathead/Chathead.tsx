@@ -26,7 +26,7 @@ interface ChatheadProps {
 
   setProject: (projectId: string) => void;
   setDebuggee: (debuggeeId: string) => void;
-  createBreakpoint: (fileName: string, lineNumber: number) => void;
+  createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
   deleteBreakpoint: (breakpointId: string) => void;
 }
 

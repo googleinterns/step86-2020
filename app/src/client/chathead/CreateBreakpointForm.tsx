@@ -1,9 +1,10 @@
 import React from "react";
 import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 interface CreateBreakpointFormProps {
-  createBreakpoint: (fileName: string, lineNumber: number) => void;
+  createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
 }
 
 interface CreateBreakpointFormState {
@@ -36,7 +37,7 @@ export class CreateBreakpointForm extends React.Component<
   }
 
   onCreateBreakpoint() {
-    this.props.createBreakpoint(this.state.fileName, this.state.lineNumber);
+    this.props.createBreakpoint(this.state.fileName, this.state.lineNumber, this.state.condition, this.state.expressions);
   }
 
   render() {
@@ -88,7 +89,7 @@ export class CreateBreakpointForm extends React.Component<
 const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setExpressions}) => {
   return (
     <Accordion>
-      <AccordionSummary>
+      <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
         <Typography variant="body2">Condition and Expressions</Typography>
       </AccordionSummary>
       <AccordionDetails>

@@ -51,14 +51,16 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    * @param {String} filename Name of the file to set the breakpoint in that file.
    * @param {number} lineNumber line number to set the breakpoint on that line.
    */
-  async createBreakPoint(fileName: string, lineNumber: number) {
+  async createBreakPoint(fileName: string, lineNumber: number, condition: string = "", expressions: string[] = []) {
     // Make the Set breakpoint request in the BackgroundRequest
     const response = await new BackgroundRequest.SetBreakpointRequest().run(
       new BackgroundRequest.SetBreakpointRequestData(
         this.state.debuggeeId,
         fileName,
-        lineNumber
-      )
+        lineNumber,
+        condition,
+        expressions
+      );
     );
     /**
      * Side note: you cannot mutate the state variable in React. So, to append (add) values to an array, you have to
