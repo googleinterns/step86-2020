@@ -11,38 +11,55 @@ interface InjectedAppState {
 
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
+
+  localStorage?: Storage
 }
 
-export class InjectedApp extends React.Component<any,InjectedAppState> {
-
-  constructor(props: InjectedAppState){
+export class InjectedApp extends React.Component<any, InjectedAppState> {
+  constructor(props: InjectedAppState) {
     super(props);
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
 
-      activeBreakpoints : {},
-      completedBreakpoints: {}
-    }
+      activeBreakpoints: {},
+      completedBreakpoints: {},
+    };
   }
 
   /**
    * This function fetches projects names on Github and return the title of the project
    */
-  getProjectNameFromGithub(): string{
+  getProjectNameFromGithub(): string {
     let title = document.querySelector(".js-path-segment:first-child");
-    if (title !== null){
+    if (title !== null) {
       var projectName = title.innerText;
       return projectName;
     }
   }
 
   /**
-   * This function checks of the project name already exists in the local storage 
+   * This function checks of the project name already exists in the local storage
    */
-  getGcpProjectId(): string{
+  getGcpProjectId(): string {
     let gcpProjectId = localStorage.getItem(this.getProjectNameFromGithub());
     return gcpProjectId !== null ? gcpProjectId : undefined;
+  }
+
+  /** Saves the current project name - project id association (if possible) */
+  saveGcpProjectId(projectId: string): void {
+    const projectName = this.getProjectNameFromGithub();
+    // Only save if we're able to pull the project name.
+    if (projectName) {
+      // Save new project ID only if there is a projectId.
+      // Otherwise, localStorage saves the string "undefined" which throws things off.
+      if (projectId) {
+        this.getLocalStorage().setItem(projectName, projectId);
+      } else {
+        // In the undefined case, manually remove the saved project.
+        this.getLocalStorage().removeItem(projectName);
+      }
+    }
   }
 
   /**
@@ -81,17 +98,25 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
     // Set waitToken to null as default for first call
     var waitToken = null;
     // Checks if debuggeeId is not undefined
-      setInterval(async () => {
-        if (this.state.debuggeeId !== undefined && Object.keys(this.state.activeBreakpoints).length > 0) {         
-          // Make the list breakpoint request
-          let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(new BackgroundRequest.ListBreakpointsData(this.state.debuggeeId,waitToken))
-          waitToken = breakpointListResponse.nextWaitToken
+    setInterval(async () => {
+      if (
+        this.state.debuggeeId !== undefined &&
+        Object.keys(this.state.activeBreakpoints).length > 0
+      ) {
+        // Make the list breakpoint request
+        let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(
+          new BackgroundRequest.ListBreakpointsData(
+            this.state.debuggeeId,
+            waitToken
+          )
+        );
+        waitToken = breakpointListResponse.nextWaitToken;
 
-          let breakpointList: Array<any> = [];
-          // Add the active breakpoints to the listBreakpoint state array.
-          for (let breakpoint of (breakpointListResponse.breakpoints || [])) {
-            breakpointList.push(breakpoint['id']);
-          }
+        let breakpointList: Array<any> = [];
+        // Add the active breakpoints to the listBreakpoint state array.
+        for (let breakpoint of breakpointListResponse.breakpoints || []) {
+          breakpointList.push(breakpoint["id"]);
+        }
 
         // Get the inactive breakpoints (by getting difference from activeBreakpoint and breakpointList) array
         let inactiveBreakpoints: Array<any> = [];
@@ -111,12 +136,15 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
   async deleteBreakpoint(breakpointId: string) {
     // Delete the breakpoint from remote cloud debugger.
     const deleteBreakpointRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
-      new BackgroundRequest.DeleteBreakpointRequestData(this.state.debuggeeId, breakpointId)
+      new BackgroundRequest.DeleteBreakpointRequestData(
+        this.state.debuggeeId,
+        breakpointId
+      )
     );
     // Remove breakpoint from local tracking.
-    const updatedCompletedBreakpoints = {...this.state.completedBreakpoints};
+    const updatedCompletedBreakpoints = { ...this.state.completedBreakpoints };
     delete updatedCompletedBreakpoints[breakpointId];
-    this.setState({completedBreakpoints: updatedCompletedBreakpoints});
+    this.setState({ completedBreakpoints: updatedCompletedBreakpoints });
   }
 
   /**
@@ -126,7 +154,7 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
    */
   async loadBreakpoints(breakpointIdsToLoad: Array<any>) {
     // Make request to get the breakpoint data using breakpoint ids
-    var tempGetBreakpoints = {...this.state.completedBreakpoints};
+    var tempGetBreakpoints = { ...this.state.completedBreakpoints };
     var updatedActiveBPs = { ...this.state.activeBreakpoints };
     for (let breakpointId of breakpointIdsToLoad) {
       const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(
@@ -136,13 +164,29 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         )
       );
       // Add it to the state array for getBreakpoint data
-      const {breakpoint} = getBreakpointresponse;
+      const { breakpoint } = getBreakpointresponse;
       tempGetBreakpoints[breakpoint.id] = breakpoint;
       // Remove the breakpoint from the active breakpoint list
       delete updatedActiveBPs[breakpointId];
     }
     this.setState({ completedBreakpoints: tempGetBreakpoints });
     this.setState({ activeBreakpoints: updatedActiveBPs });
+  }
+  /**
+   * Delete a batch of active breakpoints from debugger backend
+   */
+  async deleteAllActiveBreakpoints() {
+    //delete all active breakpoints from remote cloud debugger.
+    for (let breakpointId of Object.values(this.state.activeBreakpoints)) {
+      const deletionRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
+        new BackgroundRequest.DeleteBreakpointRequestData(
+          this.state.debuggeeId,
+          breakpointId.id
+        )
+      );
+    }
+    this.setState({ completedBreakpoints: {} });
+    this.setState({ activeBreakpoints: {} });
   }
 
   render() {
@@ -157,18 +201,20 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
-
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
             localStorage.setItem(this.getProjectNameFromGithub(), projectId);
-            this.setState({projectId})}
-          }
+            this.setState({ projectId });
+          }}
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
           createBreakpoint={(fileName, lineNumber) =>
             this.createBreakPoint(fileName, lineNumber)
           }
-          deleteBreakpoint={(breakpointId: string) => this.deleteBreakpoint(breakpointId)}
+          deleteBreakpoint={(breakpointId: string) =>
+            this.deleteBreakpoint(breakpointId)
+          }
+          deleteAllActiveBreakpoints={() => this.deleteAllActiveBreakpoints()}
         />
 
         <BreakpointMarkers
@@ -180,6 +226,11 @@ export class InjectedApp extends React.Component<any,InjectedAppState> {
         />
       </>
     );
+  }
+
+  /** Get the windows local storage object. This accepts a prop to allow mocks. */
+  getLocalStorage() {
+    return this.props.localStorage || window.localStorage;
   }
 }
 

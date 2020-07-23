@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
+  deleteAllActiveBreakpoints: () => void;
 }
 
 interface CreateBreakpointFormState {
@@ -40,6 +41,10 @@ export class CreateBreakpointForm extends React.Component<
     this.props.createBreakpoint(this.state.fileName, this.state.lineNumber, this.state.condition, this.state.expressions);
   }
 
+  onDeleteAllActiveBreakpoints() {
+    this.props.deleteAllActiveBreakpoints();
+  }
+
   render() {
     const { fileName, lineNumber, condition, expressions } = this.state;
     return (
@@ -49,16 +54,17 @@ export class CreateBreakpointForm extends React.Component<
             <form>
               <TextField
                 label="File Name"
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 data-testid="fileName"
                 value={fileName}
                 onChange={(e) => this.onFileName(e.target.value)}
                 variant="outlined"
               />
-              <br/><br/>
+              <br />
+              <br />
               <TextField
                 label="Line Number"
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 data-testid="lineNumber"
                 value={lineNumber}
                 onChange={(e) => this.onLineNumber(e.target.value)}
@@ -72,16 +78,26 @@ export class CreateBreakpointForm extends React.Component<
                 setExpressions={expressions => this.setState({expressions})}
               />
               <br/><br/>
-              <Button onClick={(e) => {
-                e.preventDefault(); // Prevents a page reload from form submit.
-                this.onCreateBreakpoint();
-                }}>
+              <Button id='createBpButton'
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents a page reload from form submit.
+                  this.onCreateBreakpoint();
+                }}
+              >
                 Create Breakpoint
+              </Button>
+              <Button id='deleteActiveBpButton'
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents a page reload from form submit.
+                  this.onDeleteAllActiveBreakpoints();
+                }}
+              >
+                Delete all active breakpoints
               </Button>
             </form>
           </CardContent>
         </Card>
-      </Box>      
+      </Box>
     );
   }
 }

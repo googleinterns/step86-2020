@@ -34,9 +34,20 @@ describe("CreateBreakpointForm", () => {
     const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} />);
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    wrapper.find(Button).simulate("click", {preventDefault: preventFormSubmitSpy});
+    wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
 
     expect(spy).toHaveBeenCalledWith("a", 1);
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
+
+  it("calls DeleteAllActiveBreakpoint", () => {
+    const spy = jest.fn();
+    const preventFormSubmitSpy = jest.fn();
+    const wrapper = shallow(<CreateBreakpointForm deleteAllActiveBreakpoints={spy} />);
+    wrapper.find("#deleteActiveBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
+
+    expect(spy).toHaveBeenCalled();
+    expect(preventFormSubmitSpy).toHaveBeenCalled();
+  });
+
 });
