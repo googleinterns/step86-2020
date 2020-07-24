@@ -28,12 +28,6 @@ describe("Injected App", () => {
       shallow(<InjectedApp />);
       expect(InjectedApp.prototype.getGcpProjectId).toHaveBeenCalled();
     });
-
-    it("checks getProjectNameFromGithub method is called.", (done) => {
-      
-      done();
-    });
-
 });
 
 describe("Saving Project IDs", () => {
