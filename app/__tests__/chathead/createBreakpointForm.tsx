@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { CreateBreakpointForm, ExpressionView, ExpressionsList } from "../../src/client/chathead/CreateBreakpointForm";
+import { CreateBreakpointForm, ExpressionView, ExpressionsList, ConditionAndExpressionsForm } from "../../src/client/chathead/CreateBreakpointForm";
 import { Button, IconButton, TextField } from "@material-ui/core";
 
 configure({ adapter: new Adapter() });
@@ -92,4 +92,23 @@ describe("ExpressionsList", () => {
     (wrapper.find(ExpressionView).at(0).instance() as ExpressionView).onChange("c");
     expect(setExpressionsSpy).toHaveBeenCalledWith(["c", "b"]);
   });
+
+  it("can add expression", () => {
+    const setExpressionsSpy = jest.fn();
+    const wrapper = mount(<ExpressionsList expressions={["a", "b"]} setExpressions={setExpressionsSpy}/>);
+    wrapper.find(Button).simulate("click");
+    expect(setExpressionsSpy).toHaveBeenCalledWith(["a", "b", ""]);
+  });
 });
+
+describe("ConditionsAndExpressionsForm", () => {
+  it("has condition input", () => {
+    const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={[]}/>);
+    expect(wrapper.find(TextField).props().value).toBe("foo");
+  });
+
+  it("has expressions list", () => {
+    const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]}/>);
+    expect(wrapper.find(ExpressionsList).props().expressions).toEqual(["a"]);
+  });
+})

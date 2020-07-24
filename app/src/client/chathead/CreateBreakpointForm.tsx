@@ -104,7 +104,7 @@ export class CreateBreakpointForm extends React.Component<
   }
 }
 
-const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setExpressions}) => {
+export const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setExpressions}) => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
