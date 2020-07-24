@@ -20,7 +20,7 @@ describe("Injected App", () => {
           completedBreakpoints={[]}
         />
       );
-      expect(wrapper.find(Chathead)).toHaveLength(1);
+      expect(wrapper.find(Chathead)).toHaveLength(0);
     });
 
     it("checks getGcpProjectId method is called.", () => {
