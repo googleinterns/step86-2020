@@ -1,6 +1,7 @@
 import React from "react";
 import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import Alert from '@material-ui/lab/Alert';
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
@@ -12,6 +13,7 @@ interface CreateBreakpointFormProps {
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
+  errorMessage: boolean;
 }
 
 export class CreateBreakpointForm extends React.Component<
@@ -23,6 +25,7 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
+      errorMessage: true
     };
   }
 
@@ -64,6 +67,14 @@ export class CreateBreakpointForm extends React.Component<
     return true;
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.activeBreakpoints.length > prevProps.activeBreakpoints.length) {
+      this.setState({ errorMessage: true });
+    }
+  }
+
+  
+
   render() {
     const { fileName, lineNumber } = this.state;
     return (
@@ -96,14 +107,9 @@ export class CreateBreakpointForm extends React.Component<
                   e.preventDefault(); // Prevents a page reload from form submit.
                   if (this.checkValidBreakpoint()) {
                     this.onCreateBreakpoint();
+                    this.setState({ errorMessage: true });
                   } else {
-                    alert(
-                      "The breakpoint on file: " +
-                        this.state.fileName +
-                        " and line number: " +
-                        this.state.lineNumber +
-                        " already exists"
-                    );
+                    this.setState({ errorMessage: false });
                   }
                 }}
               >
@@ -117,6 +123,21 @@ export class CreateBreakpointForm extends React.Component<
               >
                 Delete all active breakpoints
               </Button>
+                { !this.state.errorMessage && (
+                <Card>
+                    <CardContent>
+                      {
+                          <Alert severity="error">{                      
+                            "The breakpoint on file: " +
+                          this.state.fileName
+                      } <br/> {" and line number: " +
+                          this.state.lineNumber +
+                          " already exists"}</Alert>
+                      }
+                    </CardContent>
+                  </Card>
+                )
+            }
             </form>
           </CardContent>
         </Card>
