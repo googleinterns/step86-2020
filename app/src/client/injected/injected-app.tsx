@@ -4,8 +4,11 @@ import { Chathead } from "../chathead/Chathead";
 import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
-import {AuthPopup} from "../popup/AuthPopup";
-import { GetAuthStateRequest, GetAuthStateRequestData } from "../../common/requests/BackgroundRequest";
+import { AuthPopup } from "../popup/AuthPopup";
+import {
+  GetAuthStateRequest,
+  GetAuthStateRequestData,
+} from "../../common/requests/BackgroundRequest";
 
 interface InjectedAppState {
   projectId: string;
@@ -15,7 +18,7 @@ interface InjectedAppState {
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
 
-  localStorage?: Storage
+  localStorage?: Storage;
 }
 
 interface InjectedAppProps {
@@ -221,7 +224,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
      */
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
     const completedBreakpoints = Object.values(this.state.completedBreakpoints);
-    if( this.state.isAuthenticated){
+    if (this.state.isAuthenticated) {
       return (
         <>
           <Chathead
@@ -242,7 +245,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
             }
             deleteAllActiveBreakpoints={() => this.deleteAllActiveBreakpoints()}
           />
-  
+
           <BreakpointMarkers
             activeBreakpoints={activeBreakpoints}
             completedBreakpoints={completedBreakpoints}
@@ -252,8 +255,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
           />
         </>
       );
-    }
-    else{
+    } else {
       return null;
     }
   }

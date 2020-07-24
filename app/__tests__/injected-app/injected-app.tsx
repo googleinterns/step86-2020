@@ -34,6 +34,12 @@ describe("Injected App", () => {
       shallow(<InjectedApp />);
       expect(InjectedApp.prototype.getProjectNameFromGithub).toHaveBeenCalled();
     });
+
+    it("checks getAuthState method is called.", () => {
+      jest.spyOn(InjectedApp.prototype, 'getAuthState');
+      shallow(<InjectedApp />);
+      expect(InjectedApp.prototype.getAuthState).toHaveBeenCalled();
+    });
 });
 
 describe("Saving Project IDs", () => {
