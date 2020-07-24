@@ -45,8 +45,11 @@ export class CreateBreakpointForm extends React.Component<
     this.props.deleteAllActiveBreakpoints();
   }
 
+  /** Checks for the valid breakpoint. If the breakpoint already exists in active or completed list*/
   checkValidBreakpoint() {
+    // Loop through the lists and check active list
     for (let breakpoint of this.props.activeBreakpoints) {
+      // if the breakpoint already exists, return false
       if (
         breakpoint.location.path == this.state.fileName &&
         breakpoint.location.line == this.state.lineNumber
@@ -54,7 +57,7 @@ export class CreateBreakpointForm extends React.Component<
         return false;
       }
     }
-
+    // loop through the completed list and check
     for (let breakpoint of this.props.completedBreakpoints) {
       if (
         breakpoint.location.path == this.state.fileName &&
@@ -67,13 +70,13 @@ export class CreateBreakpointForm extends React.Component<
     return true;
   }
 
+  /** Compares the activeBreakpoint list to update the error message in chathead if existed */
   componentDidUpdate(prevProps) {
     if (this.props.activeBreakpoints.length > prevProps.activeBreakpoints.length) {
       this.setState({ errorMessage: true });
     }
   }
 
-  
 
   render() {
     const { fileName, lineNumber } = this.state;
