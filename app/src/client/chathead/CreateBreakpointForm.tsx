@@ -104,27 +104,45 @@ export class CreateBreakpointForm extends React.Component<
   }
 }
 
-export const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setExpressions}) => {
-  return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-        <Typography variant="body2">Condition and Expressions</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <List>
-          <TextField
-            label="Condition"
-            size="small"
-            fullWidth
-            variant="outlined"
-            value={condition}
-            onChange={e => setCondition(e.target.value)}
-          />
-          <ExpressionsList expressions={expressions} setExpressions={setExpressions}/>
-        </List>
-      </AccordionDetails>
-    </Accordion>
-  )
+interface ConditionAndExpressionsFormProps {
+  condition: string;
+  expressions: string[];
+  setCondition: (condition: string) => void;
+  setExpressions: (expressions: string[]) => void;
+}
+
+export class ConditionAndExpressionsForm extends Component<ConditionAndExpressionsFormProps> {
+  setCondition(condition: string) {
+    this.props.setCondition(condition);
+  }
+
+  setExpressions(expressions: string[]) {
+    this.props.setExpressions(expressions);
+  }
+
+  render() {
+    const {condition, expressions} = this.props;
+    return (
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+          <Typography variant="body2">Condition and Expressions</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List>
+            <TextField
+              label="Condition"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={condition}
+              onChange={e => this.setCondition(e.target.value)}
+            />
+            <ExpressionsList expressions={expressions} setExpressions={expressions => this.setExpressions(expressions)}/>
+          </List>
+        </AccordionDetails>
+      </Accordion>
+    )
+  }
 }
 
 export const ExpressionsList = ({expressions, setExpressions}) => {
