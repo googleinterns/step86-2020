@@ -13,7 +13,7 @@ interface CreateBreakpointFormProps {
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
-  errorMessage: boolean;
+  errorMessage: string;
 }
 
 export class CreateBreakpointForm extends React.Component<
@@ -25,18 +25,18 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
-      errorMessage: true
+      errorMessage: undefined
     };
   }
 
   onFileName(fileName) {
     this.setState({ fileName });
-    this.setState({ errorMessage: true });
+    this.setState({ errorMessage: undefined });
   }
 
   onLineNumber(lineNumber) {
     this.setState({ lineNumber });
-    this.setState({ errorMessage: true });
+    this.setState({ errorMessage: undefined });
   }
 
   onCreateBreakpoint() {
@@ -75,7 +75,7 @@ export class CreateBreakpointForm extends React.Component<
   /** Compares the activeBreakpoint list to update the error message in chathead if existed */
   componentDidUpdate(prevProps) {
     if (this.props.activeBreakpoints.length > prevProps.activeBreakpoints.length) {
-      this.setState({ errorMessage: true });
+      this.setState({ errorMessage: undefined });
     }
   }
 
@@ -113,9 +113,9 @@ export class CreateBreakpointForm extends React.Component<
                   e.preventDefault(); // Prevents a page reload from form submit.
                   if (this.checkValidBreakpoint()) {
                     this.onCreateBreakpoint();
-                    this.setState({ errorMessage: true });
+                    this.setState({ errorMessage: undefined });
                   } else {
-                    this.setState({ errorMessage: false });
+                    this.setState({ errorMessage: "ERROR" });
                   }
                 }}
               >
@@ -125,12 +125,12 @@ export class CreateBreakpointForm extends React.Component<
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   this.onDeleteAllActiveBreakpoints();
-                  this.setState({ errorMessage: true });
+                  this.setState({ errorMessage: undefined });
                 }}
               >
                 Delete all active breakpoints
               </Button>
-                { !this.state.errorMessage && (
+                { this.state.errorMessage === "ERROR" && (
                 <Card>
                     <CardContent>
                       {
