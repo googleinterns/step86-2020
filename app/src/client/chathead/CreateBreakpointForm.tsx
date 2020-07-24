@@ -111,6 +111,7 @@ interface ConditionAndExpressionsFormProps {
   setExpressions: (expressions: string[]) => void;
 }
 
+/** A collapsible form to enter a condition and expression(s) for the current breakpoint. */
 export class ConditionAndExpressionsForm extends Component<ConditionAndExpressionsFormProps> {
   setCondition(condition: string) {
     this.props.setCondition(condition);
@@ -145,7 +146,12 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
   }
 }
 
-export const ExpressionsList = ({expressions, setExpressions}) => {
+interface ExpressionsListProps {
+  expressions: string[];
+  setExpressions: (expressions: string[]) => void;
+}
+/** A list of expressions, including add/delete functionality. */
+export const ExpressionsList = ({expressions, setExpressions}: ExpressionsListProps) => {
   return (
     <List>
       {
@@ -153,11 +159,13 @@ export const ExpressionsList = ({expressions, setExpressions}) => {
           <ExpressionView
             expression={expression}
             onChange={updatedExpression => {
+              // Deep copy expressions, update specific index.
               const updatedExpressions = [...expressions];
               updatedExpressions[index] = updatedExpression;
               setExpressions(updatedExpressions);
             }}
             onDelete={() => {
+              // Deep copy expressions and delete specific entry.
               const updatedExpressions = [...expressions];
               updatedExpressions.splice(index, 1);
               setExpressions(updatedExpressions);
@@ -176,6 +184,8 @@ interface ExpressionViewProps {
   onChange: (expression: string) => void;
 
 }
+
+/** A single expression input. */
 export class ExpressionView extends Component<ExpressionViewProps> {
   onChange(expression) {
     this.props.onChange(expression);
