@@ -28,6 +28,22 @@ describe("CreateBreakpointForm", () => {
     });
   });
 
+  it ("handles conditions and expressions input", () => {
+    const wrapper = mount(<CreateBreakpointForm/>);
+    const condExpForm = wrapper.find(ConditionAndExpressionsForm).instance() as ConditionAndExpressionsForm;
+    
+    const condition = "a";
+    const expressions = ["b", "c"];
+
+    condExpForm.setCondition(condition);
+    condExpForm.setExpressions(expressions);
+
+    expect(wrapper.state()).toEqual({
+      condition,
+      expressions
+    });
+  });
+
   it("calls createBreakpoint", () => {
     const spy = jest.fn();
     const preventFormSubmitSpy = jest.fn();
@@ -111,4 +127,4 @@ describe("ConditionsAndExpressionsForm", () => {
     const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]}/>);
     expect(wrapper.find(ExpressionsList).props().expressions).toEqual(["a"]);
   });
-})
+});
