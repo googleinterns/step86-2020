@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { CreateBreakpointForm } from "../../src/client/chathead/CreateBreakpointForm";
-import { Button } from "@material-ui/core";
+import { CreateBreakpointForm, ExpressionView, ExpressionsList } from "../../src/client/chathead/CreateBreakpointForm";
+import { Button, IconButton, TextField } from "@material-ui/core";
 
 configure({ adapter: new Adapter() });
 
@@ -49,5 +49,47 @@ describe("CreateBreakpointForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
+});
 
+describe("ExpressionView", () => {
+  it("displays current expression", () => {
+    const wrapper = mount(<ExpressionView expression="foo"/>);
+    expect(wrapper.html()).toContain("foo");
+  });
+
+  it("calls delete callback", () => {
+    const deleteSpy = jest.fn();
+    const wrapper = mount(<ExpressionView onDelete={deleteSpy}/>);
+    const deleteButton = wrapper.find(IconButton);
+    deleteButton.simulate("click");
+    expect(deleteSpy).toHaveBeenCalled();
+  });
+
+  it("calls change callback", () => {
+    const changeSpy = jest.fn();
+    const wrapper = mount(<ExpressionView onChange={changeSpy}/>);
+    (wrapper.instance() as ExpressionView).onChange("foo");
+    expect(changeSpy).toHaveBeenCalledWith("foo");
+  });
+});
+
+describe("ExpressionsList", () => {
+  it("displays current expression", () => {
+    const wrapper = mount(<ExpressionsList expressions={["a", "b"]}/>);
+    expect(wrapper.find(ExpressionView).length).toBe(2);
+  });
+
+  it("can delete expression", () => {
+    const setExpressionsSpy = jest.fn();
+    const wrapper = mount(<ExpressionsList expressions={["a", "b"]} setExpressions={setExpressionsSpy}/>);
+    (wrapper.find(ExpressionView).at(0).instance() as ExpressionView).onDelete();
+    expect(setExpressionsSpy).toHaveBeenCalledWith(["b"]);
+  });
+
+  it("can change expression", () => {
+    const setExpressionsSpy = jest.fn();
+    const wrapper = mount(<ExpressionsList expressions={["a", "b"]} setExpressions={setExpressionsSpy}/>);
+    (wrapper.find(ExpressionView).at(0).instance() as ExpressionView).onChange("c");
+    expect(setExpressionsSpy).toHaveBeenCalledWith(["c", "b"]);
+  });
 });

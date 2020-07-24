@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -127,7 +127,7 @@ const ConditionAndExpressionsForm = ({condition, expressions, setCondition, setE
   )
 }
 
-const ExpressionsList = ({expressions, setExpressions}) => {
+export const ExpressionsList = ({expressions, setExpressions}) => {
   return (
     <List>
       {
@@ -152,25 +152,41 @@ const ExpressionsList = ({expressions, setExpressions}) => {
   );
 }
 
-const ExpressionView = ({expression, onChange, onDelete}) => {
-  return (
-    <ListItem>
-      <TextField
-        size="small"
-        label="Expression"
-        variant="outlined"
-        value={expression}
-        onChange={e => onChange(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={onDelete}>
-                <DeleteIcon/>
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
-      />
-    </ListItem>
-  )
+interface ExpressionViewProps {
+  expression: string;
+  onDelete: () => void;
+  onChange: (expression: string) => void;
+
+}
+export class ExpressionView extends Component<ExpressionViewProps> {
+  onChange(expression) {
+    this.props.onChange(expression);
+  }
+
+  onDelete() {
+    this.props.onDelete();
+  }
+
+  render() {
+    return (
+      <ListItem>
+        <TextField
+          size="small"
+          label="Expression"
+          variant="outlined"
+          value={this.props.expression}
+          onChange={e => this.onChange(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => this.onDelete()}>
+                  <DeleteIcon/>
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </ListItem>
+    )
+  }
 }

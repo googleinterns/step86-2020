@@ -77,7 +77,7 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
         lineNumber,
         condition,
         expressions
-      );
+      )
     );
     /**
      * Side note: you cannot mutate the state variable in React. So, to append (add) values to an array, you have to
