@@ -136,7 +136,7 @@ const ExpressionsList = ({expressions, setExpressions}) => {
             expression={expression}
             onChange={updatedExpression => {
               const updatedExpressions = [...expressions];
-              updatedExpressions[index] = expression;
+              updatedExpressions[index] = updatedExpression;
               setExpressions(updatedExpressions);
             }}
             onDelete={() => {
