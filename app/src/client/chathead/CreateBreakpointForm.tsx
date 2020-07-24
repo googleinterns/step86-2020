@@ -59,6 +59,7 @@ export class CreateBreakpointForm extends React.Component<
                 value={fileName}
                 onChange={(e) => this.onFileName(e.target.value)}
                 variant="outlined"
+                size="small"
               />
               <br />
               <br />
@@ -69,6 +70,7 @@ export class CreateBreakpointForm extends React.Component<
                 value={lineNumber}
                 onChange={(e) => this.onLineNumber(e.target.value)}
                 variant="outlined"
+                size="small"
               />
               <br/><br/>
               <ConditionAndExpressionsForm
