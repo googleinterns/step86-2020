@@ -15,7 +15,7 @@ describe("CreateBreakpointForm", () => {
 
   it("handles input", () => {
     const wrapper = shallow(
-      <CreateBreakpointForm createBreakpoint={() => {}} />
+      <CreateBreakpointForm activeBreakpoints={[]} createBreakpoint={() => {}} />
     );
     const fileNameInput = wrapper.find('[data-testid="fileName"]');
     const lineNumberInput = wrapper.find('[data-testid="lineNumber"]');
@@ -36,10 +36,7 @@ describe("CreateBreakpointForm", () => {
     );
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    // wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
-    wrapper
-      .find(Button)
-      .simulate("click", { preventDefault: preventFormSubmitSpy });
+    wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
 
     expect(spy).toHaveBeenCalledWith("a", 1);
     expect(preventFormSubmitSpy).toHaveBeenCalled();
@@ -48,14 +45,14 @@ describe("CreateBreakpointForm", () => {
   it("calls DeleteAllActiveBreakpoint", () => {
     const spy = jest.fn();
     const preventFormSubmitSpy = jest.fn();
-    const wrapper = shallow(<CreateBreakpointForm deleteAllActiveBreakpoints={spy} />);
+    const wrapper = shallow(<CreateBreakpointForm activeBreakpoints={[]} deleteAllActiveBreakpoints={spy} />);
     wrapper.find("#deleteActiveBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
 
     expect(spy).toHaveBeenCalled();
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
 
-  it("Prevents from creating breakpoint if breakpoint already existed", () => {
+  it("Prevents from creating breakpoint if breakpoint already existed in active BP list", () => {
     const spy = jest.fn();
     const preventFormSubmitSpy = jest.fn();
     const temp = {
@@ -72,11 +69,43 @@ describe("CreateBreakpointForm", () => {
     );
     (wrapper.instance() as CreateBreakpointForm).onFileName("a");
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    wrapper
-      .find(Button)
-      .simulate("click", { preventDefault: preventFormSubmitSpy });
+    wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
+
 
     expect(spy).not.toHaveBeenCalled();
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
+
+  it("Prevents from creating breakpoint if breakpoint already existed in Completed BP list", () => {
+    const spy = jest.fn();
+    const preventFormSubmitSpy = jest.fn();
+    const temp = {
+      id: "string",
+      location: {
+        path: "a",
+        line: 1,
+      },
+      createTime: "string",
+      userEmail: "string",
+      isFinalState: true,
+      stackFrames: [],
+      variableTable: [],
+      finalTime: "string",
+      labels: "any"
+    };
+    const wrapper = shallow(
+      <CreateBreakpointForm createBreakpoint={spy} activeBreakpoints={[]} completedBreakpoints={[temp]} />
+    );
+    (wrapper.instance() as CreateBreakpointForm).onFileName("a");
+    (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
+    wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
+
+
+    expect(spy).not.toHaveBeenCalled();
+    expect(preventFormSubmitSpy).toHaveBeenCalled();
+  });
+
+
+
+
 });
