@@ -31,10 +31,12 @@ export class CreateBreakpointForm extends React.Component<
 
   onFileName(fileName) {
     this.setState({ fileName });
+    this.setState({ errorMessage: true });
   }
 
   onLineNumber(lineNumber) {
     this.setState({ lineNumber });
+    this.setState({ errorMessage: true });
   }
 
   onCreateBreakpoint() {
@@ -85,6 +87,7 @@ export class CreateBreakpointForm extends React.Component<
         <Card elevation={1}>
           <CardContent>
             <form>
+              
               <TextField
                 label="File Name"
                 style={{ width: "100%" }}
@@ -122,6 +125,7 @@ export class CreateBreakpointForm extends React.Component<
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   this.onDeleteAllActiveBreakpoints();
+                  this.setState({ errorMessage: true });
                 }}
               >
                 Delete all active breakpoints
