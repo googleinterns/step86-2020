@@ -14,17 +14,20 @@ describe("CreateBreakpointForm", () => {
   });
 
   it("handles input", () => {
+    const fileName = "a";
+    const lineNumber = 1;
+
     const wrapper = shallow(
       <CreateBreakpointForm createBreakpoint={() => {}} />
     );
     const fileNameInput = wrapper.find('[data-testid="fileName"]');
     const lineNumberInput = wrapper.find('[data-testid="lineNumber"]');
-    fileNameInput.simulate("change", { target: { value: "a" } });
-    lineNumberInput.simulate("change", { target: { value: 1 } });
+    fileNameInput.simulate("change", { target: { value: fileName } });
+    lineNumberInput.simulate("change", { target: { value: lineNumber } });
 
-    expect(wrapper.state()).toEqual({
-      fileName: "a",
-      lineNumber: 1,
+    expect(wrapper.state()).toMatchObject({
+      fileName,
+      lineNumber,
     });
   });
 
@@ -47,12 +50,18 @@ describe("CreateBreakpointForm", () => {
   it("calls createBreakpoint", () => {
     const spy = jest.fn();
     const preventFormSubmitSpy = jest.fn();
+
+    const fileName = "a";
+    const lineNumber = 1;
+    const condition = "";
+    const expressions = [];
+
     const wrapper = shallow(<CreateBreakpointForm createBreakpoint={spy} />);
-    (wrapper.instance() as CreateBreakpointForm).onFileName("a");
-    (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
+    (wrapper.instance() as CreateBreakpointForm).onFileName(fileName);
+    (wrapper.instance() as CreateBreakpointForm).onLineNumber(lineNumber);
     wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
 
-    expect(spy).toHaveBeenCalledWith("a", 1);
+    expect(spy).toHaveBeenCalledWith(fileName, lineNumber, condition, expressions);
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
 
