@@ -1,11 +1,12 @@
 import React from "react";
 import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
-import { BreakpointMeta } from "../../common/types/debugger";
+import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number) => void;
   deleteAllActiveBreakpoints: () => void;
   activeBreakpoints: BreakpointMeta[];
+  completedBreakpoints:Breakpoint[];
 }
 
 interface CreateBreakpointFormState {
@@ -50,6 +51,16 @@ export class CreateBreakpointForm extends React.Component<
         return false;
       }
     }
+
+    for (let breakpoint of this.props.completedBreakpoints) {
+      if (
+        breakpoint.location.path == this.state.fileName &&
+        breakpoint.location.line == this.state.lineNumber
+      ) {
+        return false;
+      }
+    }
+
     return true;
   }
 
