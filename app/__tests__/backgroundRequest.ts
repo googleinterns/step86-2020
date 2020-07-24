@@ -52,11 +52,41 @@ describe("BackgroundRequestData", () => {
 // tests that setBreakPoint class is well instantiated with the right attributes
 describe("SetBreakpointRequestData", () => {
   it("can be instantiated", () => {
-    const data = new SetBreakpointRequestData("test", "test2", 2);
-    expect(data.type).toBe(BackgroundRequestType.SET_BREAKPOINT);
-    expect(data.debuggeeId).toBe("test");
-    expect(data.fileName).toBe("test2");
-    expect(data.lineNumber).toBe(2);
+    const debuggeeId = "debuggeeId";
+    const fileName = "fileName";
+    const lineNumber = 43;
+    const condition = "condition";
+    const expressions = ["a", "b"];
+
+    const data = new SetBreakpointRequestData(debuggeeId, fileName, lineNumber, condition, expressions);
+    
+    expect(data).toEqual({
+      type: BackgroundRequestType.SET_BREAKPOINT,
+      debuggeeId,
+      fileName,
+      lineNumber,
+      condition,
+      expressions
+    })
+  });
+
+  it("sets sensible defaults for condition and expressions", () => {
+    const debuggeeId = "debuggeeId";
+    const fileName = "fileName";
+    const lineNumber = 43;
+    const condition = "";
+    const expressions = [];
+
+    const data = new SetBreakpointRequestData(debuggeeId, fileName, lineNumber);
+    
+    expect(data).toEqual({
+      type: BackgroundRequestType.SET_BREAKPOINT,
+      debuggeeId,
+      fileName,
+      lineNumber,
+      condition,
+      expressions
+    })
   });
 });
 
