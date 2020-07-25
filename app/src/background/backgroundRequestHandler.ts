@@ -210,3 +210,18 @@ BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
     return {};
   }
 );
+
+/**
+ * Handler for fetching the User information from debugger-extension api and return the response.
+ */
+BackgroundRequestHandler.on<backgroundRequest.UserInfoRequestData>(
+  backgroundRequest.BackgroundRequestType.USER_INFO,
+  async () => {
+    try {
+      const response = await api.getUserInfo();
+      return response;
+    } catch (error) {
+      throw { message: error.message };
+    }
+  }
+);
