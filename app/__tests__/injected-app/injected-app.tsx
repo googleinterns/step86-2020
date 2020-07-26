@@ -47,7 +47,6 @@ describe("Injected App", () => {
     shallow(<InjectedApp />);
     expect(InjectedApp.prototype.getProjectNameFromGithub).toHaveBeenCalled();
   });
-
 });
 
 describe("Saving Project IDs", () => {
@@ -113,11 +112,9 @@ describe("Saving Project IDs", () => {
   });
 
   it("test get auth state", () => {
-    const runSpy = jest
-      .fn()
-      .mockResolvedValueOnce({
-        breakpoint: { id : "a" },
-      });
+    const runSpy = jest.fn().mockResolvedValueOnce({
+      breakpoint: { id: "a" },
+    });
 
     const { BackgroundRequest, GetAuthStateRequestData } = backgroundRequest;
     const mockRequest = class extends BackgroundRequest<
@@ -129,7 +126,7 @@ describe("Saving Project IDs", () => {
       <InjectedApp
         backgroundRequest={{
           ...backgroundRequest,
-          GetAuthStateRequest: mockRequest
+          GetAuthStateRequest: mockRequest,
         }}
       />
     );
