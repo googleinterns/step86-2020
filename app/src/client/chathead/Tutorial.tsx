@@ -9,7 +9,7 @@ import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 import Image from "material-ui-image";
-import Demo from './TutorialHelper';
+import Demo from "./TutorialHelper";
 
 const Wrapper = styled(Paper)`
   width: 300px;
@@ -65,47 +65,7 @@ export default function ScrollDialog() {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            {/* <section>
-              <h2> What's the Cloud Debugger Extension for </h2>
-              <p>
-                The Extension is a simplified version to access the GCP Cloud
-                Debugger in order for customers to view their GCP projects and
-                associated debuggees.
-              </p>
-            </section>
-
-            <section>
-              <h2> How to use it </h2>
-              <p>Sign-in through the extension popup after installing it</p>
-
-              <Image
-                src="https://drive.google.com/uc?export=view&id=1mX7pieRulh6AtFvnH6zvIKZol_KxpbhP"
-                width="100px"
-                height="100px"
-              />
-
-              <p>
-                After signing-in the extension will popup as the folowing
-                picture shows
-              </p>
-
-              <Image
-                src="https://drive.google.com/uc?export=view&id=1GC5ysuuCsOanOqLQqkiOnsmx4I281Qnw"
-                width="100px"
-                height="100px"
-              />
-
-              <p>
-                <Box fontWeight="fontWeightBold" m={1}>
-                  {" "}
-                  Note{" "}
-                </Box>{" "}
-                refreshing the page each time is important.
-              </p>
-            </section> */}
-            {
-              <Demo/>
-            }
+            {<Demo />}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
