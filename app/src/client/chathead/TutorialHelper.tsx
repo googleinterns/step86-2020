@@ -7,7 +7,11 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {TutorialIntro} from "./Step1Tutorial";
+import {Step1Tutorial} from "./Step1Tutorial";
+import {Step2Tutorial} from "./Step2Tutorial";
+import { TutorialIntro } from './Tutorialintro';
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,23 +32,23 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-  return ['Installing and Setting up', 'Features and walkthroughs', 'Obersvations and stuff to keep in mind', 'Important links'];
+  return ['About the extension', 'Installing and Setting up', 'Features and walkthroughs', 'Obersvations and stuff to keep in mind', 'Important links'];
 }
 
 function getStepContent(step: number) {
   switch (step) {
-    case 0:
-      return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
-    case 1:
+    case 0: 
       return <TutorialIntro />;
+    case 1:
+      return <Step1Tutorial />;
     case 2:
+      return <Step2Tutorial />;
+    case 3:
       return `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
               they're running and how to resolve approval issues.`;
-    case 3:
+    case 4:
      return `Important links that might help you more discovering how cloud debugger works`
     default:
       return 'Unknown step';
