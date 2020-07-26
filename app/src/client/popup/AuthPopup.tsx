@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Box, Avatar } from "@material-ui/core";
 import GoogleButton from "react-google-button";
 import CheckIcon from "@material-ui/icons/Check";
 import {
@@ -76,17 +76,51 @@ export class AuthPopup extends React.Component<
         <>
           <AppBar position="static">
             <Toolbar>
-              <CheckIcon></CheckIcon>{" "}
               <Typography
-                variant="h6"
                 style={{
-                  paddingLeft: "30px",
+                  textAlign: "center",
+                  margin: "auto",
                 }}
+                variant="h6"
               >
-                You are signed in
-              </Typography>{" "}
+                Welcome to Cloud Debugger
+              </Typography>
             </Toolbar>
           </AppBar>
+          <Avatar
+            alt="Remy Sharp"
+            style={{
+              display: "block",
+              width: "40%",
+              height: "40%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginTop: "30px",
+              marginBottom: "10px",
+              border: "1px solid #DCDCDC",
+            }}
+            src="https://authenticgoods.co/wrapbootstrap/themes/sparks/img/team/avatar-male.png"
+          />
+          <Typography
+            style={{
+              textAlign: "center",
+              marginTop: "20px",
+              fontSize: "20px;",
+            }}
+            variant="h6"
+          >
+            YOUR NAME
+          </Typography>
+
+          <Typography
+            style={{
+              textAlign: "center",
+              paddingBottom: "50px",
+              fontSize: "14px;",
+            }}
+          >
+            example123@google.com
+          </Typography>
         </>
       );
     }
