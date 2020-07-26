@@ -203,8 +203,10 @@ exports.enableService = async (name) => {
  * Gets the user informatin by making call to userinfo api.
  */
 exports.getUserInfo = async () => {
-  const url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=".concat(userAuth);
-  const data = await fetch(url);
-  const response = await data.json(); 
-  return response;
+  if (userAuth !== ""){
+    const url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=".concat(userAuth);
+    const data = await fetch(url);
+    const response = await data.json(); 
+    return response;
+  }
 }
