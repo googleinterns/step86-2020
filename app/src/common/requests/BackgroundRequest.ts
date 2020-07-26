@@ -349,7 +349,10 @@ export class UserInfoRequestData extends BackgroundRequestData {
 }
 
 interface UserInfoRequestResponse {
-  userInfo: any;
+  userName: string;
+  userEmail: string;
+  userPicture: string;
+
 }
 
 export class UserInfoRequest extends BackgroundRequest<

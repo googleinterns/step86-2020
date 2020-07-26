@@ -219,7 +219,8 @@ BackgroundRequestHandler.on<backgroundRequest.UserInfoRequestData>(
   async () => {
     try {
       const response = await api.getUserInfo();
-      return response;
+      const data = {userName: response.name, userEmail: response.email, userPicture: response.picture }
+      return data;
     } catch (error) {
       throw { message: error.message };
     }
