@@ -1,18 +1,22 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Avatar } from "@material-ui/core";
 import GoogleButton from "react-google-button";
-import CheckIcon from "@material-ui/icons/Check";
 import {
   AuthenticationRequest,
   GetAuthStateRequest,
   AuthenticationRequestData,
   GetAuthStateRequestData,
+  UserInfoRequestData,
+  UserInfoRequest,
 } from "../../common/requests/BackgroundRequest";
 
 interface AuthPopupFormProps {}
 
 interface AuthPopupFormState {
   isAuthenticated: boolean;
+  userName: string;
+  userEmail: string
+  userPicture: string;
 }
 
 /**
@@ -26,6 +30,9 @@ export class AuthPopup extends React.Component<
     super(props);
     this.state = {
       isAuthenticated: false,
+      userName: "",
+      userEmail: "",
+      userPicture: "",
     };
   }
 
@@ -39,8 +46,29 @@ export class AuthPopup extends React.Component<
     this.setState({ isAuthenticated: response.isAuthenticated });
   }
 
+  /**
+   *  get user info by making a call to backend requests
+   */
+  async getUserInfo() {
+    const response = await new UserInfoRequest().run(
+      new UserInfoRequestData()
+    );
+    console.log(response.userName)
+    this.setState({ userName: response.userName });
+    this.setState({ userEmail: response.userEmail });
+    this.setState({ userPicture: response.userPicture });
+
+  }
+
   componentDidMount() {
     this.getAuthState();
+  }
+
+   /**
+   *  After updating the component(when user is signed in), get the user information.
+   */
+  componentDidUpdate() {
+    this.getUserInfo();
   }
 
   render() {
@@ -99,7 +127,7 @@ export class AuthPopup extends React.Component<
               marginBottom: "10px",
               border: "1px solid #DCDCDC",
             }}
-            src="https://authenticgoods.co/wrapbootstrap/themes/sparks/img/team/avatar-male.png"
+            src={this.state.userPicture}
           />
           <Typography
             style={{
@@ -109,7 +137,7 @@ export class AuthPopup extends React.Component<
             }}
             variant="h6"
           >
-            YOUR NAME
+            {this.state.userName}
           </Typography>
 
           <Typography
@@ -119,7 +147,7 @@ export class AuthPopup extends React.Component<
               fontSize: "14px;",
             }}
           >
-            example123@google.com
+            {this.state.userEmail}
           </Typography>
         </>
       );
