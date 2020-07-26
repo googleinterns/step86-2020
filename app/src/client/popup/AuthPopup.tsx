@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Avatar, CircularProgress } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Box, Avatar, CircularProgress, Button } from "@material-ui/core";
 import GoogleButton from "react-google-button";
 import {
   AuthenticationRequest,
@@ -180,6 +180,16 @@ export class AuthPopup extends React.Component<
             {this.state.userEmail}
           </Typography>
 
+          <Button  style={{
+              textAlign: "center",
+              marginLeft: '25%',
+              marginRight: '25%',
+              marginTop: "10px",
+              marginBottom: "30px",
+            }}
+              variant="outlined" color="primary" href="https://cloud.google.com/">
+          Go to Console
+        </Button>
         </>
       );
     }
