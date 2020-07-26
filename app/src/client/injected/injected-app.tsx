@@ -4,6 +4,7 @@ import { Chathead } from "../chathead/Chathead";
 import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
+import * from "../../../../images/"
 
 interface InjectedAppState {
   projectId: string;

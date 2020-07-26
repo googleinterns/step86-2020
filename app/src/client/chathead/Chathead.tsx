@@ -14,6 +14,7 @@ import {
   PendingBreakpointView,
   CompletedBreakpointView,
 } from "./BreakpointView";
+import Demo from './Tutorial';
 
 import Paper from "@material-ui/core/Paper";
 import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
@@ -101,6 +102,11 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
             />
           </>
         )}
+        {
+          <>
+          <Demo />
+          </>
+        }
 
         {this.props.activeBreakpoints.map((b) => (
           <PendingBreakpointView breakpointMeta={b} />
