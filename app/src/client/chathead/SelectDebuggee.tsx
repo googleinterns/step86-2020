@@ -93,6 +93,7 @@ export class SelectDebuggeeContainer extends React.Component<
                     selectedOptionId={this.props.debuggeeId}
                     onChange={(debuggeeId) => this.onChange(debuggeeId)}
                     optionToId={(debuggee: Debuggee) => debuggee.id}
+                    optionToLabel={(debuggee: Debuggee) => debuggee.description}
                   />
                 )
               }

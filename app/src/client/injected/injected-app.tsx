@@ -208,6 +208,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
+          projectDescription={this.props.projectDescription}
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {

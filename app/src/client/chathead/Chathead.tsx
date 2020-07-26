@@ -47,12 +47,13 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 
   render() {
-    const { projectId, debuggeeId } = this.props;
+    const { projectId, debuggeeId, projectDescription } = this.props;
     return (
       <ChatheadWrapper>
         {!projectId && (
           <SelectProjectContainer
             projectId={this.props.projectId}
+            projectDescription={this.props.projectDescription}
             onChange={this.props.setProject}
             loadProjects={async () => {
               const response = await new FetchProjectsRequest().run(

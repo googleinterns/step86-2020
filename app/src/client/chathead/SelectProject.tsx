@@ -78,6 +78,7 @@ export class SelectProjectContainer extends React.Component<
                     selectedOptionId={this.props.projectId}
                     onChange={(projectId) => this.onChange(projectId)}
                     optionToId={(project: Project) => project.projectId}
+                    optionToLabel={(project: Project) => project.projectId}
                   />
                 )
               }
