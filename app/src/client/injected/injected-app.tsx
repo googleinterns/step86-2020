@@ -77,13 +77,15 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
    * @param {String} filename Name of the file to set the breakpoint in that file.
    * @param {number} lineNumber line number to set the breakpoint on that line.
    */
-  async createBreakPoint(fileName: string, lineNumber: number) {
+  async createBreakPoint(fileName: string, lineNumber: number, condition: string = "", expressions: string[] = []) {
     // Make the Set breakpoint request in the BackgroundRequest
     const response = await new this.props.backgroundRequest.SetBreakpointRequest().run(
       new this.props.backgroundRequest.SetBreakpointRequestData(
         this.state.debuggeeId,
         fileName,
-        lineNumber
+        lineNumber,
+        condition,
+        expressions
       )
     );
     /**

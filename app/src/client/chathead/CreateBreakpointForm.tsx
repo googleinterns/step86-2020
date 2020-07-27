@@ -1,10 +1,12 @@
-import React from "react";
-import { TextField, Card, CardContent, Button, Box } from "@material-ui/core";
+import React, { Component } from "react";
+import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import Alert from '@material-ui/lab/Alert';
-
+        
 interface CreateBreakpointFormProps {
-  createBreakpoint: (fileName: string, lineNumber: number) => void;
+  createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
   deleteAllActiveBreakpoints: () => void;
   activeBreakpoints: BreakpointMeta[];
   completedBreakpoints:Breakpoint[];
@@ -13,6 +15,8 @@ interface CreateBreakpointFormProps {
 interface CreateBreakpointFormState {
   fileName: string;
   lineNumber: number;
+  condition: string;
+  expressions: string[];
   errorMessage: string;
 }
 
@@ -25,6 +29,8 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
+      condition: "",
+      expressions: []
       errorMessage: undefined
     };
   }
@@ -40,7 +46,7 @@ export class CreateBreakpointForm extends React.Component<
   }
 
   onCreateBreakpoint() {
-    this.props.createBreakpoint(this.state.fileName, this.state.lineNumber);
+    this.props.createBreakpoint(this.state.fileName, this.state.lineNumber, this.state.condition, this.state.expressions);
   }
 
   onDeleteAllActiveBreakpoints() {
@@ -81,7 +87,7 @@ export class CreateBreakpointForm extends React.Component<
 
 
   render() {
-    const { fileName, lineNumber } = this.state;
+    const { fileName, lineNumber, condition, expressions } = this.state;
     return (
       <Box m={1}>
         <Card elevation={1}>
@@ -94,6 +100,7 @@ export class CreateBreakpointForm extends React.Component<
                 value={fileName}
                 onChange={(e) => this.onFileName(e.target.value)}
                 variant="outlined"
+                size="small"
               />
               <br />
               <br />
@@ -104,11 +111,17 @@ export class CreateBreakpointForm extends React.Component<
                 value={lineNumber}
                 onChange={(e) => this.onLineNumber(e.target.value)}
                 variant="outlined"
+                size="small"
               />
-              <br />
-              <br />
-              <Button
-                id="createBpButton"
+              <br/><br/>
+              <ConditionAndExpressionsForm
+                condition={condition}
+                expressions={expressions}
+                setCondition={condition => this.setState({condition})}
+                setExpressions={expressions => this.setState({expressions})}
+              />
+              <br/><br/>
+              <Button id='createBpButton'
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   if (this.checkValidBreakpoint()) {
@@ -150,5 +163,120 @@ export class CreateBreakpointForm extends React.Component<
         </Card>
       </Box>
     );
+  }
+}
+
+interface ConditionAndExpressionsFormProps {
+  condition: string;
+  expressions: string[];
+  setCondition: (condition: string) => void;
+  setExpressions: (expressions: string[]) => void;
+}
+
+/** A collapsible form to enter a condition and expression(s) for the current breakpoint. */
+export class ConditionAndExpressionsForm extends Component<ConditionAndExpressionsFormProps> {
+  setCondition(condition: string) {
+    this.props.setCondition(condition);
+  }
+
+  setExpressions(expressions: string[]) {
+    this.props.setExpressions(expressions);
+  }
+
+  render() {
+    const {condition, expressions} = this.props;
+    return (
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+          <Typography variant="body2">Condition and Expressions</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List>
+            <TextField
+              label="Condition"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={condition}
+              onChange={e => this.setCondition(e.target.value)}
+            />
+            <ExpressionsList expressions={expressions} setExpressions={expressions => this.setExpressions(expressions)}/>
+          </List>
+        </AccordionDetails>
+      </Accordion>
+    )
+  }
+}
+
+interface ExpressionsListProps {
+  expressions: string[];
+  setExpressions: (expressions: string[]) => void;
+}
+/** A list of expressions, including add/delete functionality. */
+export const ExpressionsList = ({expressions, setExpressions}: ExpressionsListProps) => {
+  return (
+    <List>
+      {
+        expressions.map((expression, index) => (
+          <ExpressionView
+            expression={expression}
+            onChange={updatedExpression => {
+              // Deep copy expressions, update specific index.
+              const updatedExpressions = [...expressions];
+              updatedExpressions[index] = updatedExpression;
+              setExpressions(updatedExpressions);
+            }}
+            onDelete={() => {
+              // Deep copy expressions and delete specific entry.
+              const updatedExpressions = [...expressions];
+              updatedExpressions.splice(index, 1);
+              setExpressions(updatedExpressions);
+            }}
+          />
+        ))
+      }
+      <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
+    </List>
+  );
+}
+
+interface ExpressionViewProps {
+  expression: string;
+  onDelete: () => void;
+  onChange: (expression: string) => void;
+
+}
+
+/** A single expression input. */
+export class ExpressionView extends Component<ExpressionViewProps> {
+  onChange(expression) {
+    this.props.onChange(expression);
+  }
+
+  onDelete() {
+    this.props.onDelete();
+  }
+
+  render() {
+    return (
+      <ListItem>
+        <TextField
+          size="small"
+          label="Expression"
+          variant="outlined"
+          value={this.props.expression}
+          onChange={e => this.onChange(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => this.onDelete()}>
+                  <DeleteIcon/>
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </ListItem>
+    )
   }
 }

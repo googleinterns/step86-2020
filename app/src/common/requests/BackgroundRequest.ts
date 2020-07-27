@@ -206,8 +206,8 @@ export class SetBreakpointRequestData extends BackgroundRequestData {
     debuggeeId: string,
     fileName: string,
     lineNumber: number,
-    condition: string,
-    expressions: Array<any>
+    condition: string = "",
+    expressions: Array<any> = []
   ) {
     super(BackgroundRequestType.SET_BREAKPOINT);
     this.debuggeeId = debuggeeId;
