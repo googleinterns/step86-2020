@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { SelectProjectContainer } from "./SelectProject";
 import { SelectDebuggeeContainer } from "./SelectDebuggee";
 import { CreateBreakpointForm } from "./CreateBreakpointForm";
@@ -40,18 +40,34 @@ interface ChatheadProps {
   deleteAllActiveBreakpoints: () => void;
 }
 
-interface ChatheadState {}
+interface ChatheadState {
+  minimized: boolean;
+  maximized: boolean;
+}
 
 export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   constructor(props: ChatheadProps) {
     super(props);
+    this.state = {
+      minimized: false
+    }
+  }
+
+  toggleMinimized() {
+    this.setState({minimized: !this.state.minimized, maximized: false});
+  }
+
+  toggleMaximized() {
+    this.setState({maximized: !this.state.maximized});
   }
 
   render() {
-    const { projectId, debuggeeId, projectDescription } = this.props;
+    const { projectId, debuggeeId } = this.props;
+    const { minimized, maximized} = this.state;
     return (
-      <ChatheadWrapper>
-        {!projectId && (
+      <ChatheadWrapper minimized={minimized} maximized={maximized} onClick={() => minimized && this.toggleMinimized()}>
+        {minimized && <CloudLogo src="https://pbs.twimg.com/profile_images/1105378972156649472/9W16lxHj_400x400.png"/>}
+        {!minimized && !projectId && (
           <SelectProjectContainer
             projectId={this.props.projectId}
             projectDescription={this.props.projectDescription}
@@ -62,10 +78,12 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
               );
               return response.projects;
             }}
+            toggleMinimized={() => this.toggleMinimized()}
+            toggleMaximized={() => this.toggleMaximized()}
           />
         )}
 
-        {projectId && !debuggeeId && (
+        {!minimized && projectId && !debuggeeId && (
           <SelectDebuggeeContainer
             projectId={this.props.projectId}
             debuggeeId={this.props.debuggeeId}
@@ -83,7 +101,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           />
         )}
 
-        {projectId && debuggeeId && (
+        {!minimized && projectId && debuggeeId && (
           <>
             <AppBar position="static">
               <Toolbar>
@@ -106,14 +124,11 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
           </>
         }
 
-        {this.props.activeBreakpoints.map((b) => (
-          <PendingBreakpointView
-            breakpointMeta={b}
-            deleteBreakpoint={this.props.deleteBreakpoint}
-          />
+        {!minimized && this.props.activeBreakpoints.map((b) => (
+          <PendingBreakpointView breakpointMeta={b} deleteBreakpoint={this.props.deleteBreakpoint}/>
         ))}
 
-        {this.props.completedBreakpoints.map((b) => (
+        {!minimized && this.props.completedBreakpoints.map((b) => (
           <CompletedBreakpointView
             breakpoint={b}
             deleteBreakpoint={this.props.deleteBreakpoint}
@@ -130,8 +145,30 @@ const ChatheadWrapper = styled(Paper)`
 
   right: 20px;
   width: 600px;
+  min-height: 60px;
   max-height: calc(100% - 40px);
   overflow: auto;
 
   z-index: 1000;
+
+  transition: all 0.4s !important;
+
+  ${props => props.minimized && css`
+    width: 60px;
+    max-height: 60px;
+    border-radius: 30px !important;
+  `}
+
+  ${props => props.maximized && css`
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    top: 20px;
+    right: 20px;
+  `}
+`;
+
+const CloudLogo = styled.img`
+  height: 50px;
+  margin-top: 5px;
+  margin-left: 5px;
 `;

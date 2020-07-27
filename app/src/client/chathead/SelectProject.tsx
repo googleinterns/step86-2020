@@ -4,12 +4,16 @@ import { Project } from "../../common/types/debugger";
 import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import MinimizeIcon from "@material-ui/icons/Minimize";
+import MaximizeIcon from "@material-ui/icons/Maximize";
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
 
 interface SelectProjectContainerProps {
   projectId?: string;
   loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
+  toggleMinimized: () => void;
+  toggleMaximized: () => void;
 }
 
 interface SelectProjectContainerState {
@@ -64,6 +68,12 @@ export class SelectProjectContainer extends React.Component<
                 </IconButton>
               )
             }
+            <IconButton color="inherit" onClick={() => this.props.toggleMinimized()}>
+              <MinimizeIcon/>
+            </IconButton>
+            <IconButton color="inherit" onClick={() => this.props.toggleMaximized()}>
+              <MaximizeIcon/>
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Box m={1}>
