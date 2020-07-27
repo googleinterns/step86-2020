@@ -19,16 +19,35 @@ export class Step1Tutorial extends React.Component<
   render() {
     return (
       <section>
-        <p>Sign-in through the extension popup after installing it from the Chrome Web-store</p>
-        
-        <img src = "https://drive.google.com/uc?export=view&id=1xlm5As8pkekhcRLHyuOtD73KH-NgBYyn" width="50%" height="40%" border-radius = "8px"/>
+        <p>
+          Sign-in through the extension popup after installing it from the
+          Chrome Web-store
+        </p>
 
+        <img
+          src="https://drive.google.com/uc?export=view&id=1xlm5As8pkekhcRLHyuOtD73KH-NgBYyn"
+          width="50%"
+          height="40%"
+          border-radius="8px"
+        />
 
-        <img src = "https://drive.google.com/uc?export=view&id=1a1UZ6OIHuxzOT29XuQph94y6DQTdVmBf" width="50%" height="15%" border-radius = "8px" />
+        <p>Once signed-in you'll have your info hsowed in the small popup</p>
+
+        <img
+          src="https://drive.google.com/uc?export=view&id=1a1UZ6OIHuxzOT29XuQph94y6DQTdVmBf"
+          width="50%"
+          height="15%"
+          border-radius="8px"
+        />
 
         <p>After signing in a floating popup will show </p>
-        
 
+        <img
+          src="https://drive.google.com/uc?export=view&id=1BbBRMUZWdO_yFOJRwz4SRUiM9bxqUMSa"
+          width="50%"
+          height="15%"
+          border-radius="8px"
+        />
       </section>
     );
   }

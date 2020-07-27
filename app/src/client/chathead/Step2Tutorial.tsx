@@ -18,13 +18,34 @@ export class Step2Tutorial extends React.Component<
   render() {
     return (
       <section>
-        <p></p>
+        <p>
+          {" "}
+          After slecting a project and a debugee enter the line number and file
+          name to set a breakpoint manually or you can set it on the line
+        </p>
 
         <img
-          src="https://drive.google.com/uc?export=view&id=1jGUWeCwJeVCNU6lgr5KJQhTj9_bwVpes"
-          width="90%"
-          height="70%"
+          src="https://drive.google.com/uc?export=view&id=1rao3qTyVzV150Db7TGo0OQya-SKrl8ed"
+          width="50%"
+          height="40%"
+          border-radius="8px"
         />
+        <p>
+          {" "}
+          After the breakpoint is hit you'll recive a stack trace similair to
+          the picture below
+        </p>
+        <img
+          src="https://drive.google.com/uc?export=view&id=1ETtG6pP3l29LqSy0lI5ixyxg8OI2YYi_"
+          width="50%"
+          height="40%"
+          border-radius="8px"
+        />
+        <p>
+          {" "}
+          Afterwards, you can delete a single breakpoint as well as deleting all
+          the active breakpoints
+        </p>
       </section>
     );
   }

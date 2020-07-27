@@ -75,6 +75,7 @@ export default function VerticalLinearStepper() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
   /**
    * This function is responsible of handling the steps within tutorial
    */
