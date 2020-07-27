@@ -1,22 +1,20 @@
-import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import {Step1Tutorial} from "./Step1Tutorial";
-import {Step2Tutorial} from "./Step2Tutorial";
-import { TutorialIntro } from './Tutorialintro';
-
-
+import React from "react";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import StepContent from "@material-ui/core/StepContent";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import { Step1Tutorial } from "./Step1Tutorial";
+import { Step2Tutorial } from "./Step2Tutorial";
+import { TutorialIntro } from "./Tutorialintro";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      width: "100%",
     },
     button: {
       marginTop: theme.spacing(1),
@@ -28,16 +26,22 @@ const useStyles = makeStyles((theme: Theme) =>
     resetContainer: {
       padding: theme.spacing(3),
     },
-  }),
+  })
 );
 
 function getSteps() {
-  return ['About the extension', 'Installing and Setting up', 'Features and walkthroughs', 'Obersvations and stuff to keep in mind', 'Important links'];
+  return [
+    "About the extension",
+    "Installing and Setting up",
+    "Features and walkthroughs",
+    "Obersvations and stuff to keep in mind",
+    "Important links",
+  ];
 }
 
 function getStepContent(step: number) {
   switch (step) {
-    case 0: 
+    case 0:
       return <TutorialIntro />;
     case 1:
       return <Step1Tutorial />;
@@ -49,9 +53,9 @@ function getStepContent(step: number) {
               If you run into any problems with your ads, find out how to tell if
               they're running and how to resolve approval issues.`;
     case 4:
-     return `Important links that might help you more discovering how cloud debugger works`
+      return `Important links that might help you more discovering how cloud debugger works`;
     default:
-      return 'Unknown step';
+      return "Unknown step";
   }
 }
 
@@ -71,7 +75,9 @@ export default function VerticalLinearStepper() {
   const handleReset = () => {
     setActiveStep(0);
   };
-
+  /**
+   * This function is responsible of handling the steps within tutorial
+   */
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -95,7 +101,7 @@ export default function VerticalLinearStepper() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </Button>
                 </div>
               </div>

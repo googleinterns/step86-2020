@@ -17,12 +17,9 @@ import styled from "styled-components";
 import Image from "material-ui-image";
 import Demo from "./TutorialHelper";
 
-const Wrapper = styled(Paper)`
-  width: 300px;
-`;
 
 /**
- * This class is reponsible for Walkthrought dialog popup
+ * This function is reponsible for Walkthrought dialog popup
  */
 
 export default function ScrollDialog() {
@@ -57,7 +54,7 @@ export default function ScrollDialog() {
           </Button>
         </Toolbar>
       </AppBar>
-      
+
       <Dialog
         open={open}
         onClose={handleClose}

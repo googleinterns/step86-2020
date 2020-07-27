@@ -18,7 +18,13 @@ export class Step2Tutorial extends React.Component<
   render() {
     return (
       <section>
-        <p>Step 2 hello world :)))))))))))</p>
+        <p></p>
+
+        <img
+          src="https://drive.google.com/uc?export=view&id=1jGUWeCwJeVCNU6lgr5KJQhTj9_bwVpes"
+          width="90%"
+          height="70%"
+        />
       </section>
     );
   }

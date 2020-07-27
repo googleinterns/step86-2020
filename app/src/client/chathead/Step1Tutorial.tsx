@@ -19,13 +19,15 @@ export class Step1Tutorial extends React.Component<
   render() {
     return (
       <section>
-        <p>Sign-in through the extension popup after installing it</p>
+        <p>Sign-in through the extension popup after installing it from the Chrome Web-store</p>
         
-        <img src = "https://drive.google.com/uc?export=view&id=1jGUWeCwJeVCNU6lgr5KJQhTj9_bwVpes" width="90%" height="70%" />
+        <img src = "https://drive.google.com/uc?export=view&id=1xlm5As8pkekhcRLHyuOtD73KH-NgBYyn" width="50%" height="40%" border-radius = "8px"/>
 
-        {/* <video width="90%" height="70%" autoPlay loop>
-          <source  src = "https://drive.google.com/uc?export=view&id=1yIK0b40GR564KSZXjDm5EtF3r0DANH19" type="video/webm"></source>
-        </video> */}
+
+        <img src = "https://drive.google.com/uc?export=view&id=1a1UZ6OIHuxzOT29XuQph94y6DQTdVmBf" width="50%" height="15%" border-radius = "8px" />
+
+        <p>After signing in a floating popup will show </p>
+        
 
       </section>
     );
