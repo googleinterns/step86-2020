@@ -205,8 +205,7 @@ exports.enableService = async (name) => {
 exports.getUserInfo = async () => {
   if (userAuth !== ""){
     const url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=".concat(userAuth);
-    const data = await fetch(url);
-    const response = await data.json(); 
-    return response;
+    const response = await axios.get(url);
+    return response.data;
   }
 }
