@@ -282,4 +282,24 @@ describe("Testing API functions", () => {
     );
     expect(breakpoint).toEqual(mockResponse.response);
   });
+
+
+  it("Can fetch User Information", async () => {
+    expect.assertions(1);
+    const mockProjectsData = [{ project: 1 }];
+    const mockAuthToken = "authToken";
+    moxios.stubRequest(
+      "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=".concat(mockAuthToken),
+      {
+        status: 200,
+        responseText: mockProjectsData,
+      }
+
+    );
+    api.setAuthToken(mockAuthToken)
+    const projects = await api.getUserInfo(mockAuthToken);
+    expect(projects).toEqual(mockProjectsData);
+  });
+
+
 });
