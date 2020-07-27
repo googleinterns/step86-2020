@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import Paper from "@material-ui/core/Paper";
 import Image from "material-ui-image";
 import styled from "styled-components";
-import * from "../../../img/cc";
 
 interface Step1TutorialProps {}
 
@@ -24,9 +23,9 @@ export class Step1Tutorial extends React.Component<
         
         <img src = "https://drive.google.com/uc?export=view&id=1jGUWeCwJeVCNU6lgr5KJQhTj9_bwVpes" width="90%" height="70%" />
 
-        <video width="90%" height="70%" autoPlay loop>
-          <source type="video/webm"></source>
-        </video>
+        {/* <video width="90%" height="70%" autoPlay loop>
+          <source  src = "https://drive.google.com/uc?export=view&id=1yIK0b40GR564KSZXjDm5EtF3r0DANH19" type="video/webm"></source>
+        </video> */}
 
       </section>
     );

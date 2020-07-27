@@ -5,7 +5,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  IconButton,
+} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 import Image from "material-ui-image";
@@ -43,7 +49,7 @@ export default function ScrollDialog() {
   }, [open]);
 
   return (
-    <div>
+    <>
       <AppBar position="static">
         <Toolbar>
           <Button onClick={handleClickOpen("paper")}>
@@ -51,7 +57,7 @@ export default function ScrollDialog() {
           </Button>
         </Toolbar>
       </AppBar>
-
+      
       <Dialog
         open={open}
         onClose={handleClose}
@@ -74,6 +80,6 @@ export default function ScrollDialog() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
