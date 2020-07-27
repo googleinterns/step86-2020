@@ -4,6 +4,7 @@ import { Project } from "../../common/types/debugger";
 import { Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
 import { Appbar } from "./Appbar";
 
@@ -58,10 +59,13 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <Appbar
-          title="Select Project"
-          onRefresh={!this.state.projectsLoading && (() => this.loadProjects())}d
-        />
+        <Appbar title="Select Project">
+          {!this.state.projectsLoading && (
+            <IconButton color="inherit" onClick={() => this.loadProjects()}>
+              <RefreshIcon/>
+            </IconButton>
+          )} 
+        </Appbar>
         <Box m={1}>
           <Card>
             <CardContent>
