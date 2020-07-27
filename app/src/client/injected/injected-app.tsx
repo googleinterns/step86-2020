@@ -150,8 +150,10 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     );
     // Remove breakpoint from local tracking.
     const updatedCompletedBreakpoints = { ...this.state.completedBreakpoints };
+    const updatedActiveBreakpoints = { ...this.state.activeBreakpoints };
     delete updatedCompletedBreakpoints[breakpointId];
-    this.setState({ completedBreakpoints: updatedCompletedBreakpoints });
+    delete updatedActiveBreakpoints[breakpointId];
+    this.setState({ completedBreakpoints: updatedCompletedBreakpoints, activeBreakpoints: updatedActiveBreakpoints });
   }
 
   /**
