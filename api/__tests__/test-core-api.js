@@ -286,19 +286,19 @@ describe("Testing API functions", () => {
 
   it("Can fetch User Information", async () => {
     expect.assertions(1);
-    const mockProjectsData = [{ project: 1 }];
+    const mockUserData = [{ name: "Foo", email: "fooBar@example.com", picture: "fooBar.png" }];
     const mockAuthToken = "authToken";
     moxios.stubRequest(
       "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=".concat(mockAuthToken),
       {
         status: 200,
-        responseText: mockProjectsData,
+        responseText: mockUserData,
       }
 
     );
     api.setAuthToken(mockAuthToken)
-    const projects = await api.getUserInfo(mockAuthToken);
-    expect(projects).toEqual(mockProjectsData);
+    const userInfo = await api.getUserInfo(mockAuthToken);
+    expect(userInfo).toEqual(mockUserData);
   });
 
 
