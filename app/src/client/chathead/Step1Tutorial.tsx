@@ -27,7 +27,8 @@ export class Step1Tutorial extends React.Component<
         </p>
 
         <img
-          src="https://drive.google.com/uc?export=view&id=1xlm5As8pkekhcRLHyuOtD73KH-NgBYyn"
+          src="https://drive.google.com/uc?export=view&id=13qzP8vr_o0ZMPIbBXe6niSnJYFKF4yS7
+          "
           width="50%"
           height="40%"
           border-radius="8px"
@@ -36,7 +37,7 @@ export class Step1Tutorial extends React.Component<
         <p>Once signed-in you'll have your info hsowed in the small popup</p>
 
         <img
-          src="https://drive.google.com/uc?export=view&id=1a1UZ6OIHuxzOT29XuQph94y6DQTdVmBf"
+          src="https://drive.google.com/uc?export=view&id=1HU49kgHRJPse2NHMdfgmNhBNCfsiYz4O"
           width="50%"
           height="15%"
           border-radius="8px"

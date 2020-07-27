@@ -5,11 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import Demo from "./TutorialHelper";
 
 /**

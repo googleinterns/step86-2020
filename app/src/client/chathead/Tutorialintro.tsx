@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Link,
-} from "@material-ui/core";
+import { Link } from "@material-ui/core";
 
 interface TutorialIntroFormProps {}
 interface TutorialIntroFormState {}
@@ -24,7 +22,7 @@ export class TutorialIntro extends React.Component<
       <section>
         The Extension is a simplified version to access the GCP Cloud Debugger
         in order for customers to view their GCP projects and associated
-        debuggees. See this 
+        debuggees. See this
         <Link
           href="https://cloud.google.com/debugger/docs"
           onClick={this.preventDefault}
