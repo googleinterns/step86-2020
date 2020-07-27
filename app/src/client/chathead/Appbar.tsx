@@ -11,7 +11,7 @@ interface AppBarProps {
   /** Displayed text for the appbar */
   title: string;
   /** An optional function to handle 'go back' action. If defined, a back button will be shown. */
-  onBack: () => void;
+  onBack?: () => void;
   /** Optional nodes to add between title and resize buttons. */
   children?: ReactChildren;
 }
