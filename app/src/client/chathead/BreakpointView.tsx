@@ -37,7 +37,6 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {stackFrames} = breakpoint;
   console.log(breakpoint);
-  const stackframe = stackFrames[0];
   return (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
@@ -49,7 +48,7 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
           defaultExpandIcon={<ChevronRightIcon />}
         >
           {
-            stackFrames.slice(0, 3).map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+            stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
           }
         </TreeView>
       </AccordionDetails>
@@ -61,6 +60,7 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
   );
 }
 
+/** A single stackframe (closure context) of variables. */
 const StackFrame = ({stackFrame, breakpoint}) => {
   const {variableTable} = breakpoint;
   return (
@@ -78,45 +78,75 @@ const StackFrame = ({stackFrame, breakpoint}) => {
 }
 
 export const VariableView = ({parentNode, variable, variableTable}) => {
-  const name = variable.name;
-  const isInVarTable = variable.varTableIndex !== undefined;
-  const varTableData = isInVarTable && variableTable[variable.varTableIndex];
+  // Used to not render children until needed.
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const {type} = isInVarTable ? varTableData : variable;
+  const name = variable.name;
+  // Data for complex objects is normalized within the vartable.  
+  const isComplex = variable.varTableIndex !== undefined;
+  const data = isComplex && variableTable[variable.varTableIndex];
+  // Based on whether this is simple or complex, type is stored in different place.
+  const {type} = isComplex ? data : variable;
+  // MaterialUI needs a unique ID for each node. This should work.
   const nodeId = parentNode + variable.name;
 
-  const [isExpanded, setIsExpanded] = React.useState(false); 
+  // By default, there are no child nodes.
+  let children = null;
+  // Only complex objects have children.
+  if (isComplex) {
+    // Only show children if expanded, to save memory.
+    if (isExpanded) {
+      children = data.members.map(variable => (
+        <VariableView
+          variable={variable}
+          parentNode={nodeId}
+          variableTable={variableTable}/>
+      ));
+    } else {
+      // If not expanded, we add a dummy child. This forces material-ui to show the "expand" icon.
+      children = <TreeItem nodeId={nodeId + "placeholderChild"}/>
+    }
+  }
 
   return (
     <TreeItem
       nodeId={nodeId}
-      onClick={() => setIsExpanded(!isExpanded)}
-      label={(
-        <Typography component="div">
-          <Box fontWeight="fontWeightMedium" display="inline">
-            {name}
-          </Box>
-          <Box fontWeight="fontWeightRegular" display="inline">
-            {` (${type})`}
-          </Box>
-          {
-            !isInVarTable && (
-              <Box fontWeight="fontWeightRegular" display="inline">
-                {`: ${variable.value}`}
-              </Box>
-            )
-          }
-        </Typography>
-      )}
+      onClick={e => {
+        // Stop propagation, otherwise children clicks bubble up.
+        // This means a child object being opened/closed can affect this node/
+        // That makes the state go haywire and makes things not present right.
+        e.stopPropagation();
+        // Toggle expansion
+        setIsExpanded(!isExpanded)
+      }}
+      label={<VariableLabel name={name} type={type} value={variable.value}/>}
     >
-      {isInVarTable && (
-        isExpanded ?
-          varTableData.members.map(variable => <VariableView variable={variable} parentNode={nodeId} variableTable={variableTable}/>)
-        : <TreeItem nodeId={nodeId + "childDummy"}/>
-      )}
+      {children}
     </TreeItem>
   )
 }
+
+/** Displays name, type, and (if provided) value for variables in a stack tree.
+ *  "value" is not applicable for complex structures (e.g array, object)
+ *  since their value is provided as nested children.
+ */
+export const VariableLabel = ({name, type, value}) => (
+  <Typography component="div">
+    <Box fontWeight="fontWeightMedium" display="inline">
+      {name}
+    </Box>
+    <Box fontWeight="fontWeightRegular" display="inline">
+      {` (${type})`}
+    </Box>
+    {
+      value && (
+        <Box fontWeight="fontWeightRegular" display="inline">
+          {`: ${value}`}
+        </Box>
+      )
+    }
+  </Typography>
+)
 
 /** Shows error data for a failed breakpoint. */
 export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
