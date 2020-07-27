@@ -145,7 +145,7 @@ const ChatheadWrapper = styled(Paper)`
 
   right: 20px;
   width: 600px;
-  min-height: 60px;
+  min-height: 300px;
   max-height: calc(100% - 40px);
   overflow: auto;
 
@@ -155,13 +155,13 @@ const ChatheadWrapper = styled(Paper)`
 
   ${props => props.minimized && css`
     width: 60px;
-    max-height: 60px;
+    min-height: 60px;
     border-radius: 30px !important;
   `}
 
   ${props => props.maximized && css`
     width: calc(100% - 40px);
-    height: calc(100% - 40px);
+    min-height: calc(100% - 40px);
     top: 20px;
     right: 20px;
   `}

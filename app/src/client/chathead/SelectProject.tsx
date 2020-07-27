@@ -4,8 +4,8 @@ import { Project } from "../../common/types/debugger";
 import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import MinimizeIcon from "@material-ui/icons/Minimize";
-import MaximizeIcon from "@material-ui/icons/Maximize";
+import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
 
 interface SelectProjectContainerProps {
@@ -69,10 +69,10 @@ export class SelectProjectContainer extends React.Component<
               )
             }
             <IconButton color="inherit" onClick={() => this.props.toggleMinimized()}>
-              <MinimizeIcon/>
+              <PictureInPictureIcon/>
             </IconButton>
             <IconButton color="inherit" onClick={() => this.props.toggleMaximized()}>
-              <MaximizeIcon/>
+              <SettingsOverscanIcon/>
             </IconButton>
           </Toolbar>
         </AppBar>
