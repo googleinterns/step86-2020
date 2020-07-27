@@ -2,10 +2,14 @@ import React, { Component } from "react";
 import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import Alert from '@material-ui/lab/Alert';
+        
 interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
   deleteAllActiveBreakpoints: () => void;
+  activeBreakpoints: BreakpointMeta[];
+  completedBreakpoints:Breakpoint[];
 }
 
 interface CreateBreakpointFormState {
@@ -13,6 +17,7 @@ interface CreateBreakpointFormState {
   lineNumber: number;
   condition: string;
   expressions: string[];
+  errorMessage: string;
 }
 
 export class CreateBreakpointForm extends React.Component<
@@ -26,15 +31,18 @@ export class CreateBreakpointForm extends React.Component<
       lineNumber: undefined,
       condition: "",
       expressions: []
+      errorMessage: undefined
     };
   }
 
   onFileName(fileName) {
     this.setState({ fileName });
+    this.setState({ errorMessage: undefined });
   }
 
   onLineNumber(lineNumber) {
     this.setState({ lineNumber });
+    this.setState({ errorMessage: undefined });
   }
 
   onCreateBreakpoint() {
@@ -44,6 +52,39 @@ export class CreateBreakpointForm extends React.Component<
   onDeleteAllActiveBreakpoints() {
     this.props.deleteAllActiveBreakpoints();
   }
+
+  /** Checks for the valid breakpoint. If the breakpoint already exists in active or completed list*/
+  checkValidBreakpoint() {
+    // Loop through the lists and check active list
+    for (let breakpoint of this.props.activeBreakpoints) {
+      // if the breakpoint already exists, return false
+      if (
+        breakpoint.location.path == this.state.fileName &&
+        breakpoint.location.line == this.state.lineNumber
+      ) {
+        return false;
+      }
+    }
+    // loop through the completed list and check
+    for (let breakpoint of this.props.completedBreakpoints) {
+      if (
+        breakpoint.location.path == this.state.fileName &&
+        breakpoint.location.line == this.state.lineNumber
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /** Compares the activeBreakpoint list to update the error message in chathead if existed */
+  componentDidUpdate(prevProps) {
+    if (this.props.activeBreakpoints.length > prevProps.activeBreakpoints.length) {
+      this.setState({ errorMessage: undefined });
+    }
+  }
+
 
   render() {
     const { fileName, lineNumber, condition, expressions } = this.state;
@@ -83,19 +124,40 @@ export class CreateBreakpointForm extends React.Component<
               <Button id='createBpButton'
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
-                  this.onCreateBreakpoint();
+                  if (this.checkValidBreakpoint()) {
+                    this.onCreateBreakpoint();
+                    this.setState({ errorMessage: undefined });
+                  } else {
+                    this.setState({
+                      errorMessage:
+                        "The breakpoint on file: " +
+                        this.state.fileName +
+                        " and line number: " +
+                        this.state.lineNumber +
+                        " already exists",
+                    });
+                  }
                 }}
               >
                 Create Breakpoint
               </Button>
-              <Button id='deleteActiveBpButton'
+              <Button
+                id="deleteActiveBpButton"
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   this.onDeleteAllActiveBreakpoints();
+                  this.setState({ errorMessage: undefined });
                 }}
               >
                 Delete all active breakpoints
               </Button>
+              {this.state.errorMessage !== undefined && (
+                <Card>
+                  <CardContent>
+                    <Alert severity="error">{this.state.errorMessage}</Alert>
+                  </CardContent>
+                </Card>
+              )}
             </form>
           </CardContent>
         </Card>

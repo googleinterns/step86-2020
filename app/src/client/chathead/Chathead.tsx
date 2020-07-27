@@ -14,6 +14,7 @@ import {
   PendingBreakpointView,
   CompletedBreakpointView,
 } from "./BreakpointView";
+import Demo from './Tutorial';
 
 import Paper from "@material-ui/core/Paper";
 import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
@@ -47,12 +48,13 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   }
 
   render() {
-    const { projectId, debuggeeId } = this.props;
+    const { projectId, debuggeeId, projectDescription } = this.props;
     return (
       <ChatheadWrapper>
         {!projectId && (
           <SelectProjectContainer
             projectId={this.props.projectId}
+            projectDescription={this.props.projectDescription}
             onChange={this.props.setProject}
             loadProjects={async () => {
               const response = await new FetchProjectsRequest().run(
@@ -95,15 +97,20 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
                 <Typography variant="h6">Breakpoints</Typography>
               </Toolbar>
             </AppBar>
-            <CreateBreakpointForm
-              createBreakpoint={this.props.createBreakpoint}
-              deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
-            />
+            <CreateBreakpointForm activeBreakpoints={this.props.activeBreakpoints} completedBreakpoints={this.props.completedBreakpoints}  deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints} createBreakpoint={this.props.createBreakpoint}/>
           </>
         )}
+        {
+          <>
+          <Demo />
+          </>
+        }
 
         {this.props.activeBreakpoints.map((b) => (
-          <PendingBreakpointView breakpointMeta={b} />
+          <PendingBreakpointView
+            breakpointMeta={b}
+            deleteBreakpoint={this.props.deleteBreakpoint}
+          />
         ))}
 
         {this.props.completedBreakpoints.map((b) => (
@@ -122,7 +129,9 @@ const ChatheadWrapper = styled(Paper)`
   top: 20px;
 
   right: 20px;
-  width: fit-content;
+  width: 600px;
+  max-height: calc(100% - 40px);
+  overflow: auto;
 
   z-index: 1000;
 `;

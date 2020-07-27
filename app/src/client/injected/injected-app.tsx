@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Chathead } from "../chathead/Chathead";
-import * as BackgroundRequest from "../../common/requests/BackgroundRequest";
+import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
 
@@ -15,8 +15,17 @@ interface InjectedAppState {
   localStorage?: Storage
 }
 
-export class InjectedApp extends React.Component<any, InjectedAppState> {
-  constructor(props: InjectedAppState) {
+interface InjectedAppProps {
+  // Explicitly take in a collection of background requests to allow mocking.
+  backgroundRequest?: typeof backgroundRequest;
+}
+
+export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppState> {
+  public static defaultProps = {
+    backgroundRequest: backgroundRequest
+  }
+
+  constructor(props: InjectedAppProps) {
     super(props);
     this.state = {
       projectId: this.getGcpProjectId(),
@@ -70,8 +79,8 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
    */
   async createBreakPoint(fileName: string, lineNumber: number, condition: string = "", expressions: string[] = []) {
     // Make the Set breakpoint request in the BackgroundRequest
-    const response = await new BackgroundRequest.SetBreakpointRequest().run(
-      new BackgroundRequest.SetBreakpointRequestData(
+    const response = await new this.props.backgroundRequest.SetBreakpointRequest().run(
+      new this.props.backgroundRequest.SetBreakpointRequestData(
         this.state.debuggeeId,
         fileName,
         lineNumber,
@@ -104,8 +113,8 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
         Object.keys(this.state.activeBreakpoints).length > 0
       ) {
         // Make the list breakpoint request
-        let breakpointListResponse = await new BackgroundRequest.ListBreakPointsRequest().run(
-          new BackgroundRequest.ListBreakpointsData(
+        let breakpointListResponse = await new this.props.backgroundRequest.ListBreakPointsRequest().run(
+          new this.props.backgroundRequest.ListBreakpointsData(
             this.state.debuggeeId,
             waitToken
           )
@@ -135,16 +144,18 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
   /** Deletes a breakpoint from debugger backend. */
   async deleteBreakpoint(breakpointId: string) {
     // Delete the breakpoint from remote cloud debugger.
-    const deleteBreakpointRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
-      new BackgroundRequest.DeleteBreakpointRequestData(
+    const deleteBreakpointRequest = await new this.props.backgroundRequest.DeleteBreakpointRequest().run(
+      new this.props.backgroundRequest.DeleteBreakpointRequestData(
         this.state.debuggeeId,
         breakpointId
       )
     );
     // Remove breakpoint from local tracking.
     const updatedCompletedBreakpoints = { ...this.state.completedBreakpoints };
+    const updatedActiveBreakpoints = { ...this.state.activeBreakpoints };
     delete updatedCompletedBreakpoints[breakpointId];
-    this.setState({ completedBreakpoints: updatedCompletedBreakpoints });
+    delete updatedActiveBreakpoints[breakpointId];
+    this.setState({ completedBreakpoints: updatedCompletedBreakpoints, activeBreakpoints: updatedActiveBreakpoints });
   }
 
   /**
@@ -157,8 +168,8 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
     var tempGetBreakpoints = { ...this.state.completedBreakpoints };
     var updatedActiveBPs = { ...this.state.activeBreakpoints };
     for (let breakpointId of breakpointIdsToLoad) {
-      const getBreakpointresponse = await new BackgroundRequest.FetchBreakpointRequest().run(
-        new BackgroundRequest.FetchBreakpointRequestData(
+      const getBreakpointresponse = await new this.props.backgroundRequest.FetchBreakpointRequest().run(
+        new this.props.backgroundRequest.FetchBreakpointRequestData(
           this.state.debuggeeId,
           breakpointId
         )
@@ -178,8 +189,8 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
   async deleteAllActiveBreakpoints() {
     //delete all active breakpoints from remote cloud debugger.
     for (let breakpointId of Object.values(this.state.activeBreakpoints)) {
-      const deletionRequest = await new BackgroundRequest.DeleteBreakpointRequest().run(
-        new BackgroundRequest.DeleteBreakpointRequestData(
+      const deletionRequest = await new this.props.backgroundRequest.DeleteBreakpointRequest().run(
+        new this.props.backgroundRequest.DeleteBreakpointRequestData(
           this.state.debuggeeId,
           breakpointId.id
         )
@@ -201,6 +212,7 @@ export class InjectedApp extends React.Component<any, InjectedAppState> {
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
+          projectDescription={this.props.projectDescription}
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
