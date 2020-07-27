@@ -9,15 +9,12 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Box,
-  IconButton,
 } from "@material-ui/core";
 import Demo from "./TutorialHelper";
 
 /**
  * This function is reponsible for Walkthrought dialog popup
  */
-
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");

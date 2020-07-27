@@ -5,8 +5,11 @@ import Image from "material-ui-image";
 import styled from "styled-components";
 
 interface Step2TutorialProps {}
-
 interface Step2TutorialState {}
+
+/**
+ * This class is responsible of  tutorial's content step1 {feature and a how to use it }
+ */
 export class Step2Tutorial extends React.Component<
   Step2TutorialProps,
   Step2TutorialState

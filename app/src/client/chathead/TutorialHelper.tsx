@@ -58,7 +58,9 @@ function getStepContent(step: number) {
       return "Unknown step";
   }
 }
-
+  /**
+   * This function is responsible of handling the steps within tutorial
+   */
 export default function VerticalLinearStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -76,9 +78,6 @@ export default function VerticalLinearStepper() {
     setActiveStep(0);
   };
 
-  /**
-   * This function is responsible of handling the steps within tutorial
-   */
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} orientation="vertical">

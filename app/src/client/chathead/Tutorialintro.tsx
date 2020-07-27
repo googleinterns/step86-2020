@@ -1,15 +1,14 @@
 import React from "react";
 import {
-  Typography,
   Link,
-  makeStyles,
-  Theme,
-  createStyles,
 } from "@material-ui/core";
 
 interface TutorialIntroFormProps {}
-
 interface TutorialIntroFormState {}
+
+/**
+ * This class is responsible of  tutorial's first content which is the 'about this extension'
+ */
 export class TutorialIntro extends React.Component<
   TutorialIntroFormProps,
   TutorialIntroFormState
