@@ -77,6 +77,9 @@ const StackFrame = ({stackFrame, breakpoint}) => {
   );
 }
 
+/** Show data for a single variable in the stacktrace.
+ *  These can be nested to show nested variables in array or object.
+ */
 export const VariableView = ({parentNode, variable, variableTable}) => {
   // Used to not render children until needed.
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -180,21 +183,6 @@ export function getBreakpointErrorMessage(breakpoint: FailedBreakpoint): string{
   // This Regex looks for sequences like $0, $1, ... and replaces them with the parameter for their index.
   const message = format.replace(/\$(\d+)/g, (match, index) => parameters[index]);
   return message;
-}
-
-/** Displays a set of variables from a debugger stack frame. */
-export const VariablesView = ({variables}: {variables: Variable[]}) => {
-  return (
-    <List dense>
-      {
-        variables.map(variable => (
-          <ListItem>
-            <ListItemText primary={variable.name} secondary={variable.value}/>
-          </ListItem>
-        ))
-      }
-    </List>
-  )
 }
 
 /** Displays file name and line number for a breakpoint. */
