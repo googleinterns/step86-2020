@@ -1,5 +1,6 @@
 import React from "react";
 
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 import PhotoSizeSelectSmallIcon from '@material-ui/icons/PhotoSizeSelectSmall';
@@ -7,9 +8,16 @@ import { Toolbar, Typography, IconButton, AppBar, Box } from "@material-ui/core"
 import { WindowSizeContext, WindowSize } from "./windowSizeContext";
 
 /** A unified header for all pages within the chathead. */
-export const Appbar = ({title, children = null}) => (
+export const Appbar = ({title, onBack, children = null}) => (
   <AppBar position="static">
     <Toolbar>
+      {
+        onBack && (
+          <IconButton edge="start" color="inherit" onClick={onBack}>
+            <ArrowBackIcon/>
+          </IconButton>
+        )
+      }
       <Typography variant="h6">{title}</Typography>
       <Box flexGrow={1}/>
       {children}
