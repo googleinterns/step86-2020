@@ -61,7 +61,7 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
 }
 
 /** A single stackframe (closure context) of variables. */
-const StackFrame = ({stackFrame, breakpoint}) => {
+export const StackFrame = ({stackFrame, breakpoint}) => {
   const {variableTable} = breakpoint;
   return (
     <TreeItem nodeId={stackFrame.function} label={stackFrame.function}>
