@@ -74,8 +74,6 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
                     );
                     return response.projects;
                   }}
-                  toggleMinimized={() => this.toggleMinimized()}
-                  toggleMaximized={() => this.toggleMaximized()}
                 />
               )}
 
