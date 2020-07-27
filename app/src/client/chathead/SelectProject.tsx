@@ -1,12 +1,11 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
-import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
+import { Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
-import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+import { Appbar } from "./Appbar";
 
 interface SelectProjectContainerProps {
   projectId?: string;
@@ -59,23 +58,10 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6">Select Project</Typography>
-            {!this.state.projectsLoading && (
-                <IconButton color="inherit" onClick={() => this.loadProjects()}>
-                  <RefreshIcon/>
-                </IconButton>
-              )
-            }
-            <IconButton color="inherit" onClick={() => this.props.toggleMinimized()}>
-              <PictureInPictureIcon/>
-            </IconButton>
-            <IconButton color="inherit" onClick={() => this.props.toggleMaximized()}>
-              <SettingsOverscanIcon/>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <Appbar
+          title="Select Project"
+          onRefresh={!this.state.projectsLoading && (() => this.loadProjects())}d
+        />
         <Box m={1}>
           <Card>
             <CardContent>

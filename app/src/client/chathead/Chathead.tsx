@@ -19,6 +19,7 @@ import Demo from './Tutorial';
 import Paper from "@material-ui/core/Paper";
 import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { WindowSize, WindowSizeContext } from "./windowSizeContext";
 // Jest has trouble with this, so only import in actual builds.
 if (process.env.NODE_ENV !== "test") {
   import("fontsource-roboto");
@@ -41,99 +42,99 @@ interface ChatheadProps {
 }
 
 interface ChatheadState {
-  minimized: boolean;
-  maximized: boolean;
+  windowSize: WindowSize;
 }
 
 export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
   constructor(props: ChatheadProps) {
     super(props);
     this.state = {
-      minimized: false
+      windowSize: WindowSize.REGULAR
     }
-  }
-
-  toggleMinimized() {
-    this.setState({minimized: !this.state.minimized, maximized: false});
-  }
-
-  toggleMaximized() {
-    this.setState({maximized: !this.state.maximized});
   }
 
   render() {
     const { projectId, debuggeeId } = this.props;
-    const { minimized, maximized} = this.state;
+    const { windowSize } = this.state;
     return (
-      <ChatheadWrapper minimized={minimized} maximized={maximized} onClick={() => minimized && this.toggleMinimized()}>
-        {minimized && <CloudLogo src="https://pbs.twimg.com/profile_images/1105378972156649472/9W16lxHj_400x400.png"/>}
-        {!minimized && !projectId && (
-          <SelectProjectContainer
-            projectId={this.props.projectId}
-            projectDescription={this.props.projectDescription}
-            onChange={this.props.setProject}
-            loadProjects={async () => {
-              const response = await new FetchProjectsRequest().run(
-                new FetchProjectsRequestData()
-              );
-              return response.projects;
-            }}
-            toggleMinimized={() => this.toggleMinimized()}
-            toggleMaximized={() => this.toggleMaximized()}
-          />
-        )}
-
-        {!minimized && projectId && !debuggeeId && (
-          <SelectDebuggeeContainer
-            projectId={this.props.projectId}
-            debuggeeId={this.props.debuggeeId}
-            onChange={this.props.setDebuggee}
-            loadDebuggees={async () => {
-              const response = await new FetchDebuggeesRequest().run(
-                new FetchDebuggeesRequestData(this.props.projectId)
-              );
-              // Response.debuggees will be undefined if there are no active debuggees.
-              return response.debuggees || [];
-            }}
-            backToProjects={() => {
-              this.props.setProject(undefined);
-            }}
-          />
-        )}
-
-        {!minimized && projectId && debuggeeId && (
-          <>
-            <AppBar position="static">
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={() => this.props.setDebuggee(undefined)}
-                >
-                  <ArrowBackIcon />
-                </IconButton>
-                <Typography variant="h6">Breakpoints</Typography>
-              </Toolbar>
-            </AppBar>
-            <CreateBreakpointForm activeBreakpoints={this.props.activeBreakpoints} completedBreakpoints={this.props.completedBreakpoints}  deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints} createBreakpoint={this.props.createBreakpoint}/>
-          </>
-        )}
+      <ChatheadWrapper windowSize={windowSize} onClick={() => windowSize === WindowSize.COLLAPSED && this.setState({windowSize: WindowSize.REGULAR})}>
+        {windowSize === WindowSize.COLLAPSED && <CloudLogo src="https://pbs.twimg.com/profile_images/1105378972156649472/9W16lxHj_400x400.png"/>}
+        
         {
-          <>
-          <Demo />
-          </>
-        }
+          windowSize !== WindowSize.COLLAPSED && (
+            <WindowSizeContext.Provider value={{size: windowSize, setSize: windowSize => this.setState({windowSize})}}>
+              {!projectId && (
+                <SelectProjectContainer
+                  projectId={this.props.projectId}
+                  onChange={this.props.setProject}
+                  loadProjects={async () => {
+                    const response = await new FetchProjectsRequest().run(
+                      new FetchProjectsRequestData()
+                    );
+                    return response.projects;
+                  }}
+                  toggleMinimized={() => this.toggleMinimized()}
+                  toggleMaximized={() => this.toggleMaximized()}
+                />
+              )}
 
-        {!minimized && this.props.activeBreakpoints.map((b) => (
-          <PendingBreakpointView breakpointMeta={b} deleteBreakpoint={this.props.deleteBreakpoint}/>
-        ))}
+              {projectId && !debuggeeId && (
+                <SelectDebuggeeContainer
+                  projectId={this.props.projectId}
+                  debuggeeId={this.props.debuggeeId}
+                  onChange={this.props.setDebuggee}
+                  loadDebuggees={async () => {
+                    const response = await new FetchDebuggeesRequest().run(
+                      new FetchDebuggeesRequestData(this.props.projectId)
+                    );
+                    // Response.debuggees will be undefined if there are no active debuggees.
+                    return response.debuggees || [];
+                  }}
+                  backToProjects={() => {
+                    this.props.setProject(undefined);
+                  }}
+                />
+              )}
 
-        {!minimized && this.props.completedBreakpoints.map((b) => (
-          <CompletedBreakpointView
-            breakpoint={b}
-            deleteBreakpoint={this.props.deleteBreakpoint}
-          />
-        ))}
+              {projectId && debuggeeId && (
+                <>
+                  <AppBar position="static">
+                    <Toolbar>
+                      <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={() => this.props.setDebuggee(undefined)}
+                      >
+                        <ArrowBackIcon />
+                      </IconButton>
+                      <Typography variant="h6">Breakpoints</Typography>
+                    </Toolbar>
+                  </AppBar>
+                  <CreateBreakpointForm
+                    activeBreakpoints={this.props.activeBreakpoints}
+                    completedBreakpoints={this.props.completedBreakpoints}
+                    createBreakpoint={this.props.createBreakpoint}
+                    deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
+                  />
+                </>
+              )}
+
+              {this.props.activeBreakpoints.map((b) => (
+                <PendingBreakpointView
+                  breakpointMeta={b}
+                  deleteBreakpoint={this.props.deleteBreakpoint}
+                />
+              ))}
+
+              {this.props.completedBreakpoints.map((b) => (
+                <CompletedBreakpointView
+                  breakpoint={b}
+                  deleteBreakpoint={this.props.deleteBreakpoint}
+                />
+              ))} 
+            </WindowSizeContext.Provider>
+          )
+        } 
       </ChatheadWrapper>
     );
   }
@@ -153,13 +154,13 @@ const ChatheadWrapper = styled(Paper)`
 
   transition: all 0.4s !important;
 
-  ${props => props.minimized && css`
+  ${props => props.windowSize === WindowSize.COLLAPSED && css`
     width: 60px;
     min-height: 60px;
     border-radius: 30px !important;
   `}
 
-  ${props => props.maximized && css`
+  ${props => props.windowSize === WindowSize.FULL_SCREEN && css`
     width: calc(100% - 40px);
     min-height: calc(100% - 40px);
     top: 20px;
