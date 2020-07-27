@@ -87,7 +87,6 @@ export class CreateBreakpointForm extends React.Component<
         <Card elevation={1}>
           <CardContent>
             <form>
-              
               <TextField
                 label="File Name"
                 style={{ width: "100%" }}
@@ -108,20 +107,29 @@ export class CreateBreakpointForm extends React.Component<
               />
               <br />
               <br />
-              <Button id='createBpButton'
+              <Button
+                id="createBpButton"
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   if (this.checkValidBreakpoint()) {
                     this.onCreateBreakpoint();
                     this.setState({ errorMessage: undefined });
                   } else {
-                    this.setState({ errorMessage: "ERROR" });
+                    this.setState({
+                      errorMessage:
+                        "The breakpoint on file: " +
+                        this.state.fileName +
+                        " and line number: " +
+                        this.state.lineNumber +
+                        " already exists",
+                    });
                   }
                 }}
               >
                 Create Breakpoint
               </Button>
-              <Button id='deleteActiveBpButton'
+              <Button
+                id="deleteActiveBpButton"
                 onClick={(e) => {
                   e.preventDefault(); // Prevents a page reload from form submit.
                   this.onDeleteAllActiveBreakpoints();
@@ -130,21 +138,13 @@ export class CreateBreakpointForm extends React.Component<
               >
                 Delete all active breakpoints
               </Button>
-                { this.state.errorMessage === "ERROR" && (
+              {this.state.errorMessage !== undefined && (
                 <Card>
-                    <CardContent>
-                      {
-                          <Alert severity="error">{                      
-                            "The breakpoint on file: " +
-                          this.state.fileName
-                      } <br/> {" and line number: " +
-                          this.state.lineNumber +
-                          " already exists"}</Alert>
-                      }
-                    </CardContent>
-                  </Card>
-                )
-            }
+                  <CardContent>
+                    <Alert severity="error">{this.state.errorMessage}</Alert>
+                  </CardContent>
+                </Card>
+              )}
             </form>
           </CardContent>
         </Card>
