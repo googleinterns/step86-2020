@@ -7,4 +7,4 @@ export enum WindowSize {
   FULL_SCREEN // Full screened
 }
 
-export const WindowSizeContext = React.createContext<{size: WindowSize, setSize: (size: WindowSize) => void}>(undefined);
+export const WindowSizeContext = React.createContext<{size: WindowSize, setSize: (size: WindowSize) => void}>({size: undefined, setSize: () => {}});
