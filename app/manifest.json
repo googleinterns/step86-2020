@@ -20,7 +20,7 @@
   },
 
   "oauth2": {
-    "client_id": "975956245065-kiec30fc8k9v7l8bgake6mqhe33aenv9.apps.googleusercontent.com",
+    "client_id": "814996444798-715meputir3nr40tnr5c5t793kkp95aa.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/userinfo.profile"
