@@ -58,6 +58,7 @@
     "debugger-extension-api": "file:../api",
     "enzyme-adapter-react-16": "^1.15.2",
     "fontsource-roboto": "^2.1.4",
+    "material-ui-image": "^3.2.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-button": "^0.7.1",
