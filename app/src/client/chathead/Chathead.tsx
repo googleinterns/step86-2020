@@ -123,7 +123,9 @@ const ChatheadWrapper = styled(Paper)`
   top: 20px;
 
   right: 20px;
-  width: fit-content;
+  width: 600px;
+  max-height: calc(100% - 40px);
+  overflow: auto;
 
   z-index: 1000;
 `;

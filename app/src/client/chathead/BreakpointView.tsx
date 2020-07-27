@@ -1,8 +1,9 @@
 import React from "react";
 
-import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button, Box } from "@material-ui/core";
+import { Alert, AlertTitle, TreeView, TreeItem } from "@material-ui/lab";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ErrorIcon from '@material-ui/icons/Error';
 import { Variable, Breakpoint, FailedBreakpoint } from "../../common/types/debugger";
 
@@ -35,6 +36,7 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
   const {stackFrames} = breakpoint;
+  console.log(breakpoint);
   const stackframe = stackFrames[0];
   return (
     <Accordion defaultExpanded>
@@ -42,7 +44,14 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
         <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
-        <VariablesView variables={stackframe.locals}/>
+        <TreeView
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+        >
+          {
+            stackFrames.slice(0, 3).map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+          }
+        </TreeView>
       </AccordionDetails>
       <Divider/>
       <AccordionActions>
@@ -50,6 +59,63 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
       </AccordionActions>
     </Accordion>
   );
+}
+
+const StackFrame = ({stackFrame, breakpoint}) => {
+  const {variableTable} = breakpoint;
+  return (
+    <TreeItem nodeId={stackFrame.function} label={stackFrame.function}>
+      {
+        stackFrame.locals && stackFrame.locals.map(variable => (
+          <VariableView
+            parentNode={stackFrame.function}
+            variable={variable}
+            variableTable={variableTable}/>
+        ))
+      }
+    </TreeItem>
+  );
+}
+
+export const VariableView = ({parentNode, variable, variableTable}) => {
+  const name = variable.name;
+  const isInVarTable = variable.varTableIndex !== undefined;
+  const varTableData = isInVarTable && variableTable[variable.varTableIndex];
+
+  const {type} = isInVarTable ? varTableData : variable;
+  const nodeId = parentNode + variable.name;
+
+  const [isExpanded, setIsExpanded] = React.useState(false); 
+
+  return (
+    <TreeItem
+      nodeId={nodeId}
+      onClick={() => setIsExpanded(!isExpanded)}
+      label={(
+        <Typography component="div">
+          <Box fontWeight="fontWeightMedium" display="inline">
+            {name}
+          </Box>
+          <Box fontWeight="fontWeightRegular" display="inline">
+            {` (${type})`}
+          </Box>
+          {
+            !isInVarTable && (
+              <Box fontWeight="fontWeightRegular" display="inline">
+                {`: ${variable.value}`}
+              </Box>
+            )
+          }
+        </Typography>
+      )}
+    >
+      {isInVarTable && (
+        isExpanded ?
+          varTableData.members.map(variable => <VariableView variable={variable} parentNode={nodeId} variableTable={variableTable}/>)
+        : <TreeItem nodeId={nodeId + "childDummy"}/>
+      )}
+    </TreeItem>
+  )
 }
 
 /** Shows error data for a failed breakpoint. */
