@@ -17,6 +17,7 @@ import {
   DeleteBreakpointRequestData,
   EnableRequiredServiceRequestData,
   RequiredServicesEnabledRequestData,
+  UserInfoRequestData,
 } from "../src/common/requests/BackgroundRequest";
 
 // Mock
@@ -128,6 +129,14 @@ describe("RequiredServicesEnabledRequestData", () => {
   });
 });
 
+// tests that UserInfo class is well instantiated with the right attributes.
+describe("UserInfoRequestData", () => {
+  it("can be instantiated", () => {
+    const data = new UserInfoRequestData();
+    expect(data.type).toBe(BackgroundRequestType.USER_INFO);
+  });
+});
+
 describe("BackgroundRequestResponseFactory", () => {
   it("can generate response", () => {
     const data = {foo: "bar"};
@@ -196,4 +205,5 @@ describe("BackgroundRequest", () => {
       expect(expectedError).toEqual(stub.error);
     }
   });
+  
 });

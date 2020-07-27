@@ -19,6 +19,7 @@ export enum BackgroundRequestType {
   IS_AUTHENTICATED,
   ENABLE_REQUIRED_SERVICE,
   IS_SERVICE_ENABLED,
+  USER_INFO,
 }
 
 /**
@@ -334,4 +335,27 @@ interface RequiredServicesEnabledRequestResponse {
 export class RequiredServicesEnabledRequest extends BackgroundRequest<
   RequiredServicesEnabledRequestData,
   RequiredServicesEnabledRequestResponse
+> {}
+
+
+/**
+ *  This class lets UI request a user's information
+ */
+
+export class UserInfoRequestData extends BackgroundRequestData {
+  constructor() {
+    super(BackgroundRequestType.USER_INFO);
+  }
+}
+
+interface UserInfoRequestResponse {
+  userName: string;
+  userEmail: string;
+  userPicture: string;
+
+}
+
+export class UserInfoRequest extends BackgroundRequest<
+  UserInfoRequestData,
+  UserInfoRequestResponse
 > {}
