@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactChildren } from "react";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
@@ -7,8 +7,17 @@ import PhotoSizeSelectSmallIcon from '@material-ui/icons/PhotoSizeSelectSmall';
 import { Toolbar, Typography, IconButton, AppBar, Box } from "@material-ui/core";
 import { WindowSizeContext, WindowSize } from "./windowSizeContext";
 
+interface AppBarProps {
+  /** Displayed text for the appbar */
+  title: string;
+  /** An optional function to handle 'go back' action. If defined, a back button will be shown. */
+  onBack: () => void;
+  /** Optional nodes to add between title and resize buttons. */
+  children: ReactChildren;
+}
+
 /** A unified header for all pages within the chathead. */
-export const Appbar = ({title, onBack, children = null}) => (
+export const Appbar = ({title, onBack, children = null}: AppBarProps) => (
   <AppBar position="static">
     <Toolbar>
       {
