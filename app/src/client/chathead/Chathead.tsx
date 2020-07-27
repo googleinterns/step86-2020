@@ -20,6 +20,7 @@ import Paper from "@material-ui/core/Paper";
 import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { WindowSize, WindowSizeContext } from "./windowSizeContext";
+import { Appbar } from "./Appbar";
 // Jest has trouble with this, so only import in actual builds.
 if (process.env.NODE_ENV !== "test") {
   import("fontsource-roboto");
@@ -98,18 +99,7 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
 
               {projectId && debuggeeId && (
                 <>
-                  <AppBar position="static">
-                    <Toolbar>
-                      <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={() => this.props.setDebuggee(undefined)}
-                      >
-                        <ArrowBackIcon />
-                      </IconButton>
-                      <Typography variant="h6">Breakpoints</Typography>
-                    </Toolbar>
-                  </AppBar>
+                  <Appbar title="Breakpoints" onBack={() => this.props.setDebuggee(undefined)}/>
                   <CreateBreakpointForm
                     activeBreakpoints={this.props.activeBreakpoints}
                     completedBreakpoints={this.props.completedBreakpoints}
