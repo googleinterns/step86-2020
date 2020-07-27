@@ -2,7 +2,7 @@ import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { FailedBreakpoint, BreakpointMeta, Breakpoint } from "../../src/common/types/debugger";
-import { getBreakpointErrorMessage, FailedCompletedBreakpointView, CompletedBreakpointView } from "../../src/client/chathead/BreakpointView";
+import { getBreakpointErrorMessage, FailedCompletedBreakpointView, CompletedBreakpointView, StackFrame } from "../../src/client/chathead/BreakpointView";
 import { LocationView, PendingBreakpointView, SuccessfulCompletedBreakpointView, VariablesView} from "../../src/client/chathead/BreakpointView";
 import { AccordionSummary, CircularProgress, Accordion, AccordionDetails } from "@material-ui/core";
 
@@ -103,21 +103,21 @@ describe("SuccessfulCompletedBreakpointView", () => {
     expect(wrapper.find(LocationView).exists()).toBe(true);
   });
 
-  it("shows variables when expanded", () => {
+  it("shows N stackframes", () => {
     const mockBreakpoint: Partial<BreakpointMeta> = {
       location: {
         path: "foo.java",
         line: 24
       },
-      stackFrames: [{locals: []}]
+      stackFrames: [{locals: []}, {locals: []}]
     }
   
     const wrapper = shallow(<SuccessfulCompletedBreakpointView breakpoint={mockBreakpoint}/>);
     expect(
       wrapper.find(AccordionDetails)
              .dive()
-             .find(VariablesView).exists()
-    ).toBe(true);
+             .find(StackFrame).length
+    ).toBe(2);
   });
 });
 
