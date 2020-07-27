@@ -1,18 +1,29 @@
 import React from "react";
 
-import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button } from "@material-ui/core";
+import { Accordion, AccordionSummary, Typography, List, ListItem, ListItemText, AccordionDetails, CircularProgress, Divider, AccordionActions, Button, Grid } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ErrorIcon from '@material-ui/icons/Error';
 import { Variable, Breakpoint, FailedBreakpoint } from "../../common/types/debugger";
 
 /** Used to display a breakpoint that has not yet hit. */
-export const PendingBreakpointView = ({ breakpointMeta }) => {
+export const PendingBreakpointView = ({ breakpointMeta, deleteBreakpoint }) => {
   return (
     <Accordion>
-      <AccordionSummary disabled expandIcon={<CircularProgress/>}>
-        <LocationView breakpoint={breakpointMeta}/>
+      <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+        <Grid container spacing={3}>
+          <Grid item xs={11}>
+            <LocationView breakpoint={breakpointMeta}/>
+          </Grid>
+          <Grid item xs={1}>
+            <CircularProgress size={20}/>
+          </Grid>
+        </Grid>
       </AccordionSummary>
+      <Divider/>
+      <AccordionActions>
+        <Button size="small" color="secondary" onClick={() => deleteBreakpoint(breakpointMeta.id)}>Delete</Button>
+      </AccordionActions>
     </Accordion>
   );
 };

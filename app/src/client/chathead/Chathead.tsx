@@ -104,7 +104,10 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
         )}
 
         {this.props.activeBreakpoints.map((b) => (
-          <PendingBreakpointView breakpointMeta={b} />
+          <PendingBreakpointView
+            breakpointMeta={b}
+            deleteBreakpoint={this.props.deleteBreakpoint}
+          />
         ))}
 
         {this.props.completedBreakpoints.map((b) => (
