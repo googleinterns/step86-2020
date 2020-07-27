@@ -13,7 +13,7 @@ interface AppBarProps {
   /** An optional function to handle 'go back' action. If defined, a back button will be shown. */
   onBack: () => void;
   /** Optional nodes to add between title and resize buttons. */
-  children: ReactChildren;
+  children?: ReactChildren;
 }
 
 /** A unified header for all pages within the chathead. */
