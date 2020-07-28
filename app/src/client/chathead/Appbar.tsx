@@ -33,16 +33,16 @@ export const Appbar = ({title, onBack, children = null}: AppBarProps) => (
       <WindowSizeContext.Consumer>
         {({size, setSize}) => (
           <>
-            <IconButton color="inherit" onClick={() => setSize(WindowSize.COLLAPSED)}>
+            <IconButton id="size-collapse" color="inherit" onClick={() => setSize(WindowSize.COLLAPSED)}>
               <PhotoSizeSelectSmallIcon/>
             </IconButton>
             {
               size !== WindowSize.FULL_SCREEN ?
-                <IconButton color="inherit" onClick={() => setSize(WindowSize.FULL_SCREEN)}>
+                <IconButton id="size-fullscreen" color="inherit" onClick={() => setSize(WindowSize.FULL_SCREEN)}>
                   <SettingsOverscanIcon/>
                 </IconButton>
                 :
-                <IconButton color="inherit" onClick={() => setSize(WindowSize.REGULAR)}>
+                <IconButton id="size-regular" color="inherit" onClick={() => setSize(WindowSize.REGULAR)}>
                   <PictureInPictureIcon/>
               </IconButton>
             }
