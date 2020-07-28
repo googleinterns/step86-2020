@@ -9,6 +9,9 @@ import * as extensionAuthHandler from "./extensionAuthHandler";
  * These handlers will perform  logic usually by calling (and awaiting) debugger-extension API methods.
  */
 export class BackgroundRequestHandler {
+  // The chrome API used to register listeners, can be overridden for testing.
+  static chromeApi: typeof chrome = window.chrome;
+  public static overrideChromeApi = (api: typeof chrome) => BackgroundRequestHandler.chromeApi = api;
   // Dictionary to keep the handlers and their callback
   static handlers = {};
 
@@ -24,7 +27,7 @@ export class BackgroundRequestHandler {
    * back to the request using chrome.runtime.onMessage.addListener(function callback)
    */
   static listen() {
-    chrome.runtime.onMessage.addListener(
+    BackgroundRequestHandler.chromeApi.runtime.onMessage.addListener(
       (data: backgroundRequest.BackgroundRequestData, sender, sendResponse) => {
         const handler = BackgroundRequestHandler.handlers[data.type];
         if (handler === undefined) {
