@@ -30,7 +30,7 @@ export class CreateBreakpointForm extends React.Component<
       fileName: undefined,
       lineNumber: undefined,
       condition: "",
-      expressions: []
+      expressions: [],
       errorMessage: undefined
     };
   }
