@@ -32,7 +32,7 @@ describe("CreateBreakpointForm", () => {
   });
 
   it ("handles conditions and expressions input", () => {
-    const wrapper = mount(<CreateBreakpointForm/>);
+    const wrapper = mount(<CreateBreakpointForm activeBreakpoints={[]} completedBreakpoints={[]}/>);
     const condExpForm = wrapper.find(ConditionAndExpressionsForm).instance() as ConditionAndExpressionsForm;
     
     const condition = "a";
