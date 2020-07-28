@@ -91,7 +91,7 @@ export class CreateBreakpointForm extends React.Component<
     return (
       <Box m={1}>
         <Accordion>
-          <AccordionSummary>
+          <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
             <Typography variant="body2">Create Breakpoint</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -204,18 +204,24 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
           <Typography variant="body2">Condition and Expressions</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <List>
-            <TextField
-              label="Condition"
-              size="small"
-              fullWidth
-              variant="outlined"
-              value={condition}
-              onChange={e => this.setCondition(e.target.value)}
-            />
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                label="Condition"
+                size="small"
+                fullWidth
+                variant="outlined"
+                value={condition}
+                onChange={e => this.setCondition(e.target.value)}
+              />
+            </Grid>
             <ExpressionsList expressions={expressions} setExpressions={expressions => this.setExpressions(expressions)}/>
-          </List>
+          </Grid>
         </AccordionDetails>
+        <Divider/>
+        <AccordionActions>
+          <Button size="small" onClick={() => this.setExpressions([...expressions, ""])}>Add Expression</Button>
+        </AccordionActions>
       </Accordion>
     )
   }
@@ -227,30 +233,23 @@ interface ExpressionsListProps {
 }
 /** A list of expressions, including add/delete functionality. */
 export const ExpressionsList = ({expressions, setExpressions}: ExpressionsListProps) => {
-  return (
-    <List>
-      {
-        expressions.map((expression, index) => (
-          <ExpressionView
-            expression={expression}
-            onChange={updatedExpression => {
-              // Deep copy expressions, update specific index.
-              const updatedExpressions = [...expressions];
-              updatedExpressions[index] = updatedExpression;
-              setExpressions(updatedExpressions);
-            }}
-            onDelete={() => {
-              // Deep copy expressions and delete specific entry.
-              const updatedExpressions = [...expressions];
-              updatedExpressions.splice(index, 1);
-              setExpressions(updatedExpressions);
-            }}
-          />
-        ))
-      }
-      <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
-    </List>
-  );
+  return expressions.map((expression, index) => (
+    <ExpressionView
+      expression={expression}
+      onChange={updatedExpression => {
+        // Deep copy expressions, update specific index.
+        const updatedExpressions = [...expressions];
+        updatedExpressions[index] = updatedExpression;
+        setExpressions(updatedExpressions);
+      }}
+      onDelete={() => {
+        // Deep copy expressions and delete specific entry.
+        const updatedExpressions = [...expressions];
+        updatedExpressions.splice(index, 1);
+        setExpressions(updatedExpressions);
+      }}
+    />
+  ));
 }
 
 interface ExpressionViewProps {
@@ -272,7 +271,7 @@ export class ExpressionView extends Component<ExpressionViewProps> {
 
   render() {
     return (
-      <ListItem>
+      <Grid item xs={12}>
         <TextField
           size="small"
           label="Expression"
@@ -289,7 +288,7 @@ export class ExpressionView extends Component<ExpressionViewProps> {
             )
           }}
         />
-      </ListItem>
+      </Grid>
     )
   }
 }
