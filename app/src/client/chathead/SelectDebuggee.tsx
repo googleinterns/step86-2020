@@ -73,14 +73,14 @@ export class SelectDebuggeeContainer extends React.Component<
               !this.state.error && this.state.debuggees.length === 0 && (
                 <Grid item xs={12}>
                   <Alert severity="warning">
-                    No debuggees are active. This means your project hasn't run in a while, try using it to wake it up.
+                    No debuggees are active. This means your project hasn't run in a while. Please make sure its active, then try again. 
                   </Alert>
                 </Grid>
               )
             }
 
             {
-              !this.state.error && this.state.debuggees.length && (
+              !this.state.error && this.state.debuggees.length ? (
                 <Grid item xs={12}>
                   <SelectView
                     label="Debuggee ID"
@@ -92,14 +92,14 @@ export class SelectDebuggeeContainer extends React.Component<
                     optionToLabel={(debuggee: Debuggee) => debuggee.description}
                   />
                 </Grid>
-              )
+              ): null
             }
             {
-              this.state.error && (
+              this.state.error ? (
                 <Grid item xs={12}>
                   <Alert severity="error">{this.state.error.message}</Alert>
                 </Grid>
-              )
+              ): null
             }
           </Grid>
         </Box>   
