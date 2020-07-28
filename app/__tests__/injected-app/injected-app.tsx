@@ -10,7 +10,8 @@ import {
   BackgroundRequestData,
   BackgroundRequestType,
   GetAuthStateRequestData,
-  FetchBreakpointRequestData
+  FetchBreakpointRequestData,
+  SetBreakpointRequestData
 } from "../../src/common/requests/BackgroundRequest";
 import * as backgroundRequest from "../../src/common/requests/BackgroundRequest";
 
@@ -136,6 +137,40 @@ describe("Saving Project IDs", () => {
     expect(runSpy).not.toHaveBeenCalled();
   });
 
+
+
+  it("tests for creating the breakpoint", () => {
+    const runSpy = jest.fn().mockResolvedValueOnce({
+      breakpoint: {
+        fileName: "foo",
+        lineNumber: 1,
+        condition: "",
+        expressions: [],
+      },
+    });
+
+    const { BackgroundRequest, SetBreakpointRequestData } = backgroundRequest;
+    const mockRequestClass = class extends BackgroundRequest<
+      SetBreakpointRequestData,
+      {}
+    > {};
+    mockRequestClass.prototype.run = runSpy;
+
+    const wrapper = mount(
+      <InjectedApp
+        backgroundRequest={{
+          ...backgroundRequest,
+          SetBreakpointRequest: mockRequestClass,
+        }}
+      />
+    );
+
+    wrapper.instance().createBreakPoint({ fileName: "foo", lineNumber: 1 });
+    expect(runSpy).not.toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ fileName: "foo" })
+    );
+  });
 
   it("tests the load breakpoint", () => {
     const runSpy = jest
