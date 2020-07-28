@@ -171,13 +171,6 @@ describe("ExpressionsList", () => {
     (wrapper.find(ExpressionView).at(0).instance() as ExpressionView).onChange("c");
     expect(setExpressionsSpy).toHaveBeenCalledWith(["c", "b"]);
   });
-
-  it("can add expression", () => {
-    const setExpressionsSpy = jest.fn();
-    const wrapper = mount(<ExpressionsList expressions={["a", "b"]} setExpressions={setExpressionsSpy}/>);
-    wrapper.find(Button).simulate("click");
-    expect(setExpressionsSpy).toHaveBeenCalledWith(["a", "b", ""]);
-  });
 });
 
 describe("ConditionsAndExpressionsForm", () => {
@@ -189,5 +182,13 @@ describe("ConditionsAndExpressionsForm", () => {
   it("has expressions list", () => {
     const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]}/>);
     expect(wrapper.find(ExpressionsList).props().expressions).toEqual(["a"]);
+  });
+
+
+  it("can add expression", () => {
+    const setExpressionsSpy = jest.fn();
+    const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]} setExpressions={setExpressionsSpy}/>);
+    wrapper.find(Button).simulate("click");
+    expect(setExpressionsSpy).toHaveBeenCalledWith(["a", ""]);
   });
 });

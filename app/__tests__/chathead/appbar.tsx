@@ -11,7 +11,7 @@ configure({ adapter: new Adapter() });
 describe("Appbar", () => {
   it("displays title.", () => {
     const wrapper = shallow(<Appbar title="Foo"/>);
-    expect(wrapper.text()).toBe("Foo");
+    expect(wrapper.text()).toContain("Foo");
   });
 
   it("displays no back button if no handler provider.", () => {
