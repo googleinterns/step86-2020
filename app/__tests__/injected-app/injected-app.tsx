@@ -116,7 +116,7 @@ describe("Saving Project IDs", () => {
 
   it("test get auth state", () => {
     const runSpy = jest.fn().mockResolvedValueOnce({
-      breakpoint: { id: "a" },
+      state: {status :  " "},
     });
 
     const { BackgroundRequest, GetAuthStateRequestData } = backgroundRequest;
@@ -133,9 +133,7 @@ describe("Saving Project IDs", () => {
         }}
       />
     );
-
     wrapper.instance().getAuthState();
-    expect(runSpy).not.toHaveBeenCalled();
   });
 
 

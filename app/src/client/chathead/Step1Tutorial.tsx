@@ -8,6 +8,12 @@ interface Step1TutorialProps {}
 
 interface Step1TutorialState {}
 
+const CloudLogo = styled.img`
+  height: 50px;
+  margin-top: 5px;
+  margin-left: 5px;
+`;
+
 export class Step1Tutorial extends React.Component<
   Step1TutorialProps,
   Step1TutorialState
@@ -15,6 +21,8 @@ export class Step1Tutorial extends React.Component<
   constructor(props: Step1TutorialProps) {
     super(props);
   }
+
+  //  string ls =  chrome.tabs.create({url: 'http://Console.Cloud.Google.Com/debug'});
 
   render() {
     return (
@@ -25,12 +33,14 @@ export class Step1Tutorial extends React.Component<
         </p>
 
         <img
-          src="https://drive.google.com/uc?export=view&id=13qzP8vr_o0ZMPIbBXe6niSnJYFKF4yS7
-          "
+          src="https://drive.google.com/uc?export=view&id=13qzP8vr_o0ZMPIbBXe6niSnJYFKF4yS7"
           width="50%"
           height="40%"
           border-radius="8px"
         />
+        <p> Trying this one : </p>
+
+        <CloudLogo src={chrome.extension.getURL("../../assets/photo1.png")} />
 
         <p>Once signed-in you'll have your info hsowed in the small popup</p>
 

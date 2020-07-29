@@ -1,5 +1,13 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Avatar, CircularProgress, Button } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Avatar,
+  CircularProgress,
+  Button,
+} from "@material-ui/core";
 import GoogleButton from "react-google-button";
 import {
   AuthenticationRequest,
@@ -15,7 +23,7 @@ interface AuthPopupFormProps {}
 interface AuthPopupFormState {
   isAuthenticated: boolean;
   userName: string;
-  userEmail: string
+  userEmail: string;
   userPicture: string;
 }
 
@@ -50,20 +58,17 @@ export class AuthPopup extends React.Component<
    *  get user info by making a call to backend requests
    */
   async getUserInfo() {
-    const response = await new UserInfoRequest().run(
-      new UserInfoRequestData()
-    );
+    const response = await new UserInfoRequest().run(new UserInfoRequestData());
     this.setState({ userName: response.userName });
     this.setState({ userEmail: response.userEmail });
     this.setState({ userPicture: response.userPicture });
-
   }
 
   componentDidMount() {
     this.getAuthState();
   }
 
-   /**
+  /**
    *  After updating the component(when user is signed in), get the user information.
    */
   componentDidUpdate() {
@@ -101,31 +106,31 @@ export class AuthPopup extends React.Component<
     }
 
     if (this.state.isAuthenticated && this.state.userName === "") {
-     return (
-       <>
-         <AppBar position="static">
-           <Toolbar>
-             <Typography
-               style={{
-                 textAlign: "center",
-                 margin: "auto",
-               }}
-               variant="h6"
-             >
-               Welcome to Cloud Debugger
-             </Typography>
-           </Toolbar>
-         </AppBar>
-         <CircularProgress
-           style={{
-             marginLeft: "45%",
-            //  marginRight: "50%",
-             marginTop: "30px",
-             marginBottom: "30px",
-           }}
-         />
-       </>
-     );
+      return (
+        <>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                style={{
+                  textAlign: "center",
+                  margin: "auto",
+                }}
+                variant="h6"
+              >
+                Welcome to Cloud Debugger
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <CircularProgress
+            style={{
+              marginLeft: "45%",
+              //  marginRight: "50%",
+              marginTop: "30px",
+              marginBottom: "30px",
+            }}
+          />
+        </>
+      );
     }
 
     if (this.state.isAuthenticated && this.state.userName !== "") {
@@ -163,7 +168,7 @@ export class AuthPopup extends React.Component<
               textAlign: "center",
               marginTop: "20px",
               fontSize: "20px;",
-              color: "#202124"
+              color: "#202124",
             }}
             variant="h6"
           >
@@ -181,10 +186,11 @@ export class AuthPopup extends React.Component<
             {this.state.userEmail}
           </Typography>
 
-          <Button  style={{
+          <Button
+            style={{
               textAlign: "center",
-              marginLeft: '25%',
-              marginRight: '25%',
+              marginLeft: "25%",
+              marginRight: "25%",
               marginTop: "10px",
               marginBottom: "30px",
             }}
