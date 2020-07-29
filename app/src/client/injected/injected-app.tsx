@@ -215,7 +215,6 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     const response = await new GetAuthStateRequest().run(
       new GetAuthStateRequestData()
     );
-    console.log("hello")
     this.setState({ isAuthenticated: response.isAuthenticated });
   }
 
