@@ -220,8 +220,8 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
             this.setState({ projectId });
           }}
           setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
-          createBreakpoint={(fileName, lineNumber) =>
-            this.createBreakPoint(fileName, lineNumber)
+          createBreakpoint={(fileName, lineNumber, condition, expressions) =>
+            this.createBreakPoint(fileName, lineNumber, condition, expressions)
           }
           deleteBreakpoint={(breakpointId: string) =>
             this.deleteBreakpoint(breakpointId)
