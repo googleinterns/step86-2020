@@ -1,10 +1,11 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import PopupState, {bindPopper, bindToggle } from 'material-ui-popup-state';
 
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import { Box, Popper, Paper, Backdrop } from "@material-ui/core";
+import { SuccessfulCompletedBreakpointData } from "../chathead/BreakpointView";
 
 interface NewBreakpointMarkerProps {
   /** Callback for when new-breakpoint marker is clicked.
@@ -44,20 +45,25 @@ export const CompletedBreakpointMarker = ({
     <PopupState variant="popover" popupId="completed-bp-popover">
       {(popupState) => (
         <>
-          <CompletedBreakpointMarkerWrapper {...bindTrigger(popupState)}/>
-          <Popover
-            {...bindPopover(popupState)}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left"
+          <CompletedBreakpointMarkerWrapper {...bindToggle(popupState)}/>
+          <Popper
+            {...bindPopper(popupState)}
+            placement="right-start"
+            disablePortal={false}
+            modifiers={{
+              flip: {enabled: false},
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: 'viewport',
+              }
             }}
           >
-            Hey
-          </Popover>
+            <Paper>
+              <Box padding={3}>
+                <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>
+              </Box>
+            </Paper>
+          </Popper>
         </>
       )}
     </PopupState>
