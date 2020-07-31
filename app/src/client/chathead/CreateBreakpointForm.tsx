@@ -209,6 +209,7 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
             {condition !== undefined && (
               <Grid item xs={12}>
                 <TextField
+                  id="input-condition"
                   label="Condition"
                   size="small"
                   fullWidth
@@ -226,16 +227,16 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
           {
             // If there is no condition yet, show a button to add it.
             condition === undefined && (
-              <Button size="small" onClick={() => this.setCondition("")}>Add Condition</Button>
+              <Button id="button-add-condition" size="small" onClick={() => this.setCondition("")}>Add Condition</Button>
             )
           }
           {
             // Otherwise, show button to remove condition.
             condition !== undefined && (
-              <Button size="small" onClick={() => this.setCondition(undefined)}>Remove Condition</Button>
+              <Button id="button-remove-condition" size="small" onClick={() => this.setCondition(undefined)}>Remove Condition</Button>
             )
           }
-          <Button size="small" onClick={() => this.setExpressions([...expressions, ""])}>Add Expression</Button>
+          <Button id="button-add-expression" size="small" onClick={() => this.setExpressions([...expressions, ""])}>Add Expression</Button>
         </AccordionActions>
       </Accordion>
     )
