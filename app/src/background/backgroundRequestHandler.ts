@@ -203,10 +203,9 @@ BackgroundRequestHandler.on<backgroundRequest.GetAuthStateRequestData>(
 BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
   backgroundRequest.BackgroundRequestType.AUTHENTICATION,
   async () => {
-    await extensionAuthHandler.getToken();
-    setInterval(() => {
-      extensionAuthHandler.getToken();
-    }, 5 * 60 * 1000);
+    // Start ongoing authentication, and wait for the first auth to complete.
+    await extensionAuthHandler.startPollingAuth();
+    extensionAuthHandler.setUserAuthConsent(true);
     return {};
   }
 );
