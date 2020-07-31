@@ -12,8 +12,6 @@ interface SelectProjectContainerProps {
   projectId?: string;
   loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
-  toggleMinimized: () => void;
-  toggleMaximized: () => void;
 }
 
 interface SelectProjectContainerState {

@@ -4,6 +4,7 @@ import { Chathead } from "../chathead/Chathead";
 import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
+import { WindowSize, WindowSizeContext } from "../chathead/windowSizeContext";
 
 interface InjectedAppState {
   projectId: string;
@@ -12,7 +13,8 @@ interface InjectedAppState {
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
 
-  localStorage?: Storage
+  localStorage?: Storage;
+  windowSize: WindowSize;
 }
 
 interface InjectedAppProps {
@@ -33,6 +35,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
 
       activeBreakpoints: {},
       completedBreakpoints: {},
+      windowSize: WindowSize.REGULAR
     };
   }
 
@@ -208,11 +211,10 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     const completedBreakpoints = Object.values(this.state.completedBreakpoints);
 
     return (
-      <>
+      <WindowSizeContext.Provider value={{size: this.state.windowSize, setSize: windowSize => this.setState({windowSize})}}>
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
-          projectDescription={this.props.projectDescription}
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
           setProject={(projectId) => {
@@ -236,7 +238,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
             this.createBreakPoint(fileName, lineNumber)
           }
         />
-      </>
+      </WindowSizeContext.Provider>
     );
   }
 

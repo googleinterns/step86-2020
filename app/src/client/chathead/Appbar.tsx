@@ -1,4 +1,4 @@
-import React, { ReactChildren } from "react";
+import React, { ReactChildren, ReactElement } from "react";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
@@ -13,7 +13,7 @@ interface AppBarProps {
   /** An optional function to handle 'go back' action. If defined, a back button will be shown. */
   onBack?: () => void;
   /** Optional nodes to add between title and resize buttons. */
-  children?: ReactChildren;
+  children?: ReactElement;
 }
 
 /** A unified header for all pages within the chathead. */
