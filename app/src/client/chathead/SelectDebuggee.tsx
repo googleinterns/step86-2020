@@ -77,11 +77,11 @@ export class SelectDebuggeeContainer extends React.Component<
           <Card>
             <CardContent>
               {
-                !this.state.error && this.state.debuggees.length === 0 && (
+                (!this.state.error && !this.state.debuggeesLoading && this.state.debuggees.length === 0) ? (
                   <Alert severity="warning">
                     No debuggees are active. This means your project hasn't run in a while, try using it to wake it up.
                   </Alert>
-                )
+                ) : null
               }
 
               {
