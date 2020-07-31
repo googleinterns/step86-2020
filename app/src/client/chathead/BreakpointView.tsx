@@ -46,7 +46,6 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {stackFrames, evaluatedExpressions, variableTable} = breakpoint;
   console.log(breakpoint);
   return (
     <Accordion defaultExpanded>
@@ -54,23 +53,7 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
         <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
-        <TreeView
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-        >
-          {
-            evaluatedExpressions && (
-              <TreeItem nodeId="expressions" label="Expressions">
-                {evaluatedExpressions.map(expression => <VariableView variable={expression} parentNode={"expressions"} variableTable={variableTable}/>)}
-              </TreeItem>
-            )
-          }
-          <TreeItem nodeId="stackframes" label="Stackframes">
-            {
-              stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
-            }
-          </TreeItem>
-        </TreeView>
+        <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>
       </AccordionDetails>
       <Divider/>
       <AccordionActions>
@@ -78,6 +61,30 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
       </AccordionActions>
     </Accordion>
   );
+}
+
+/** Stacktrace and expression data for a successful breakpoint. */
+export const SuccessfulCompletedBreakpointData = ({breakpoint}) => {
+  const {stackFrames, evaluatedExpressions, variableTable} = breakpoint;
+  return (
+    <TreeView
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
+      {
+        evaluatedExpressions && (
+          <TreeItem nodeId="expressions" label="Expressions">
+            {evaluatedExpressions.map(expression => <VariableView variable={expression} parentNode={"expressions"} variableTable={variableTable}/>)}
+          </TreeItem>
+        )
+      }
+      <TreeItem nodeId="stackframes" label="Stackframes">
+        {
+          stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+        }
+      </TreeItem>
+    </TreeView>
+  )
 }
 
 /** A single stackframe (closure context) of variables. */
