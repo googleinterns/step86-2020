@@ -29,7 +29,7 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
-      condition: "",
+      condition: undefined,
       expressions: [],
       errorMessage: undefined
     };
@@ -205,21 +205,36 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                label="Condition"
-                size="small"
-                fullWidth
-                variant="outlined"
-                value={condition}
-                onChange={e => this.setCondition(e.target.value)}
-              />
-            </Grid>
+            {/* Only show condition if added, to reduce clutter.*/}
+            {condition !== undefined && (
+              <Grid item xs={12}>
+                <TextField
+                  label="Condition"
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                  value={condition}
+                  onChange={e => this.setCondition(e.target.value)}
+                />
+              </Grid>
+            )}
             <ExpressionsList expressions={expressions} setExpressions={expressions => this.setExpressions(expressions)}/>
           </Grid>
         </AccordionDetails>
         <Divider/>
         <AccordionActions>
+          {
+            // If there is no condition yet, show a button to add it.
+            condition === undefined && (
+              <Button size="small" onClick={() => this.setCondition("")}>Add Condition</Button>
+            )
+          }
+          {
+            // Otherwise, show button to remove condition.
+            condition !== undefined && (
+              <Button size="small" onClick={() => this.setCondition(undefined)}>Remove Condition</Button>
+            )
+          }
           <Button size="small" onClick={() => this.setExpressions([...expressions, ""])}>Add Expression</Button>
         </AccordionActions>
       </Accordion>
