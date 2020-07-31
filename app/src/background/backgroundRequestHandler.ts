@@ -90,9 +90,9 @@ export class BackgroundRequestHandler {
   }
 }
 
-if (window.chrome) {
+export function register(): BackgroundRequestHandler {
   const backgroundRequestHandler: BackgroundRequestHandler = new BackgroundRequestHandler({
-    register: window.chrome.runtime.onMessage.addListener
+    register: (handler: MessageHandler) => window.chrome.runtime.onMessage.addListener(handler)
   });
 
   /**
@@ -272,5 +272,6 @@ if (window.chrome) {
     }
   );
 
+  return backgroundRequestHandler;
 }
 
