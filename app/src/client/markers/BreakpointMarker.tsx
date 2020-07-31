@@ -1,6 +1,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 
 interface NewBreakpointMarkerProps {
@@ -37,7 +40,28 @@ interface CompletedBreakpointMarkerProps {
 export const CompletedBreakpointMarker = ({
   breakpoint,
 }: CompletedBreakpointMarkerProps) => {
-  return <CompletedBreakpointMarkerWrapper />;
+  return (
+    <PopupState variant="popover" popupId="completed-bp-popover">
+      {(popupState) => (
+        <>
+          <CompletedBreakpointMarkerWrapper {...bindTrigger(popupState)}/>
+          <Popover
+            {...bindPopover(popupState)}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left"
+            }}
+          >
+            Hey
+          </Popover>
+        </>
+      )}
+    </PopupState>
+  )
 };
 
 /** UI that is shared by all types of breakpoint markers.
