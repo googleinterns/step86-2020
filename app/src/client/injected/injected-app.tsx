@@ -203,6 +203,11 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     this.setState({ activeBreakpoints: {} });
   }
 
+  /** Set the chathead window size. */
+  setWindowSize(windowSize: WindowSize) {
+    this.setState({windowSize});
+  }
+
   render() {
     /** Active and completed breakpoints are kept in state differently because active breakpoints must be deletable.
      *  However, as far as UI is concerned, they are both lists. This conversion helps simplify markup.
@@ -211,7 +216,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     const completedBreakpoints = Object.values(this.state.completedBreakpoints);
 
     return (
-      <WindowSizeContext.Provider value={{size: this.state.windowSize, setSize: windowSize => this.setState({windowSize})}}>
+      <WindowSizeContext.Provider value={{size: this.state.windowSize, setSize: windowSize => this.setWindowSize(windowSize)}}>
         <Chathead
           projectId={this.state.projectId}
           debuggeeId={this.state.debuggeeId}
@@ -234,9 +239,12 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
         <BreakpointMarkers
           activeBreakpoints={activeBreakpoints}
           completedBreakpoints={completedBreakpoints}
-          createBreakpoint={(fileName, lineNumber) =>
+          createBreakpoint={(fileName, lineNumber) => {
+            // The marker may be clicked when the chathead is closed.
+            // It's a reasonable assumption that it should be open.
+            this.setWindowSize(WindowSize.REGULAR);
             this.createBreakPoint(fileName, lineNumber)
-          }
+          }}
         />
       </WindowSizeContext.Provider>
     );
