@@ -5,7 +5,7 @@ import PopupState, {bindPopper, bindToggle } from 'material-ui-popup-state';
 
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { Box, Popper, Paper, Backdrop } from "@material-ui/core";
-import { SuccessfulCompletedBreakpointData } from "../chathead/BreakpointView";
+import { SuccessfulCompletedBreakpointData, breakpointIsSuccessful, FailedCompletedBreakpointData } from "../chathead/BreakpointView";
 
 interface NewBreakpointMarkerProps {
   /** Callback for when new-breakpoint marker is clicked.
@@ -60,7 +60,13 @@ export const CompletedBreakpointMarker = ({
           >
             <Paper>
               <Box padding={3}>
-                <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>
+                {
+                  breakpointIsSuccessful(breakpoint) ? (
+                    <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>   
+                  ): (
+                    <FailedCompletedBreakpointData breakpoint={breakpoint}/>
+                  )
+                }
               </Box>
             </Paper>
           </Popper>

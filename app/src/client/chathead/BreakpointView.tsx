@@ -37,8 +37,7 @@ interface CompletedBreakpointViewProps {
   
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {status} = breakpoint;
-  if (status && status.isError) {
+  if (!breakpointIsSuccessful(breakpoint)) {
     return <FailedCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
   }
   return <SuccessfulCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
@@ -85,6 +84,17 @@ export const SuccessfulCompletedBreakpointData = ({breakpoint}) => {
       </TreeItem>
     </TreeView>
   )
+}
+
+/** Error data for failed breakpoint. */
+export const FailedCompletedBreakpointData = ({breakpoint}) => {
+  return (
+    <Alert severity="error">
+      {/* Currently this title causes issues with the width of the chathead */}
+      {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
+      {getBreakpointErrorMessage(breakpoint)}
+    </Alert>
+  );
 }
 
 /** A single stackframe (closure context) of variables. */
@@ -189,11 +199,7 @@ export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: 
         <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
-        <Alert severity="error">
-          {/* Currently this title causes issues with the width of the chathead */}
-          {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
-          {getBreakpointErrorMessage(breakpoint)}
-        </Alert>
+        <FailedCompletedBreakpointData breakpoint={breakpoint}/>
       </AccordionDetails>
       <Divider/>
       <AccordionActions>
@@ -221,4 +227,10 @@ export const LocationView = ({breakpoint}) => {
   return (
     <Typography>{location.path}:{location.line}</Typography>
   );
+}
+
+/** Whether a breakpoint is successful or failed. */
+export function breakpointIsSuccessful(breakpoint) {
+  const {status} = breakpoint;
+  return !status || !status.isError;
 }
