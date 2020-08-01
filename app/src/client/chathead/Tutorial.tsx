@@ -11,7 +11,7 @@ import Demo from "./TutorialHelper";
 /**
  * This function is reponsible for Walkthrought dialog popup
  */
-export  function ScrollDialog() {
+export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
 

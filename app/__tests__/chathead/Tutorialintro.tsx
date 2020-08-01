@@ -33,20 +33,12 @@ describe("Tutorial", () => {
     expect(result.type).toBe("section");
   });
 
-  it("",() => {
-    const renderer = new ShallowRenderer();
-    renderer.render(<ScrollDialogClass />);
-    const result = renderer.getRenderOutput();
-
-    expect(result).toBe("section");
-  });
-
-  // it("tests first content of tutorial", () => {
+  // it("",() => {
   //   const renderer = new ShallowRenderer();
   //   renderer.render(<ScrollDialogClass />);
   //   const result = renderer.getRenderOutput();
-  //   console.log("finaallllyy", result);
-  // });
 
+  //   expect(result).toBe("section");
+  // });
   
 });
