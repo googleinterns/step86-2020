@@ -46,7 +46,7 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {stackFrames} = breakpoint;
+  const {stackFrames, evaluatedExpressions, variableTable} = breakpoint;
   console.log(breakpoint);
   return (
     <Accordion defaultExpanded>
@@ -59,8 +59,17 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
           defaultExpandIcon={<ChevronRightIcon />}
         >
           {
-            stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+            evaluatedExpressions && (
+              <TreeItem nodeId="expressions" label="Expressions">
+                {evaluatedExpressions.map(expression => <VariableView variable={expression} parentNode={"expressions"} variableTable={variableTable}/>)}
+              </TreeItem>
+            )
           }
+          <TreeItem nodeId="stackframes" label="Stackframes">
+            {
+              stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+            }
+          </TreeItem>
         </TreeView>
       </AccordionDetails>
       <Divider/>
@@ -149,9 +158,12 @@ export const VariableLabel = ({name, type, value}) => (
     <Box fontWeight="fontWeightMedium" display="inline">
       {name}
     </Box>
-    <Box fontWeight="fontWeightRegular" display="inline">
-      {` (${type})`}
-    </Box>
+    {type && (
+      <Box fontWeight="fontWeightRegular" display="inline">
+        {` (${type})`}
+      </Box>
+    )}
+
     {
       value && (
         <Box fontWeight="fontWeightRegular" display="inline">
