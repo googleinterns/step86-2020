@@ -48,8 +48,8 @@ function getStepContent(step: number) {
     case 2:
       return <Step2Tutorial />;
     case 3:
-      return `- Make sure it is the right version of the application you are running
-              - Make sure to refresh your running application to wake it  `;
+      return ` Make sure it is the right version of the application you are running
+               with refreshing your applicaiton to wake it `;
     case 4:
       return `Important links that might help you more discovering how cloud debugger works`;
     default:
