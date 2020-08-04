@@ -70,15 +70,14 @@ export class SelectDebuggeeContainer extends React.Component<
         <Box m={4}>
           <Grid container>
             {
-              !this.state.error && this.state.debuggees.length === 0 && (
+               (!this.state.error && !this.state.debuggeesLoading && this.state.debuggees.length === 0) ? (
                 <Grid item xs={12}>
                   <Alert severity="warning">
                     No debuggees are active. This means your project hasn't run in a while. Please make sure its active, then try again. 
                   </Alert>
                 </Grid>
-              )
+              ): null
             }
-
             {
               !this.state.error && this.state.debuggees.length ? (
                 <Grid item xs={12}>
