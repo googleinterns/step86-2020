@@ -1,15 +1,19 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
-import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
+import { Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
+
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+import { Appbar } from "./Appbar";
 
 interface SelectProjectContainerProps {
   projectId?: string;
   loadProjects: () => Promise<Project[]>;
   onChange: (projectId) => void;
+  toggleMinimized: () => void;
+  toggleMaximized: () => void;
 }
 
 interface SelectProjectContainerState {
@@ -55,17 +59,13 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6">Select Project</Typography>
-            {!this.state.projectsLoading && (
-                <IconButton color="inherit" onClick={() => this.loadProjects()}>
-                  <RefreshIcon/>
-                </IconButton>
-              )
-            }
-          </Toolbar>
-        </AppBar>
+        <Appbar title="Select Project">
+          {!this.state.projectsLoading && (
+            <IconButton color="inherit" onClick={() => this.loadProjects()}>
+              <RefreshIcon/>
+            </IconButton>
+          )} 
+        </Appbar>
         <Box m={1}>
           <Card>
             <CardContent>

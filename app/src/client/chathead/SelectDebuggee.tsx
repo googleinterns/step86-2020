@@ -3,10 +3,10 @@ import { SelectView } from "./GeneralSelectView";
 import { Debuggee } from "../../common/types/debugger";
 
 import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Alert from '@material-ui/lab/Alert';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+import { Appbar } from "./Appbar";
 
 interface SelectDebuggeeContainerProps {
   projectId: string;
@@ -59,20 +59,14 @@ export class SelectDebuggeeContainer extends React.Component<
   render() {
     return (
       <>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={this.props.backToProjects}>
-              <ArrowBackIcon/>
-            </IconButton>
-            <Typography variant="h6">{this.props.projectId}</Typography>
-            {!this.state.debuggeesLoading && (
-                <IconButton color="inherit" onClick={() => this.loadDebuggees()}>
-                  <RefreshIcon/>
-                </IconButton>
-              )
-            }
-          </Toolbar>
-        </AppBar>
+        <Appbar title={this.props.projectId} onBack={this.props.backToProjects}>
+          {!this.state.debuggeesLoading && (
+              <IconButton color="inherit" onClick={() => this.loadDebuggees()}>
+                <RefreshIcon/>
+              </IconButton>
+            )
+          }
+        </Appbar>
         <Box m={1}>
           <Card>
             <CardContent>
