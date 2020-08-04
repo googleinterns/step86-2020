@@ -9,7 +9,6 @@ interface CreateBreakpointFormProps {
   createBreakpoint: (fileName: string, lineNumber: number, condition: string, expressions: string[]) => void;
   deleteAllActiveBreakpoints: () => void;
   activeBreakpoints: BreakpointMeta[];
-  completedBreakpoints:Breakpoint[];
 }
 
 interface CreateBreakpointFormState {
@@ -58,15 +57,6 @@ export class CreateBreakpointForm extends React.Component<
     // Loop through the lists and check active list
     for (let breakpoint of this.props.activeBreakpoints) {
       // if the breakpoint already exists, return false
-      if (
-        breakpoint.location.path == this.state.fileName &&
-        breakpoint.location.line == this.state.lineNumber
-      ) {
-        return false;
-      }
-    }
-    // loop through the completed list and check
-    for (let breakpoint of this.props.completedBreakpoints) {
       if (
         breakpoint.location.path == this.state.fileName &&
         breakpoint.location.line == this.state.lineNumber
