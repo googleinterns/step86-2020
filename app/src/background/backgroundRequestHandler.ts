@@ -245,7 +245,7 @@ export function register(): BackgroundRequestHandler {
 /**
  * Handler for Request the token from extensionAuthHandler.
  */
-BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
+backgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
   backgroundRequest.BackgroundRequestType.AUTHENTICATION,
   async () => {
     // Start ongoing authentication, and wait for the first auth to complete.
