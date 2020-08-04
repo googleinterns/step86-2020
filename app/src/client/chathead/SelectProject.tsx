@@ -1,7 +1,7 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
-import { Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
+import { Toolbar, Typography, Card, CardContent, Box, IconButton, Grid } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -64,11 +64,11 @@ export class SelectProjectContainer extends React.Component<
             </IconButton>
           )} 
         </Appbar>
-        <Box m={1}>
-          <Card>
-            <CardContent>
-              {
-                !this.state.error && (
+        <Box m={4}>
+          <Grid container>
+            {
+              !this.state.error && (
+                <Grid item xs={12}>
                   <SelectView
                     label="Project ID"
                     options={this.state.projects}
@@ -78,15 +78,18 @@ export class SelectProjectContainer extends React.Component<
                     optionToId={(project: Project) => project.projectId}
                     optionToLabel={(project: Project) => project.projectId}
                   />
-                )
-              }
-              {
-                this.state.error && <Alert severity="error">{this.state.error.message}</Alert>
-              }
-            </CardContent>
-          </Card>
+                </Grid>
+              )
+            }
+            {
+              this.state.error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">{this.state.error.message}</Alert>
+                </Grid>
+              )
+            }
+          </Grid>
         </Box>
-        
       </>
     );
   }

@@ -302,4 +302,60 @@ describe("Testing API functions", () => {
   });
 
 
+  it("Can fetch enabled services in the project", async () => {
+    const mockProjectNumber= "1234567";
+
+    const mockResponse = {
+      status: 200,
+      response: [{ breakpoints: 1 }],
+    };
+
+    // This depends on the number of "expect" checks we have below
+    expect.assertions(2);
+
+    // Before calling the API, set up a function to intercept the API request.
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+
+      expect(request.config.url).toEqual(
+        "https://serviceusage.googleapis.com/v1/{parent=*/*}/services"
+      );
+      request.respondWith(mockResponse);
+    });
+
+    // Call the API
+    const breakpoint = await api.fetchServices(
+      mockProjectNumber
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
+  });
+
+  it("Can enable given services in the project", async () => {
+    const mockProjectName= "projects/1234567/services/fooBar.googleapis.com";
+
+    const mockResponse = {
+      status: 200,
+      response: [{ service: "ENABLED" }],
+    };
+
+    // This depends on the number of "expect" checks we have below
+    expect.assertions(2);
+
+    // Before calling the API, set up a function to intercept the API request.
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+
+      expect(request.config.url).toEqual(
+        "https://serviceusage.googleapis.com/v1/".concat(mockProjectName, ":enable")
+      );
+      request.respondWith(mockResponse);
+    });
+
+    // Call the API
+    const breakpoint = await api.enableService(
+      mockProjectName
+    );
+    expect(breakpoint).toEqual(mockResponse.response);
+  });
+
 });
