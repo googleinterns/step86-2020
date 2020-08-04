@@ -4,6 +4,7 @@ import { Chathead } from "../chathead/Chathead";
 import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
+import { WindowSize, WindowSizeContext } from "../chathead/windowSizeContext";
 import { AuthPopup } from "../popup/AuthPopup";
 import {
   GetAuthStateRequest,
@@ -19,6 +20,7 @@ interface InjectedAppState {
   completedBreakpoints: { [key: string]: Breakpoint };
 
   localStorage?: Storage;
+  windowSize: WindowSize;
 }
 
 interface InjectedAppProps {
@@ -40,6 +42,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
 
       activeBreakpoints: {},
       completedBreakpoints: {},
+      windowSize: WindowSize.REGULAR
     };
   }
 
@@ -208,6 +211,11 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     this.setState({ activeBreakpoints: {} });
   }
 
+  /** Set the chathead window size. */
+  setWindowSize(windowSize: WindowSize) {
+    this.setState({windowSize});
+  }
+
   /**
    *  get authentication state by making a call to backend requests
    */
@@ -226,7 +234,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     const completedBreakpoints = Object.values(this.state.completedBreakpoints);
     if (this.state.isAuthenticated) {
       return (
-        <>
+        <WindowSizeContext.Provider value={{size: this.state.windowSize, setSize: windowSize => this.setWindowSize(windowSize)}}>
           <Chathead
             projectId={this.state.projectId}
             debuggeeId={this.state.debuggeeId}
@@ -249,11 +257,14 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
           <BreakpointMarkers
             activeBreakpoints={activeBreakpoints}
             completedBreakpoints={completedBreakpoints}
-            createBreakpoint={(fileName, lineNumber) =>
+            createBreakpoint={(fileName, lineNumber) => {
+              // The marker may be clicked when the chathead is closed.
+              // It's a reasonable assumption that it should be open.
+              this.setWindowSize(WindowSize.REGULAR);
               this.createBreakPoint(fileName, lineNumber)
-            }
+            }}
           />
-        </>
+        </WindowSizeContext.Provider>
       );
     } else {
       return null;

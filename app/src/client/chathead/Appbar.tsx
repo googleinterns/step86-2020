@@ -1,4 +1,4 @@
-import React, { ReactChildren } from "react";
+import React, { ReactChildren, ReactElement } from "react";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
