@@ -70,6 +70,7 @@ export class AuthPopup extends React.Component<
     this.getUserInfo();
   }
 
+
   render() {
     if (!this.state.isAuthenticated) {
       return (
@@ -187,7 +188,7 @@ export class AuthPopup extends React.Component<
               marginTop: "10px",
               marginBottom: "30px",
             }}
-              variant="outlined" color="primary" href="https://cloud.google.com/">
+              variant="outlined" color="primary" onClick={() => {chrome.tabs.create({url: 'http://Console.Cloud.Google.Com/debug', active: false}); }} >
           Go to Console
         </Button>
         </>

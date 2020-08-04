@@ -4,15 +4,23 @@ import { Chathead } from "../chathead/Chathead";
 import * as backgroundRequest from "../../common/requests/BackgroundRequest";
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
 import { BreakpointMarkers } from "../markers/BreakpointMarkers";
+import { WindowSize, WindowSizeContext } from "../chathead/windowSizeContext";
+import { AuthPopup } from "../popup/AuthPopup";
+import {
+  GetAuthStateRequest,
+  GetAuthStateRequestData,
+} from "../../common/requests/BackgroundRequest";
 
 interface InjectedAppState {
   projectId: string;
   debuggeeId: string;
+  isAuthenticated: boolean;
 
   activeBreakpoints: { [key: string]: BreakpointMeta };
   completedBreakpoints: { [key: string]: Breakpoint };
 
-  localStorage?: Storage
+  localStorage?: Storage;
+  windowSize: WindowSize;
 }
 
 interface InjectedAppProps {
@@ -30,9 +38,11 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     this.state = {
       projectId: this.getGcpProjectId(),
       debuggeeId: undefined,
+      isAuthenticated: false,
 
       activeBreakpoints: {},
       completedBreakpoints: {},
+      windowSize: WindowSize.REGULAR
     };
   }
 
@@ -138,6 +148,7 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
         // Call function to get the breakpoint data sending non-active breakpoints.
         this.loadBreakpoints(inactiveBreakpoints);
       }
+      this.getAuthState();
     }, 5000);
   }
 
@@ -200,44 +211,64 @@ export class InjectedApp extends React.Component<InjectedAppProps, InjectedAppSt
     this.setState({ activeBreakpoints: {} });
   }
 
+  /** Set the chathead window size. */
+  setWindowSize(windowSize: WindowSize) {
+    this.setState({windowSize});
+  }
+
+  /**
+   *  get authentication state by making a call to backend requests
+   */
+  async getAuthState() {
+    const response = await new GetAuthStateRequest().run(
+      new GetAuthStateRequestData()
+    );
+    this.setState({ isAuthenticated: response.isAuthenticated });
+  }
+
   render() {
     /** Active and completed breakpoints are kept in state differently because active breakpoints must be deletable.
      *  However, as far as UI is concerned, they are both lists. This conversion helps simplify markup.
      */
     const activeBreakpoints = Object.values(this.state.activeBreakpoints);
     const completedBreakpoints = Object.values(this.state.completedBreakpoints);
+    if (this.state.isAuthenticated) {
+      return (
+        <WindowSizeContext.Provider value={{size: this.state.windowSize, setSize: windowSize => this.setWindowSize(windowSize)}}>
+          <Chathead
+            projectId={this.state.projectId}
+            debuggeeId={this.state.debuggeeId}
+            activeBreakpoints={activeBreakpoints}
+            completedBreakpoints={completedBreakpoints}
+            setProject={(projectId) => {
+              localStorage.setItem(this.getProjectNameFromGithub(), projectId);
+              this.setState({ projectId });
+            }}
+            setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
+            createBreakpoint={(fileName, lineNumber) =>
+              this.createBreakPoint(fileName, lineNumber)
+            }
+            deleteBreakpoint={(breakpointId: string) =>
+              this.deleteBreakpoint(breakpointId)
+            }
+            deleteAllActiveBreakpoints={() => this.deleteAllActiveBreakpoints()}
+          />
 
-    return (
-      <>
-        <Chathead
-          projectId={this.state.projectId}
-          debuggeeId={this.state.debuggeeId}
-          projectDescription={this.props.projectDescription}
-          activeBreakpoints={activeBreakpoints}
-          completedBreakpoints={completedBreakpoints}
-          setProject={(projectId) => {
-            localStorage.setItem(this.getProjectNameFromGithub(), projectId);
-            this.setState({ projectId });
-          }}
-          setDebuggee={(debuggeeId) => this.setState({ debuggeeId })}
-          createBreakpoint={(fileName, lineNumber, condition, expressions) =>
-            this.createBreakPoint(fileName, lineNumber, condition, expressions)
-          }
-          deleteBreakpoint={(breakpointId: string) =>
-            this.deleteBreakpoint(breakpointId)
-          }
-          deleteAllActiveBreakpoints={() => this.deleteAllActiveBreakpoints()}
-        />
-
-        <BreakpointMarkers
-          activeBreakpoints={activeBreakpoints}
-          completedBreakpoints={completedBreakpoints}
-          createBreakpoint={(fileName, lineNumber) =>
-            this.createBreakPoint(fileName, lineNumber)
-          }
-        />
-      </>
-    );
+          <BreakpointMarkers
+            activeBreakpoints={activeBreakpoints}
+            completedBreakpoints={completedBreakpoints}
+            createBreakpoint={(fileName, lineNumber) => {
+              // The marker may be clicked when the chathead is closed.
+              // It's a reasonable assumption that it should be open.
+              this.setWindowSize(WindowSize.REGULAR);
+              this.createBreakPoint(fileName, lineNumber)
+            }}
+          />
+        </WindowSizeContext.Provider>
+      );
+    } else {
+      return null;
+    }
   }
 
   /** Get the windows local storage object. This accepts a prop to allow mocks. */

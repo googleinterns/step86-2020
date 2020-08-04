@@ -58,72 +58,76 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
     const { projectId, debuggeeId } = this.props;
     const { windowSize } = this.state;
     return (
-      <ChatheadWrapper windowSize={windowSize} onClick={() => windowSize === WindowSize.COLLAPSED && this.setState({windowSize: WindowSize.REGULAR})}>
-        {windowSize === WindowSize.COLLAPSED && <CloudLogo src="https://pbs.twimg.com/profile_images/1105378972156649472/9W16lxHj_400x400.png"/>}
-        
-        {
-          windowSize !== WindowSize.COLLAPSED && (
-            <WindowSizeContext.Provider value={{size: windowSize, setSize: windowSize => this.setState({windowSize})}}>
-              {!projectId && (
-                <SelectProjectContainer
-                  projectId={this.props.projectId}
-                  onChange={this.props.setProject}
-                  loadProjects={async () => {
-                    const response = await new FetchProjectsRequest().run(
-                      new FetchProjectsRequestData()
-                    );
-                    return response.projects;
-                  }}
-                />
-              )}
-
-              {projectId && !debuggeeId && (
-                <SelectDebuggeeContainer
-                  projectId={this.props.projectId}
-                  debuggeeId={this.props.debuggeeId}
-                  onChange={this.props.setDebuggee}
-                  loadDebuggees={async () => {
-                    const response = await new FetchDebuggeesRequest().run(
-                      new FetchDebuggeesRequestData(this.props.projectId)
-                    );
-                    // Response.debuggees will be undefined if there are no active debuggees.
-                    return response.debuggees || [];
-                  }}
-                  backToProjects={() => {
-                    this.props.setProject(undefined);
-                  }}
-                />
-              )}
-
-              {projectId && debuggeeId && (
+      <WindowSizeContext.Consumer>
+        {({size: windowSize, setSize}) => (
+          <ChatheadWrapper windowSize={windowSize} onClick={() => windowSize === WindowSize.COLLAPSED && setSize(WindowSize.REGULAR)}>
+            {windowSize === WindowSize.COLLAPSED && <CloudLogo src="https://pbs.twimg.com/profile_images/1105378972156649472/9W16lxHj_400x400.png"/>}
+            
+            {
+              windowSize !== WindowSize.COLLAPSED && (
                 <>
-                  <Appbar title="Breakpoints" onBack={() => this.props.setDebuggee(undefined)}/>
-                  <CreateBreakpointForm
-                    activeBreakpoints={this.props.activeBreakpoints}
-                    completedBreakpoints={this.props.completedBreakpoints}
-                    createBreakpoint={this.props.createBreakpoint}
-                    deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
-                  />
+                  {!projectId && (
+                    <SelectProjectContainer
+                      projectId={this.props.projectId}
+                      onChange={this.props.setProject}
+                      loadProjects={async () => {
+                        const response = await new FetchProjectsRequest().run(
+                          new FetchProjectsRequestData()
+                        );
+                        return response.projects;
+                      }}
+                    />
+                  )}
+
+                  {projectId && !debuggeeId && (
+                    <SelectDebuggeeContainer
+                      projectId={this.props.projectId}
+                      debuggeeId={this.props.debuggeeId}
+                      onChange={this.props.setDebuggee}
+                      loadDebuggees={async () => {
+                        const response = await new FetchDebuggeesRequest().run(
+                          new FetchDebuggeesRequestData(this.props.projectId)
+                        );
+                        // Response.debuggees will be undefined if there are no active debuggees.
+                        return response.debuggees || [];
+                      }}
+                      backToProjects={() => {
+                        this.props.setProject(undefined);
+                      }}
+                    />
+                  )}
+
+                  {projectId && debuggeeId && (
+                    <>
+                      <Appbar title="Breakpoints" onBack={() => this.props.setDebuggee(undefined)}/>
+                      <CreateBreakpointForm
+                        activeBreakpoints={this.props.activeBreakpoints}
+                        completedBreakpoints={this.props.completedBreakpoints}
+                        createBreakpoint={this.props.createBreakpoint}
+                        deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
+                      />
+                    </>
+                  )}
+
+                  {this.props.activeBreakpoints.map((b) => (
+                    <PendingBreakpointView
+                      breakpointMeta={b}
+                      deleteBreakpoint={this.props.deleteBreakpoint}
+                    />
+                  ))}
+
+                  {this.props.completedBreakpoints.map((b) => (
+                    <CompletedBreakpointView
+                      breakpoint={b}
+                      deleteBreakpoint={this.props.deleteBreakpoint}
+                    />
+                  ))} 
                 </>
-              )}
-
-              {this.props.activeBreakpoints.map((b) => (
-                <PendingBreakpointView
-                  breakpointMeta={b}
-                  deleteBreakpoint={this.props.deleteBreakpoint}
-                />
-              ))}
-
-              {this.props.completedBreakpoints.map((b) => (
-                <CompletedBreakpointView
-                  breakpoint={b}
-                  deleteBreakpoint={this.props.deleteBreakpoint}
-                />
-              ))} 
-            </WindowSizeContext.Provider>
-          )
-        } 
-      </ChatheadWrapper>
+              )
+            } 
+          </ChatheadWrapper>
+        )}
+      </WindowSizeContext.Consumer>
     );
   }
 }

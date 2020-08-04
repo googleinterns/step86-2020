@@ -1,5 +1,4 @@
 const axios = require("axios");
-const fetch = require("node-fetch");
 
 var userAuth = ""; // Create temp token using https://developers.google.com/oauthplayground/
 
@@ -190,13 +189,12 @@ exports.fetchServices = async (projectNumber) => {
  */
 exports.enableService = async (name) => {
   const url = "https://serviceusage.googleapis.com/v1/".concat(name, ":enable");
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${userAuth}`,
-    },
-  });
-  return response;
+  const response = await axios.post(url,{},
+    {
+      headers: {
+        Authorization: `Bearer ${userAuth}`,
+      }});
+  return response.data;
 };
 
 /**
