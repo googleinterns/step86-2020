@@ -25,3 +25,27 @@ export function getToken() {
 export function setAuthToken(access_token) {
   api.setAuthToken(access_token);
 }
+
+/** After being called, this will authenticate once (initially), and every 5 minutes. */
+export async function startPollingAuth() {
+  // Set interval doesn't call at time 0, so must manually do this.
+  await getToken();
+  setInterval(() => {
+    getToken();
+  }, 5 * 60 * 1000);
+}
+
+/** Use this to set the user's auth consent. If they manually sign in once,
+ * we'll assume we have permission to automatically sign in going forward.
+ */
+export function setUserAuthConsent(hasConsent: boolean) {
+  // This manual string cast is needed for local storage.
+  localStorage.setItem("auth-consent", hasConsent ? "true" : "false");
+}
+
+/** If true, this means the user has consented to auth in the past,
+ * and we can sign in automatically.
+ */
+export function hasUserAuthConsent() {
+  return localStorage.getItem("auth-consent") === "true";
+}

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion } from "@material-ui/core";
+import { TextField, Card, CardContent, Button, Box, List, ListItem, ListItemSecondaryAction, IconButton, ListItemText, OutlinedInput, InputAdornment, AccordionSummary, Typography, AccordionDetails, Accordion, AccordionActions, Divider, Grid } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
@@ -29,7 +29,7 @@ export class CreateBreakpointForm extends React.Component<
     this.state = {
       fileName: undefined,
       lineNumber: undefined,
-      condition: "",
+      condition: undefined,
       expressions: [],
       errorMessage: undefined
     };
@@ -90,54 +90,75 @@ export class CreateBreakpointForm extends React.Component<
     const { fileName, lineNumber, condition, expressions } = this.state;
     return (
       <Box m={1}>
-        <Card elevation={1}>
-          <CardContent>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+            <Typography variant="body2">Create Breakpoint</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <form>
-              <TextField
-                label="File Name"
-                style={{ width: "100%" }}
-                data-testid="fileName"
-                value={fileName}
-                onChange={(e) => this.onFileName(e.target.value)}
-                variant="outlined"
-                size="small"
-              />
-              <br />
-              <br />
-              <TextField
-                label="Line Number"
-                style={{ width: "100%" }}
-                data-testid="lineNumber"
-                value={lineNumber}
-                onChange={(e) => this.onLineNumber(e.target.value)}
-                variant="outlined"
-                size="small"
-              />
-              <br/><br/>
-              <ConditionAndExpressionsForm
-                condition={condition}
-                expressions={expressions}
-                setCondition={condition => this.setState({condition})}
-                setExpressions={expressions => this.setState({expressions})}
-              />
-              <br/><br/>
-              <Button id='createBpButton'
-                onClick={(e) => {
-                  e.preventDefault(); // Prevents a page reload from form submit.
-                  if (this.checkValidBreakpoint()) {
-                    this.onCreateBreakpoint();
-                    this.setState({ errorMessage: undefined });
-                  } else {
-                    this.setState({
-                      errorMessage:
-                        "The breakpoint on file: " +
-                        this.state.fileName +
-                        " and line number: " +
-                        this.state.lineNumber +
-                        " already exists",
-                    });
-                  }
-                }}
+              <Grid container spacing={3}>
+                <Grid item xs={6}>
+                  <TextField
+                    label="File Name"
+                    style={{ width: "100%" }}
+                    data-testid="fileName"
+                    value={fileName}
+                    onChange={(e) => this.onFileName(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    label="Line Number"
+                    style={{ width: "100%" }}
+                    data-testid="lineNumber"
+                    value={lineNumber}
+                    onChange={(e) => this.onLineNumber(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <ConditionAndExpressionsForm
+                    condition={condition}
+                    expressions={expressions}
+                    setCondition={condition => this.setState({condition})}
+                    setExpressions={expressions => this.setState({expressions})}
+                  />
+                </Grid>
+              </Grid>
+              
+              
+              {this.state.errorMessage !== undefined && (
+                <Card>
+                  <CardContent>
+                    <Alert severity="error">{this.state.errorMessage}</Alert>
+                  </CardContent>
+                </Card>
+              )}
+            </form>
+          </AccordionDetails>
+          <Divider/>
+          <AccordionActions>
+            <Button
+              id='createBpButton'
+              onClick={(e) => {
+                e.preventDefault(); // Prevents a page reload from form submit.
+                if (this.checkValidBreakpoint()) {
+                  this.onCreateBreakpoint();
+                  this.setState({ errorMessage: undefined });
+                } else {
+                  this.setState({
+                    errorMessage:
+                      "The breakpoint on file: " +
+                      this.state.fileName +
+                      " and line number: " +
+                      this.state.lineNumber +
+                      " already exists",
+                  });
+                }}}
               >
                 Create Breakpoint
               </Button>
@@ -151,16 +172,8 @@ export class CreateBreakpointForm extends React.Component<
               >
                 Delete all active breakpoints
               </Button>
-              {this.state.errorMessage !== undefined && (
-                <Card>
-                  <CardContent>
-                    <Alert severity="error">{this.state.errorMessage}</Alert>
-                  </CardContent>
-                </Card>
-              )}
-            </form>
-          </CardContent>
-        </Card>
+          </AccordionActions>
+        </Accordion>
       </Box>
     );
   }
@@ -191,18 +204,40 @@ export class ConditionAndExpressionsForm extends Component<ConditionAndExpressio
           <Typography variant="body2">Condition and Expressions</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <List>
-            <TextField
-              label="Condition"
-              size="small"
-              fullWidth
-              variant="outlined"
-              value={condition}
-              onChange={e => this.setCondition(e.target.value)}
-            />
+          <Grid container spacing={3}>
+            {/* Only show condition if added, to reduce clutter.*/}
+            {condition !== undefined && (
+              <Grid item xs={12}>
+                <TextField
+                  id="input-condition"
+                  label="Condition"
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                  value={condition}
+                  onChange={e => this.setCondition(e.target.value)}
+                />
+              </Grid>
+            )}
             <ExpressionsList expressions={expressions} setExpressions={expressions => this.setExpressions(expressions)}/>
-          </List>
+          </Grid>
         </AccordionDetails>
+        <Divider/>
+        <AccordionActions>
+          {
+            // If there is no condition yet, show a button to add it.
+            condition === undefined && (
+              <Button id="button-add-condition" size="small" onClick={() => this.setCondition("")}>Add Condition</Button>
+            )
+          }
+          {
+            // Otherwise, show button to remove condition.
+            condition !== undefined && (
+              <Button id="button-remove-condition" size="small" onClick={() => this.setCondition(undefined)}>Remove Condition</Button>
+            )
+          }
+          <Button id="button-add-expression" size="small" onClick={() => this.setExpressions([...expressions, ""])}>Add Expression</Button>
+        </AccordionActions>
       </Accordion>
     )
   }
@@ -214,30 +249,23 @@ interface ExpressionsListProps {
 }
 /** A list of expressions, including add/delete functionality. */
 export const ExpressionsList = ({expressions, setExpressions}: ExpressionsListProps) => {
-  return (
-    <List>
-      {
-        expressions.map((expression, index) => (
-          <ExpressionView
-            expression={expression}
-            onChange={updatedExpression => {
-              // Deep copy expressions, update specific index.
-              const updatedExpressions = [...expressions];
-              updatedExpressions[index] = updatedExpression;
-              setExpressions(updatedExpressions);
-            }}
-            onDelete={() => {
-              // Deep copy expressions and delete specific entry.
-              const updatedExpressions = [...expressions];
-              updatedExpressions.splice(index, 1);
-              setExpressions(updatedExpressions);
-            }}
-          />
-        ))
-      }
-      <Button size="small" onClick={() => setExpressions([...expressions, ""])}>Add Expression</Button>
-    </List>
-  );
+  return expressions.map((expression, index) => (
+    <ExpressionView
+      expression={expression}
+      onChange={updatedExpression => {
+        // Deep copy expressions, update specific index.
+        const updatedExpressions = [...expressions];
+        updatedExpressions[index] = updatedExpression;
+        setExpressions(updatedExpressions);
+      }}
+      onDelete={() => {
+        // Deep copy expressions and delete specific entry.
+        const updatedExpressions = [...expressions];
+        updatedExpressions.splice(index, 1);
+        setExpressions(updatedExpressions);
+      }}
+    />
+  ));
 }
 
 interface ExpressionViewProps {
@@ -259,7 +287,7 @@ export class ExpressionView extends Component<ExpressionViewProps> {
 
   render() {
     return (
-      <ListItem>
+      <Grid item xs={12}>
         <TextField
           size="small"
           label="Expression"
@@ -276,7 +304,7 @@ export class ExpressionView extends Component<ExpressionViewProps> {
             )
           }}
         />
-      </ListItem>
+      </Grid>
     )
   }
 }

@@ -30,7 +30,7 @@ export class SelectView extends React.Component<SelectViewProps, {}> {
         {/* <InputLabel>{label}</InputLabel> */}
         <Autocomplete
           options={options}
-          style={{width: 300}}
+          fullWidth
           getOptionLabel={optionToLabel}
           getOptionSelected={(option, value) => optionToId(option) === value}
           value={selectedOptionId}
