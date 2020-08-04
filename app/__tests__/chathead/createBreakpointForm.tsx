@@ -53,8 +53,6 @@ describe("CreateBreakpointForm", () => {
 
     const fileName = "a";
     const lineNumber = 1;
-    const condition = "";
-    const expressions = [];
 
     const wrapper = shallow(<CreateBreakpointForm activeBreakpoints={[]} createBreakpoint={spy} completedBreakpoints={[]} />);
 
@@ -62,7 +60,7 @@ describe("CreateBreakpointForm", () => {
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(lineNumber);
     wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
 
-    expect(spy).toHaveBeenCalledWith(fileName, lineNumber, condition, expressions);
+    expect(spy).toHaveBeenCalledWith(fileName, lineNumber, undefined, []);
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
 
@@ -171,23 +169,45 @@ describe("ExpressionsList", () => {
     (wrapper.find(ExpressionView).at(0).instance() as ExpressionView).onChange("c");
     expect(setExpressionsSpy).toHaveBeenCalledWith(["c", "b"]);
   });
-
-  it("can add expression", () => {
-    const setExpressionsSpy = jest.fn();
-    const wrapper = mount(<ExpressionsList expressions={["a", "b"]} setExpressions={setExpressionsSpy}/>);
-    wrapper.find(Button).simulate("click");
-    expect(setExpressionsSpy).toHaveBeenCalledWith(["a", "b", ""]);
-  });
 });
 
 describe("ConditionsAndExpressionsForm", () => {
-  it("has condition input", () => {
+  it("does not show condition input initially", () => {
+    const wrapper = mount(<ConditionAndExpressionsForm expressions={[]}/>);
+    expect(wrapper.find("#input-condition").exists()).toBe(false);
+  });
+
+  it("can add condition", () => {
+    const addConditionSpy = jest.fn();
+    const wrapper = mount(<ConditionAndExpressionsForm setCondition={addConditionSpy} expressions={[]}/>);
+    
+    wrapper.find("#button-add-condition").at(0).simulate("click");
+    expect(addConditionSpy).toHaveBeenCalledWith("");
+  });
+
+  it("can remove condition", () => {
+    const removeConditionSpy = jest.fn();
+    const wrapper = mount(<ConditionAndExpressionsForm condition="foo" setCondition={removeConditionSpy} expressions={[]}/>);
+    
+    wrapper.find("#button-remove-condition").at(0).simulate("click");
+    expect(removeConditionSpy).toHaveBeenCalledWith(undefined);
+  });
+
+  it("has condition input when not undefined", () => {
     const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={[]}/>);
-    expect(wrapper.find(TextField).props().value).toBe("foo");
+    expect(wrapper.find("#input-condition").at(0).props().value).toBe("foo");
   });
 
   it("has expressions list", () => {
     const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]}/>);
     expect(wrapper.find(ExpressionsList).props().expressions).toEqual(["a"]);
+  });
+
+
+  it("can add expression", () => {
+    const setExpressionsSpy = jest.fn();
+    const wrapper = mount(<ConditionAndExpressionsForm condition="foo" expressions={["a"]} setExpressions={setExpressionsSpy}/>);
+    wrapper.find("#button-add-expression").at(0).simulate("click");
+    expect(setExpressionsSpy).toHaveBeenCalledWith(["a", ""]);
   });
 });
