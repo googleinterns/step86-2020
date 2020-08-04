@@ -242,35 +242,34 @@ export function register(): BackgroundRequestHandler {
     }
   );
 
-  /**
-   * Handler for Request the token from extensionAuthHandler.
-   */
-  backgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
-    backgroundRequest.BackgroundRequestType.AUTHENTICATION,
-    async () => {
-      await extensionAuthHandler.getToken();
-      setInterval(() => {
-        extensionAuthHandler.getToken();
-      }, 5 * 60 * 1000);
-      return {};
-    }
-  );
+/**
+ * Handler for Request the token from extensionAuthHandler.
+ */
+BackgroundRequestHandler.on<backgroundRequest.AuthenticationRequestData>(
+  backgroundRequest.BackgroundRequestType.AUTHENTICATION,
+  async () => {
+    // Start ongoing authentication, and wait for the first auth to complete.
+    await extensionAuthHandler.startPollingAuth();
+    extensionAuthHandler.setUserAuthConsent(true);
+    return {};
+  }
+);
 
-  /**
-   * Handler for fetching the User information from debugger-extension api and return the response.
-   */
-  backgroundRequestHandler.on<backgroundRequest.UserInfoRequestData>(
-    backgroundRequest.BackgroundRequestType.USER_INFO,
-    async () => {
-      try {
-        const response = await api.getUserInfo();
-        const data = {userName: response.name, userEmail: response.email, userPicture: response.picture }
-        return data;
-      } catch (error) {
-        throw { message: error.message };
-      }
+/**
+ * Handler for fetching the User information from debugger-extension api and return the response.
+ */
+backgroundRequestHandler.on<backgroundRequest.UserInfoRequestData>(
+  backgroundRequest.BackgroundRequestType.USER_INFO,
+  async () => {
+    try {
+      const response = await api.getUserInfo();
+      const data = {userName: response.name, userEmail: response.email, userPicture: response.picture }
+      return data;
+    } catch (error) {
+      throw { message: error.message };
     }
-  );
+  }
+);
 
   return backgroundRequestHandler;
 }
