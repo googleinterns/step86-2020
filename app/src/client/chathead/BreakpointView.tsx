@@ -37,8 +37,7 @@ interface CompletedBreakpointViewProps {
   
 /** Used to display data for a breakpoint that has already hit. */
 export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {status} = breakpoint;
-  if (status && status.isError) {
+  if (!breakpointIsSuccessful(breakpoint)) {
     return <FailedCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
   }
   return <SuccessfulCompletedBreakpointView breakpoint={breakpoint} deleteBreakpoint={deleteBreakpoint}/>;
@@ -46,7 +45,6 @@ export const CompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: Comple
 
 /** Shows stackframe data for a successful breakpoint. */
 export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: CompletedBreakpointViewProps) => {
-  const {stackFrames, evaluatedExpressions, variableTable} = breakpoint;
   console.log(breakpoint);
   return (
     <Accordion defaultExpanded>
@@ -54,29 +52,48 @@ export const SuccessfulCompletedBreakpointView = ({ breakpoint, deleteBreakpoint
         <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
-        <TreeView
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-        >
-          {
-            evaluatedExpressions && (
-              <TreeItem nodeId="expressions" label="Expressions">
-                {evaluatedExpressions.map(expression => <VariableView variable={expression} parentNode={"expressions"} variableTable={variableTable}/>)}
-              </TreeItem>
-            )
-          }
-          <TreeItem nodeId="stackframes" label="Stackframes">
-            {
-              stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
-            }
-          </TreeItem>
-        </TreeView>
+        <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>
       </AccordionDetails>
       <Divider/>
       <AccordionActions>
         <Button size="small" color="secondary" onClick={() => deleteBreakpoint(breakpoint.id)}>Delete</Button>
       </AccordionActions>
     </Accordion>
+  );
+}
+
+/** Stacktrace and expression data for a successful breakpoint. */
+export const SuccessfulCompletedBreakpointData = ({breakpoint}) => {
+  const {stackFrames, evaluatedExpressions, variableTable} = breakpoint;
+  return (
+    <TreeView
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
+      {
+        evaluatedExpressions && (
+          <TreeItem nodeId="expressions" label="Expressions">
+            {evaluatedExpressions.map(expression => <VariableView variable={expression} parentNode={"expressions"} variableTable={variableTable}/>)}
+          </TreeItem>
+        )
+      }
+      <TreeItem nodeId="stackframes" label="Stackframes">
+        {
+          stackFrames.map(stackFrame => <StackFrame stackFrame={stackFrame} breakpoint={breakpoint}/>)
+        }
+      </TreeItem>
+    </TreeView>
+  )
+}
+
+/** Error data for failed breakpoint. */
+export const FailedCompletedBreakpointData = ({breakpoint}) => {
+  return (
+    <Alert severity="error">
+      {/* Currently this title causes issues with the width of the chathead */}
+      {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
+      {getBreakpointErrorMessage(breakpoint)}
+    </Alert>
   );
 }
 
@@ -182,11 +199,7 @@ export const FailedCompletedBreakpointView = ({ breakpoint, deleteBreakpoint }: 
         <LocationView breakpoint={breakpoint}/>
       </AccordionSummary>
       <AccordionDetails>
-        <Alert severity="error">
-          {/* Currently this title causes issues with the width of the chathead */}
-          {/* <AlertTitle>{status.refersTo}</AlertTitle> */}
-          {getBreakpointErrorMessage(breakpoint)}
-        </Alert>
+        <FailedCompletedBreakpointData breakpoint={breakpoint}/>
       </AccordionDetails>
       <Divider/>
       <AccordionActions>
@@ -214,4 +227,10 @@ export const LocationView = ({breakpoint}) => {
   return (
     <Typography>{location.path}:{location.line}</Typography>
   );
+}
+
+/** Whether a breakpoint is successful or failed. */
+export function breakpointIsSuccessful(breakpoint) {
+  const {status} = breakpoint;
+  return !status || !status.isError;
 }
