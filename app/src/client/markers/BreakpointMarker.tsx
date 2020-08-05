@@ -1,7 +1,11 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+import PopupState, {bindPopper, bindToggle } from 'material-ui-popup-state';
+
 import { BreakpointMeta, Breakpoint } from "../../common/types/debugger";
+import { Box, Popper, Paper, Backdrop } from "@material-ui/core";
+import { SuccessfulCompletedBreakpointData, breakpointIsSuccessful, FailedCompletedBreakpointData } from "../chathead/BreakpointView";
 
 interface NewBreakpointMarkerProps {
   /** Callback for when new-breakpoint marker is clicked.
@@ -37,7 +41,39 @@ interface CompletedBreakpointMarkerProps {
 export const CompletedBreakpointMarker = ({
   breakpoint,
 }: CompletedBreakpointMarkerProps) => {
-  return <CompletedBreakpointMarkerWrapper />;
+  return (
+    <PopupState variant="popover" popupId="completed-bp-popover">
+      {(popupState) => (
+        <>
+          <CompletedBreakpointMarkerWrapper {...bindToggle(popupState)}/>
+          <Popper
+            {...bindPopper(popupState)}
+            placement="right-start"
+            disablePortal={false}
+            modifiers={{
+              flip: {enabled: false},
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: 'viewport',
+              }
+            }}
+          >
+            <Paper>
+              <Box padding={3}>
+                {
+                  breakpointIsSuccessful(breakpoint) ? (
+                    <SuccessfulCompletedBreakpointData breakpoint={breakpoint}/>   
+                  ): (
+                    <FailedCompletedBreakpointData breakpoint={breakpoint}/>
+                  )
+                }
+              </Box>
+            </Paper>
+          </Popper>
+        </>
+      )}
+    </PopupState>
+  )
 };
 
 /** UI that is shared by all types of breakpoint markers.

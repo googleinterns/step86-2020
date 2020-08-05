@@ -2,7 +2,7 @@ import React from "react";
 import { shallow, mount, render, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { FailedBreakpoint, BreakpointMeta, Breakpoint } from "../../src/common/types/debugger";
-import { getBreakpointErrorMessage, FailedCompletedBreakpointView, CompletedBreakpointView, StackFrame } from "../../src/client/chathead/BreakpointView";
+import { getBreakpointErrorMessage, FailedCompletedBreakpointView, CompletedBreakpointView, StackFrame, SuccessfulCompletedBreakpointData, FailedCompletedBreakpointData } from "../../src/client/chathead/BreakpointView";
 import { LocationView, PendingBreakpointView, SuccessfulCompletedBreakpointView, VariablesView} from "../../src/client/chathead/BreakpointView";
 import { AccordionSummary, CircularProgress, Accordion, AccordionDetails } from "@material-ui/core";
 
@@ -103,7 +103,7 @@ describe("SuccessfulCompletedBreakpointView", () => {
     expect(wrapper.find(LocationView).exists()).toBe(true);
   });
 
-  it("shows N stackframes", () => {
+  it("shows BP data", () => {
     const mockBreakpoint: Partial<BreakpointMeta> = {
       location: {
         path: "foo.java",
@@ -116,10 +116,27 @@ describe("SuccessfulCompletedBreakpointView", () => {
     expect(
       wrapper.find(AccordionDetails)
              .dive()
-             .find(StackFrame).length
-    ).toBe(2);
+             .find(SuccessfulCompletedBreakpointData).exists()
+    ).toBe(true)
   });
 });
+
+describe("SuccessfulCompletedBreakpointData", () => {
+  it("shows N stackframes", () => {
+    const mockBreakpoint: Partial<BreakpointMeta> = {
+      location: {
+        path: "foo.java",
+        line: 24
+      },
+      stackFrames: [{locals: []}, {locals: []}]
+    }
+  
+    const wrapper = shallow(<SuccessfulCompletedBreakpointData breakpoint={mockBreakpoint}/>);
+    expect(
+      wrapper.find(StackFrame).length
+    ).toBe(2);
+  });
+})
 
 describe("FailedCompletedBreakpointView", () => {
   it("is accordion", () => {
@@ -160,7 +177,7 @@ describe("FailedCompletedBreakpointView", () => {
     expect(wrapper.find(LocationView).exists()).toBe(true);
   });
 
-  it("shows error message", () => {
+  it("shows error data", () => {
     const mockBreakpoint: Partial<FailedBreakpoint> = {
       location: {
         path: "foo.java",
@@ -176,6 +193,27 @@ describe("FailedCompletedBreakpointView", () => {
     }
   
     const wrapper = shallow(<FailedCompletedBreakpointView breakpoint={mockBreakpoint}/>);
+    expect(wrapper.find(FailedCompletedBreakpointData).exists()).toBe(true);
+  });
+});
+
+describe("FailedCompletedBreakpointData", () => {
+  it("shows error message", () => {
+    const mockBreakpoint: Partial<FailedBreakpoint> = {
+      location: {
+        path: "foo.java",
+        line: 24
+      },
+      status: {
+        isError: true,
+        description: {
+          format: "Hello $0 and $1.",
+          parameters: ["foo", "bar"]
+        }
+      }
+    }
+  
+    const wrapper = shallow(<FailedCompletedBreakpointData breakpoint={mockBreakpoint}/>);
     expect(wrapper.html()).toContain("MuiAlert-standardError");
     expect(wrapper.text()).toContain("Hello foo and bar.");
   });
