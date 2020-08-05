@@ -23,7 +23,7 @@ export class Step2Tutorial extends React.Component<
       <section>
         <p>
           {" "}
-          After slecting a project and a debugee enter the line number and file
+          After selecting a project and a debuggee enter the line number and file
           name to set a breakpoint manually or you can set it on the line
         </p>
 

@@ -32,7 +32,7 @@ export class Step1Tutorial extends React.Component<
           border-radius="8px"
         />
 
-        <p>Once signed-in you'll have your info hsowed in the small popup</p>
+        <p>Once signed-in you'll have your info showed in the small popup</p>
 
         <img
           src="https://drive.google.com/uc?export=view&id=1HU49kgHRJPse2NHMdfgmNhBNCfsiYz4O"
