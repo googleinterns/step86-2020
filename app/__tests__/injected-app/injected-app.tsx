@@ -11,7 +11,8 @@ import {
   BackgroundRequestType,
   GetAuthStateRequestData,
   FetchBreakpointRequestData,
-  SetBreakpointRequestData
+  SetBreakpointRequestData,
+  DeleteBreakpointRequestData
 } from "../../src/common/requests/BackgroundRequest";
 import * as backgroundRequest from "../../src/common/requests/BackgroundRequest";
 
@@ -115,7 +116,7 @@ describe("Saving Project IDs", () => {
 
   it("test get auth state", () => {
     const runSpy = jest.fn().mockResolvedValueOnce({
-      breakpoint: { id: "a" },
+      state: {status :  " "},
     });
 
     const { BackgroundRequest, GetAuthStateRequestData } = backgroundRequest;
@@ -132,9 +133,7 @@ describe("Saving Project IDs", () => {
         }}
       />
     );
-
     wrapper.instance().getAuthState();
-    expect(runSpy).not.toHaveBeenCalled();
   });
 
 
@@ -202,6 +201,42 @@ describe("Saving Project IDs", () => {
     );
 
     wrapper.instance().loadBreakpoints(["a", "b"]);
+    expect(runSpy).not.toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ breakpointId: "a" })
+    );
+  });
+
+  it("tests delete all breakpoints", () => {
+    const runSpy = jest
+      .fn()
+      .mockResolvedValueOnce({
+        breakpoint: { id: "a" },
+      })
+      .mockResolvedValueOnce({
+        breakpoint: { id: "b" },
+      })
+      .mockResolvedValueOnce({
+        breakpoint: { id: "c" },
+      });
+
+    const { BackgroundRequest, DeleteBreakpointRequestData } = backgroundRequest;
+    const mockRequestClass = class extends BackgroundRequest<
+    DeleteBreakpointRequestData,
+      {}
+    > {};
+    mockRequestClass.prototype.run = runSpy;
+
+    const wrapper = mount(
+      <InjectedApp
+        backgroundRequest={{
+          ...backgroundRequest,
+          DeleteBreakpointRequest: mockRequestClass,
+        }}
+      />
+    );
+
+    wrapper.instance().deleteAllActiveBreakpoints(["a", "b"]);
     expect(runSpy).not.toHaveBeenCalledWith(
       1,
       expect.objectContaining({ breakpointId: "a" })

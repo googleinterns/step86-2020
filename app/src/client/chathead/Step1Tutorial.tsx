@@ -29,7 +29,13 @@ export class Step1Tutorial extends React.Component<
           Chrome Web-store
         </p>
 
-        <Images src="https://drive.google.com/uc?export=view&id=13qzP8vr_o0ZMPIbBXe6niSnJYFKF4yS7" />
+        <img
+          src="https://drive.google.com/uc?export=view&id=13qzP8vr_o0ZMPIbBXe6niSnJYFKF4yS7"
+          width="50%"
+          height="40%"
+          border-radius="8px"
+        />
+
 
         <p>Once signed-in you'll have your info showed in the small popup</p>
 
