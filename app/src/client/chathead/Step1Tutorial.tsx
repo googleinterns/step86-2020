@@ -1,8 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Paper from "@material-ui/core/Paper";
-import Image from "material-ui-image";
 import styled from "styled-components";
+
+const Images = styled.img`
+  width: 50%;
+  height: 15%;
+  margin-left: 90px;
+  border-radius: 8px;
+`;
 
 interface Step1TutorialProps {}
 
@@ -31,23 +36,14 @@ export class Step1Tutorial extends React.Component<
           border-radius="8px"
         />
 
-        <p>Once signed-in you'll have your info hsowed in the small popup</p>
 
-        <img
-          src="https://drive.google.com/uc?export=view&id=1HU49kgHRJPse2NHMdfgmNhBNCfsiYz4O"
-          width="50%"
-          height="15%"
-          border-radius="8px"
-        />
+        <p>Once signed-in you'll have your info showed in the small popup</p>
+
+        <Images src="https://drive.google.com/uc?export=view&id=1HU49kgHRJPse2NHMdfgmNhBNCfsiYz4O" />
 
         <p>After signing in a floating popup will show </p>
 
-        <img
-          src="https://drive.google.com/uc?export=view&id=1BbBRMUZWdO_yFOJRwz4SRUiM9bxqUMSa"
-          width="50%"
-          height="15%"
-          border-radius="8px"
-        />
+        <Images src="https://drive.google.com/uc?export=view&id=1BbBRMUZWdO_yFOJRwz4SRUiM9bxqUMSa" />
       </section>
     );
   }

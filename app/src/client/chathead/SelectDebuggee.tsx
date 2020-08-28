@@ -2,11 +2,11 @@ import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Debuggee } from "../../common/types/debugger";
 
-import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Toolbar, Typography, AppBar, Card, CardContent, Box, IconButton, Grid } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+import { Appbar } from "./Appbar";
 
 interface SelectDebuggeeContainerProps {
   projectId: string;
@@ -59,33 +59,28 @@ export class SelectDebuggeeContainer extends React.Component<
   render() {
     return (
       <>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={this.props.backToProjects}>
-              <ArrowBackIcon/>
-            </IconButton>
-            <Typography variant="h6">{this.props.projectId}</Typography>
-            {!this.state.debuggeesLoading && (
-                <IconButton color="inherit" onClick={() => this.loadDebuggees()}>
-                  <RefreshIcon/>
-                </IconButton>
-              )
-            }
-          </Toolbar>
-        </AppBar>
-        <Box m={1}>
-          <Card>
-            <CardContent>
-              {
-                !this.state.error && this.state.debuggees.length === 0 && (
+        <Appbar title={this.props.projectId} onBack={this.props.backToProjects}>
+          {!this.state.debuggeesLoading && (
+              <IconButton color="inherit" onClick={() => this.loadDebuggees()}>
+                <RefreshIcon/>
+              </IconButton>
+            )
+          }
+        </Appbar>
+        <Box m={4}>
+          <Grid container>
+            {
+               (!this.state.error && !this.state.debuggeesLoading && this.state.debuggees.length === 0) ? (
+                <Grid item xs={12}>
                   <Alert severity="warning">
-                    No debuggees are active. This means your project hasn't run in a while, try using it to wake it up.
+                    No debuggees are active. This means your project hasn't run in a while. Please make sure its active, then try again. 
                   </Alert>
-                )
-              }
-
-              {
-                !this.state.error && this.state.debuggees.length && (
+                </Grid>
+              ): null
+            }
+            {
+              !this.state.error && this.state.debuggees.length ? (
+                <Grid item xs={12}>
                   <SelectView
                     label="Debuggee ID"
                     options={this.state.debuggees}
@@ -95,15 +90,17 @@ export class SelectDebuggeeContainer extends React.Component<
                     optionToId={(debuggee: Debuggee) => debuggee.id}
                     optionToLabel={(debuggee: Debuggee) => debuggee.description}
                   />
-                )
-              }
-              {
-                this.state.error && (
+                </Grid>
+              ): null
+            }
+            {
+              this.state.error ? (
+                <Grid item xs={12}>
                   <Alert severity="error">{this.state.error.message}</Alert>
-                )
-              }
-            </CardContent>
-          </Card>
+                </Grid>
+              ): null
+            }
+          </Grid>
         </Box>   
       </>
     );

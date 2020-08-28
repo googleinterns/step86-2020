@@ -11,13 +11,9 @@ import Demo from "./TutorialHelper";
 /**
  * This function is reponsible for Walkthrought dialog popup
  */
-export default function ScrollDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
-
-  const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
+export default function ScrollDialog({open, setOpen}) {
+  const handleClickOpen = () => {
     setOpen(true);
-    setScroll(scrollType);
   };
 
   const handleClose = () => {
@@ -35,37 +31,27 @@ export default function ScrollDialog() {
   }, [open]);
 
   return (
-    <>
-      <AppBar position="static">
-        <Toolbar>
-          <Button onClick={handleClickOpen("paper")}>
-            <Typography variant="h6">Check Walkthrough</Typography>
-          </Button>
-        </Toolbar>
-      </AppBar>
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll={scroll}
-        aria-labelledby="scroll-dialog-title"
-      >
-        <DialogTitle id="scroll-dialog-title">Walkthrough</DialogTitle>
-        <DialogContent dividers={scroll === "paper"}>
-          <DialogContentText
-            id="scroll-dialog-description"
-            ref={descriptionElementRef}
-            tabIndex={-1}
-          >
-            {<Demo />}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      scroll={"paper"}
+      aria-labelledby="scroll-dialog-title"
+    >
+      <DialogTitle id="scroll-dialog-title">Walkthrough</DialogTitle>
+      <DialogContent dividers>
+        <DialogContentText
+          id="scroll-dialog-description"
+          ref={descriptionElementRef}
+          tabIndex={-1}
+        >
+          {<Demo />}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }

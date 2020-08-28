@@ -25,7 +25,7 @@ describe("Chathead", () => {
 
   it("handles project selection", () => {
     const spy = jest.fn();
-    const wrapper = shallow(
+    const wrapper = mount(
       <Chathead
         projectId={undefined}
         debuggeeId={undefined}

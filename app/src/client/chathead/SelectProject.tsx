@@ -1,10 +1,12 @@
 import React from "react";
 import { SelectView } from "./GeneralSelectView";
 import { Project } from "../../common/types/debugger";
-import { AppBar, Toolbar, Typography, Card, CardContent, Box, IconButton } from "@material-ui/core";
+import { Toolbar, Typography, Card, CardContent, Box, IconButton, Grid } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
+
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { BackgroundRequestError } from "../../common/requests/BackgroundRequest";
+import { Appbar } from "./Appbar";
 
 interface SelectProjectContainerProps {
   projectId?: string;
@@ -55,22 +57,18 @@ export class SelectProjectContainer extends React.Component<
   render() {
     return (
       <>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6">Select Project</Typography>
-            {!this.state.projectsLoading && (
-                <IconButton color="inherit" onClick={() => this.loadProjects()}>
-                  <RefreshIcon/>
-                </IconButton>
-              )
-            }
-          </Toolbar>
-        </AppBar>
-        <Box m={1}>
-          <Card>
-            <CardContent>
-              {
-                !this.state.error && (
+        <Appbar title="Select Project">
+          {!this.state.projectsLoading && (
+            <IconButton color="inherit" onClick={() => this.loadProjects()}>
+              <RefreshIcon/>
+            </IconButton>
+          )} 
+        </Appbar>
+        <Box m={4}>
+          <Grid container>
+            {
+              !this.state.error && (
+                <Grid item xs={12}>
                   <SelectView
                     label="Project ID"
                     options={this.state.projects}
@@ -80,15 +78,18 @@ export class SelectProjectContainer extends React.Component<
                     optionToId={(project: Project) => project.projectId}
                     optionToLabel={(project: Project) => project.projectId}
                   />
-                )
-              }
-              {
-                this.state.error && <Alert severity="error">{this.state.error.message}</Alert>
-              }
-            </CardContent>
-          </Card>
+                </Grid>
+              )
+            }
+            {
+              this.state.error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">{this.state.error.message}</Alert>
+                </Grid>
+              )
+            }
+          </Grid>
         </Box>
-        
       </>
     );
   }
