@@ -102,7 +102,6 @@ export class Chathead extends React.Component<ChatheadProps, ChatheadState> {
                       <Appbar title="Breakpoints" onBack={() => this.props.setDebuggee(undefined)}/>
                       <CreateBreakpointForm
                         activeBreakpoints={this.props.activeBreakpoints}
-                        completedBreakpoints={this.props.completedBreakpoints}
                         createBreakpoint={this.props.createBreakpoint}
                         deleteAllActiveBreakpoints={this.props.deleteAllActiveBreakpoints}
                       />

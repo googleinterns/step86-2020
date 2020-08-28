@@ -32,7 +32,7 @@ describe("CreateBreakpointForm", () => {
   });
 
   it ("handles conditions and expressions input", () => {
-    const wrapper = mount(<CreateBreakpointForm activeBreakpoints={[]} completedBreakpoints={[]}/>);
+    const wrapper = mount(<CreateBreakpointForm activeBreakpoints={[]} />);
     const condExpForm = wrapper.find(ConditionAndExpressionsForm).instance() as ConditionAndExpressionsForm;
     
     const condition = "a";
@@ -54,7 +54,7 @@ describe("CreateBreakpointForm", () => {
     const fileName = "a";
     const lineNumber = 1;
 
-    const wrapper = shallow(<CreateBreakpointForm activeBreakpoints={[]} createBreakpoint={spy} completedBreakpoints={[]} />);
+    const wrapper = shallow(<CreateBreakpointForm activeBreakpoints={[]} createBreakpoint={spy} />);
 
     (wrapper.instance() as CreateBreakpointForm).onFileName(fileName);
     (wrapper.instance() as CreateBreakpointForm).onLineNumber(lineNumber);
@@ -120,34 +120,6 @@ describe("ExpressionView", () => {
     expect(preventFormSubmitSpy).toHaveBeenCalled();
   });
 
-  it("Prevents from creating breakpoint if breakpoint already existed in Completed BP list", () => {
-    const spy = jest.fn();
-    const preventFormSubmitSpy = jest.fn();
-    const temp = {
-      id: "string",
-      location: {
-        path: "a",
-        line: 1,
-      },
-      createTime: "string",
-      userEmail: "string",
-      isFinalState: true,
-      stackFrames: [],
-      variableTable: [],
-      finalTime: "string",
-      labels: "any"
-    };
-    const wrapper = shallow(
-      <CreateBreakpointForm createBreakpoint={spy} activeBreakpoints={[]} completedBreakpoints={[temp]} />
-    );
-    (wrapper.instance() as CreateBreakpointForm).onFileName("a");
-    (wrapper.instance() as CreateBreakpointForm).onLineNumber(1);
-    wrapper.find("#createBpButton").simulate("click", {preventDefault: preventFormSubmitSpy});
-
-
-    expect(spy).not.toHaveBeenCalled();
-    expect(preventFormSubmitSpy).toHaveBeenCalled();
-  });
 });
 
 describe("ExpressionsList", () => {
